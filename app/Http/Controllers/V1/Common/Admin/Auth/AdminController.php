@@ -21,7 +21,7 @@ class AdminController extends Controller
 	public function settings_store(Request $request)
 	{    
         $this->validate($request, [
-		     'adminservice' => 'required_with:country_code',
+		    //  'adminservice' => 'required_with:country_code',
 		]);
 
 		$setting = Setting::where('company_id', \Auth::user()->company_id)->first();
