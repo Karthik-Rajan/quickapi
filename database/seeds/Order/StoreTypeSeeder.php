@@ -27,10 +27,12 @@ class StoreTypeSeeder extends Seeder
     	Schema::connection('order')->disableForeignKeyConstraints();
 
         DB::connection('order')->table('store_types')->insert([
-            ['company_id' => $company,'name' =>'Foodie','category' =>'FOOD','status' =>'1'],
-            ['company_id' => $company,'name' =>'Grocery','category' =>'OTHERS','status' =>'1'],
-            ['company_id' => $company,'name' =>'Alcohol','category' =>'OTHERS','status' =>'1'],
-            ['company_id' => $company,'name' =>'Flower','category' =>'OTHERS','status' =>'1']
+            // ['company_id' => $company,'name' =>'Foodie','category' =>'FOOD','status' =>'1'],
+            // ['company_id' => $company,'name' =>'Grocery','category' =>'OTHERS','status' =>'1'],
+            // ['company_id' => $company,'name' =>'Alcohol','category' =>'OTHERS','status' =>'1'],
+            // ['company_id' => $company,'name' =>'Flower','category' =>'OTHERS','status' =>'1']
+            ['company_id' => $company,'name' =>'Medicine','category' =>'OTHERS','status' =>'1'],
+            ['company_id' => $company,'name' =>'Products','category' =>'OTHERS','status' =>'1']
         ]);
 
 
