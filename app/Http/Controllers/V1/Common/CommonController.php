@@ -284,7 +284,7 @@ class CommonController extends Controller
 
             $auth_mobile_otp->delete();
 
-            return Helper::getResponse([ 'message' => 'OTP sent!' ]);
+            return Helper::getResponse([ 'message' => 'OTP Verified!' ]);
         } else {
 
             return Helper::getResponse([ 'status' => '400', 'message' => 'OTP error!' ]);
