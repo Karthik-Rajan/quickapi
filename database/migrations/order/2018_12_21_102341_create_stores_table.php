@@ -27,6 +27,7 @@ class CreateStoresTable extends Migration
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
             $table->string('store_zipcode')->nullable();
+            $table->string('iso2')->nullable();
             $table->unsignedInteger('country_id');
             $table->unsignedInteger('city_id');
             $table->unsignedInteger('zone_id');
