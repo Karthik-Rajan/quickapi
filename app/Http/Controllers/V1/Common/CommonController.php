@@ -247,7 +247,7 @@ class CommonController extends Controller
         if($send_sms === true) {
             return Helper::getResponse(['message' => 'OTP sent!']);
         } else {
-            return Helper::getResponse(['status' => '400', 'message' => 'Could not send SMS notification. Please try again!', 'error' => $send_sms]);
+            return Helper::getResponse(['status' => '400', 'message' => 'Could not send SMS notification. Please try again!', 'error' => [$send_sms]]);
         }
 
         
