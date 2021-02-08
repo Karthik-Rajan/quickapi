@@ -308,7 +308,7 @@ class Helper {
 		$status = !empty($response['status']) ? $response['status'] : 200 ;
 		$title = !empty($response['title']) ? $response['title'] : self::getStatus($status) ;
 		$message = !empty($response['message']) ? $response['message'] : '' ;
-		$responseData = !empty($response['data']) ? $response['data'] : [] ;
+		$responseData = !empty($response['data']) ? $response['data'] : (object)[] ;
 		$error = !empty($response['error']) ? $response['error'] : [] ;
 
 		if( ($status != 401) && ($status != 405) && ($status != 422)  ) {
