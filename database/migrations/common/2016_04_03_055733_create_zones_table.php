@@ -20,10 +20,10 @@ class CreateZonesTable extends Migration
             $table->integer('city_id');
             $table->integer('company_id');
             $table->enum('user_type', [
-                    'SHOP',
-                    'PROVIDER',
-                    'FLEET'
-                ])->default('SHOP');
+                    'PHARMACY',
+                    'CCM',
+                    'FIELD-EXECUTIVE'
+                ])->default('PHARMACY');
             $table->enum('status', [
                     'ACTIVE',
                     'INACTIVE'
