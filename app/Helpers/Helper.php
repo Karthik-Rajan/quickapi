@@ -648,4 +648,12 @@ class Helper {
         } 
 		
 	}
+
+	public static function getServices() {
+		$services = [
+		['name' => 'Medicine', 'picture' => 'https://api.pega10x.com/storage/1/home_services/pills.png'],
+		['name' => 'Lab', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png']
+		];
+		return $services;
+	}
 }

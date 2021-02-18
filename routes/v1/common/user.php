@@ -83,7 +83,10 @@ $router->group(['middleware' => 'auth:user'], function($app) {
 
     $app->get('/article_category', 'V1\Common\User\HomeController@article_category');
     $app->get('/article_sub_category/{id}', 'V1\Common\User\HomeController@article_sub_category');
-	$app->get('/articles/{id}/{ids}', 'V1\Common\User\HomeController@article');
+    $app->get('/articles/{id}/{ids}', 'V1\Common\User\HomeController@article');
+    
+
+	$app->get('/home', 'V1\Common\User\HomeController@home');
 
 });
 

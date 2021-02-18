@@ -25,6 +25,7 @@ use App\Models\Common\Chat;
 use App\Models\Common\HealthArticleCategory;
 use App\Models\Common\HealthArticleSubcategory;
 use App\Models\Common\HealthArticle;
+use App\Models\Order\StoreItem;
 use App\Services\SendPushNotification;
 use App\Helpers\Helper;
 use Carbon\Carbon;
@@ -885,6 +886,74 @@ class HomeController extends Controller
 					->get();
 
         return Helper::getResponse(['data' => $article]);
+    }
+    
+	public function home(Request $request) {
+	
+        $user = Auth::guard('user')->user();
+
+        $company_id = $user ? $user->company_id : 1;
+
+        $city_id = $user ? $user->city_id : $request->city_id;
+
+        $settings = json_decode(json_encode(Setting::where('company_id', $company_id)->first()->settings_data));
+
+		$article_category = HealthArticleCategory::where('company_id',$company_id)
+                        ->get();
+        $all_products = StoreItem::where('status', '!=', 2)->where('company_id', $company_id)->get();
+
+        $product_timeline = $settings->order->product_timeline;
+        $all_products->map(function($products) use ($product_timeline) {
+            $new_product = $products->where('id',$products->id)->where( 'created_at', '>', Carbon::now()->subDays($product_timeline))->first();
+            
+            if($new_product)
+            {
+                $products->shop_status = "NEW";
+            
+            }else{
+                $products->shop_status = "BESTSELLER";
+            }
+            
+            $products->offer=0;
+            if($products->item_discount)
+                $products->offer=1;
+
+            if($products->status == 0)
+                $products->item_status="Item Not Available";
+            else if($products->status == 1)
+                $products->item_status="Available";
+
+            if($products->item_discount_type=="PERCENTAGE"){
+                    $products->product_offer=($products->item_price-($products->item_discount/100)*$products->item_price);
+                
+                }else if($products->item_discount_type=="AMOUNT"){
+                $products->product_offer=$products->item_price-$products->item_discount;
+                
+                }
+                $products->product_offer=($products->product_offer>0) ? $products->product_offer:0;
+
+            
+            $products->itemsaddon->filter(function($addon) {
+                $addon->addon_name = $addon->addon->addon_name;;
+                unset($addon->addon);
+                return $addon;
+            });
+            
+            return $products;
+
+        });
+
+        $offers_banner = ['https://api.pega10x.com/storage/1/home_services/banner1.png', 'https://api.pega10x.com/storage/1/home_services/banner2.png'];
+        $new_arrivals_banner = ['https://api.pega10x.com/storage/1/home_services/banner3.png', 'https://api.pega10x.com/storage/1/home_services/banner4.png'];
+                        
+        $data = [];
+        $data['services'] = Helper::getServices();
+        $data['offers_banner'] = $offers_banner;
+        $data['products'] = $all_products;
+        $data['new_arrivals_banner'] = $new_arrivals_banner;
+        $data['article_category'] = $article_category;
+
+        return Helper::getResponse(['data' => $data]);
 	}
 	
 }
