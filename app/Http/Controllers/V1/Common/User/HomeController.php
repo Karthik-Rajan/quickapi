@@ -22,6 +22,9 @@ use App\Models\Common\Promocode;
 use App\Models\Common\UserRequest;
 use App\Models\Common\AdminService;
 use App\Models\Common\Chat;
+use App\Models\Common\HealthArticleCategory;
+use App\Models\Common\HealthArticleSubcategory;
+use App\Models\Common\HealthArticle;
 use App\Services\SendPushNotification;
 use App\Helpers\Helper;
 use Carbon\Carbon;
@@ -847,5 +850,41 @@ class HomeController extends Controller
         }
     }
 
+    public function article_category(Request $request)
+    {
+    	$user = Auth::guard('user')->user();
+
+        $company_id = $user ? $user->company_id : 1;
+
+		$category_list = HealthArticleCategory::where('company_id',$company_id)
+						->get();
+        return Helper::getResponse(['data' => $category_list]);
+	}
+	//Article Sub Category
+	public function article_sub_category(Request $request,$id) {
+        $user = Auth::guard('user')->user();
+
+        $company_id = $user ? $user->company_id : 1;
+		$city_id = $user ? $user->city_id : $request->city_id;
+		$article_sub_category_list = HealthArticleSubcategory::where('company_id',$company_id)->where('article_subcategory_status',1)->where('article_category_id',$id)->get();
+        return Helper::getResponse(['data' => $article_sub_category_list]);
+	}
+	//Article Sub Category
+	public function article(Request $request, $category_id,$subcategory_id) {
+	
+        $user = Auth::guard('user')->user();
+
+        $company_id = $user ? $user->company_id : 1;
+
+        $city_id = $user ? $user->city_id : $request->city_id;
+
+		$article = HealthArticle::where('company_id',$company_id)
+					->where('article_subcategory_id',$subcategory_id)
+                    ->where('article_category_id',$category_id)
+                    ->where('article_status',1)
+					->get();
+
+        return Helper::getResponse(['data' => $article]);
+	}
 	
 }

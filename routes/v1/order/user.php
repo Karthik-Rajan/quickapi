@@ -17,6 +17,7 @@ $router->group(['middleware' => 'authless:user'], function($app) {
     $app->get('/store/list/{id}', 'V1\Order\User\HomeController@store_list');
 	$app->get('/store/cusines/{id}', 'V1\Order\User\HomeController@cusine_list');
 	$app->get('/store/details/{id}', 'V1\Order\User\HomeController@store_details');
+	$app->get('/store/products', 'V1\Order\User\HomeController@all_products');
 
 });
 

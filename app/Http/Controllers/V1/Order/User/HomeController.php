@@ -231,6 +231,32 @@ class HomeController extends Controller
         $store_detail->usercart = count($this->totalusercart());
         $store_detail->totalcartprice =$this->totalusercart()->sum('total_item_price');
 		return Helper::getResponse(['data' => $store_detail]);
+    }
+    
+    // all products
+	public function all_products(Request $request){
+
+        $user = Auth::guard('user')->user();
+
+        $company_id = $user ? $user->company_id : 1;
+
+        $settings = json_decode(json_encode(Setting::where('company_id', $company_id)->first()->settings_data));
+
+        $all_products = StoreItem::where('status', 1)->where('company_id', $company_id)->get();
+        
+		// if($request->has('latitude') && $request->has('latitude')!='' && $request->has('longitude') && $request->has('longitude')!='')
+        // {
+        //     $longitude = $request->longitude;
+        //     $latitude = $request->latitude;
+        //     $distance = $settings->order->store_search_radius;
+        //     // config('constants.store_search_radius', '10');
+        //         $store_details->select('id','store_type_id','company_id','store_name','currency_symbol','store_location','latitude','longitude','picture','offer_min_amount','estimated_delivery_time','free_delivery','is_veg','rating','offer_percent',\DB::raw("(6371 * acos( cos( radians('$latitude') ) * cos( radians(latitude) ) * cos( radians(longitude) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians(latitude) ) ) ) AS distance"),'bestseller','bestseller_month')
+        //             ->whereRaw("(6371 * acos( cos( radians('$latitude') ) * cos( radians(latitude) ) * cos( radians(longitude) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians(latitude) ) ) ) <= $distance");
+        // }else{
+        // 	$store_details->select('id','store_type_id','company_id','store_name','currency_symbol','store_location','latitude','longitude','picture','offer_min_amount','estimated_delivery_time','free_delivery','is_veg','rating','offer_percent','bestseller','bestseller_month');
+        // }
+
+		return Helper::getResponse(['data' => $all_products]);
 	}
 
 	public function shoptime($id){

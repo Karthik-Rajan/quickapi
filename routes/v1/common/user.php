@@ -81,6 +81,10 @@ $router->group(['middleware' => 'auth:user'], function($app) {
     $app->post('device_token', 'V1\Common\User\HomeController@updateDeviceToken');
     $app->post('/wallet/transfer', 'V1\Common\User\HomeController@wallet_transfer');
 
+    $app->get('/article_category', 'V1\Common\User\HomeController@article_category');
+    $app->get('/article_sub_category/{id}', 'V1\Common\User\HomeController@article_sub_category');
+	$app->get('/articles/{id}/{ids}', 'V1\Common\User\HomeController@article');
+
 });
 
 $router->post('/account/kit', 'V1\Common\User\SocialLoginController@account_kit');
