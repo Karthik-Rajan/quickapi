@@ -15,6 +15,7 @@ class CreateProvidersTable extends Migration
 	{
 		Schema::create('providers', function (Blueprint $table) {
 			$table->increments('id');
+			$table->enum('type',['PATIENT', 'CCM'])->nullable();
 			$table->string('unique_id')->nullable();
 			$table->string('first_name');
 			$table->string('last_name');

@@ -97,7 +97,7 @@ class ShopsController extends Controller
              'longitude' => 'required',
              'store_zipcode'=>'required',
              'zone_id'=>'required',
-             'store_response_time'=>'required',
+             
              'picture' => 'mimes:jpeg,jpg,bmp,png|max:5242880',
              'password'         => 'required',
              'confirmpassword' => 'required|same:password',
@@ -163,7 +163,7 @@ class ShopsController extends Controller
             }else{
                 $store->is_veg = 0; 
             }    
-            $store->store_response_time = $request->store_response_time;  
+            $store->store_response_time = 100;  
             $store->email = $request->email; 
 
             if($request->has('estimated_delivery_time')) {
@@ -301,7 +301,7 @@ class ShopsController extends Controller
             else{          
                 $this->company_id = Auth::guard('shop')->user()->company_id;
             } 
-            $store['zone_data'] = Zone::where("city_id",$store['city_id'])->where('company_id',$this->company_id)->where('user_type',"SHOP")->get();
+            $store['zone_data'] = Zone::where("city_id",$store['city_id'])->where('company_id',$this->company_id)->where('user_type',"PHARMACY")->get();
 
 
             return Helper::getResponse(['data' => $store]);
@@ -336,7 +336,7 @@ class ShopsController extends Controller
              'longitude' => 'required',
              'store_zipcode'=>'required',
              'zone_id'=>'required',
-             'store_response_time'=>'required',
+             
              
          ]);
 
@@ -419,7 +419,7 @@ class ShopsController extends Controller
             }else{
                 $store->is_veg = 0; 
             }   
-            $store->store_response_time = $request->store_response_time;
+            $store->store_response_time = 100;
             $store->email = $request->email;      
             if($request->has('estimated_delivery_time')) {
                 $store->estimated_delivery_time = $request->estimated_delivery_time;     
@@ -743,7 +743,7 @@ class ShopsController extends Controller
                         $storeLists->whereBetween('created_at',[Carbon::createFromFormat('Y-m-d', $request->from),Carbon::createFromFormat('Y-m-d', $request->to)]);
                     }
                 }
-			}else{
+			}    else{
                 // dd(5);
             }
             $cancelservices = $storeLists;

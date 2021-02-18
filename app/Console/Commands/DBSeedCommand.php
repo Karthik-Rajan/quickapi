@@ -106,12 +106,12 @@ class DBSeedCommand extends Command
 
 
 
-			DB::connection('delivery')->table('package_types')->truncate();
-			DB::connection('delivery')->table('delivery_categories')->truncate();
-			DB::connection('delivery')->table('delivery_types')->truncate();
-			DB::connection('delivery')->table('delivery_vehicles')->truncate();
-			DB::connection('delivery')->table('delivery_cities')->truncate();
-			DB::connection('delivery')->table('delivery_city_prices')->truncate();
+			// DB::connection('delivery')->table('package_types')->truncate();
+			// DB::connection('delivery')->table('delivery_categories')->truncate();
+			// DB::connection('delivery')->table('delivery_types')->truncate();
+			// DB::connection('delivery')->table('delivery_vehicles')->truncate();
+			// DB::connection('delivery')->table('delivery_cities')->truncate();
+			// DB::connection('delivery')->table('delivery_city_prices')->truncate();
 
 			Schema::enableForeignKeyConstraints();
 
