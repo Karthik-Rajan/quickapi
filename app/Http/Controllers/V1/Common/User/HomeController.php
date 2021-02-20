@@ -911,7 +911,7 @@ class HomeController extends Controller
                 $products->shop_status = "NEW";
             
             }else{
-                $products->shop_status = "BESTSELLER";
+                $products->shop_status = "DISCOUNT";
             }
             
             $products->offer=0;
@@ -943,8 +943,8 @@ class HomeController extends Controller
 
         });
 
-        $offers_banner = ['https://api.pega10x.com/storage/1/home_services/banner1.png', 'https://api.pega10x.com/storage/1/home_services/banner2.png'];
-        $new_arrivals_banner = ['https://api.pega10x.com/storage/1/home_services/banner3.png', 'https://api.pega10x.com/storage/1/home_services/banner4.png'];
+        $offers_banner = ['https://api.pega10x.com/storage/1/home_services/banner1.jpg', 'https://api.pega10x.com/storage/1/home_services/banner2.jpg'];
+        $new_arrivals_banner = ['https://api.pega10x.com/storage/1/home_services/banner3.jpg', 'https://api.pega10x.com/storage/1/home_services/banner4.jpg'];
                         
         $data = [];
         $data['services'] = Helper::getServices();
