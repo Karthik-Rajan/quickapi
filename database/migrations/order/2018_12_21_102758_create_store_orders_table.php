@@ -43,7 +43,7 @@ class CreateStoreOrdersTable extends Migration
             $table->integer('paid')->default(0);
             $table->tinyInteger('user_rated')->default(0);
             $table->tinyInteger('provider_rated')->default(0);
-            $table->enum('cancelled_by', ['NONE','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('cancelled_by', ['NONE','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->string('cancel_reason')->nullable();
             $table->string('currency')->nullable();
             $table->enum('status', ['ORDERED','RECEIVED','STORECANCELLED','PROVIDEREJECTED','CANCELLED','SEARCHING','PROCESSING','STARTED','REACHED','PICKEDUP','ARRIVED','DELIVERED','COMPLETED'])->comment('ORDERED - User creates the order, RECEIVED - Shop receives the order, STORECANCELLED - Store cancel the order ()'); 
@@ -52,11 +52,11 @@ class CreateStoreOrdersTable extends Migration
             $table->string('timezone')->nullable();
             $table->enum('request_type', ['AUTO','MANUAL'])->default('AUTO');
             $table->tinyInteger('leave_at_door')->default(0);
-            $table->enum('created_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('created_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('created_by')->nullable();
-            $table->enum('modified_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('modified_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('modified_by')->nullable();
-            $table->enum('deleted_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('deleted_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();

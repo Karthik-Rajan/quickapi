@@ -20,11 +20,11 @@ class CreateMenuCitiesTable extends Migration
             $table->unsignedInteger('state_id')->nullable();
             $table->unsignedInteger('city_id')->nullable();
             $table->tinyInteger('status')->default(0);
-            $table->enum('created_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('created_type', ['ADMIN'])->nullable();
             $table->unsignedInteger('created_by')->nullable();
-            $table->enum('modified_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('modified_type', ['ADMIN'])->nullable();
             $table->unsignedInteger('modified_by')->nullable();
-            $table->enum('deleted_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('deleted_type', ['ADMIN'])->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
             $table->timestamps();
         });

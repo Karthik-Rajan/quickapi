@@ -346,7 +346,7 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
 
 
     //peakhours
-    $app->get('/permission', ['uses' => 'V1\Common\Admin\Resource\RolesController@permission', 'middleware' => ['permission:peak-hour-list']]);
+    $app->get('/permission', ['uses' => 'V1\Common\Admin\Resource\RolesController@permission']);
     
     $app->get('/peakhour', ['uses' => 'V1\Common\Admin\Resource\PeakHourController@index', 'middleware' => ['permission:peak-hour-list']]);
 

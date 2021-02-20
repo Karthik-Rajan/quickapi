@@ -31,7 +31,7 @@ class CreateServiceRequestsTable extends Migration
 			$table->unsignedInteger('quantity')->nullable();
 			$table->unsignedInteger('price')->nullable();
 			$table->enum('status', ['SEARCHING','CANCELLED','ACCEPTED','STARTED','ARRIVED','PICKEDUP','DROPPED','COMPLETED','SCHEDULED'])->nullable();
-			$table->enum('cancelled_by', ['NONE','USER','PROVIDER'])->nullable();
+			$table->enum('cancelled_by', ['NONE','PATIENT','CCM','FIELD-EXECUTIVE'])->nullable();
 			$table->string('cancel_reason')->nullable();
 			$table->string('payment_mode')->nullable();
 			$table->tinyInteger('paid')->default(0);
@@ -59,11 +59,11 @@ class CreateServiceRequestsTable extends Migration
 			$table->tinyInteger('surge')->default(0);
 			$table->longText('route_key')->nullable();
 			$table->unsignedInteger('admin_id')->nullable();
-			$table->enum('created_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+			$table->enum('created_type',  ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
 			$table->unsignedInteger('created_by')->nullable();
-			$table->enum('modified_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+			$table->enum('modified_type',  ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
 			$table->unsignedInteger('modified_by')->nullable();
-			$table->enum('deleted_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+			$table->enum('deleted_type',  ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
 			$table->unsignedInteger('deleted_by')->nullable();
 			$table->timestamps();
 			$table->softDeletes();

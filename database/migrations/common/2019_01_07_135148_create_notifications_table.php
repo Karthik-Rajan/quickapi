@@ -15,7 +15,7 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('notify_type', ['all', 'user', 'provider','shop','fleet'])->default('all');
+            $table->enum('notify_type', ['all','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->default('all');
             $table->unsignedInteger('user_id')->nullable();
             $table->string('service')->nullable();
             $table->string('title')->nullable();

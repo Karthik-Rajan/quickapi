@@ -25,11 +25,11 @@ class CreatePaymentLogsTable extends Migration
             $table->string('transaction_code')->nullable()->comment('Random code generated during payment');
             $table->string('transaction_id')->nullable()->comment('Foreign key of the user request or wallet table');
             $table->text('response')->nullable();
-            $table->enum('created_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('created_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('created_by')->nullable();
-            $table->enum('modified_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('modified_type',['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('modified_by')->nullable();
-            $table->enum('deleted_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('deleted_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
 
             $table->timestamps();

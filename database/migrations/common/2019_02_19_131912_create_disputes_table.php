@@ -16,16 +16,16 @@ class CreateDisputesTable extends Migration
         Schema::create('disputes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('service')->nullable();
-            $table->enum('dispute_type', ['user', 'provider'])->default('user');
+            $table->enum('dispute_type', ['PATIENT', 'CCM','FIELD-EXECUTIVE'])->default('PATIENT');
             $table->string('dispute_name');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->enum('admin_services', ['TRANSPORT', 'ORDER', 'SERVICE']);
             $table->unsignedInteger('company_id');
-            $table->enum('created_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('created_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('created_by')->nullable();
-            $table->enum('modified_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('modified_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('modified_by')->nullable();
-            $table->enum('deleted_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('deleted_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
 
             $table->timestamps();

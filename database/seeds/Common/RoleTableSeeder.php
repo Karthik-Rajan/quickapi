@@ -19,8 +19,7 @@ class RoleTableSeeder extends Seeder
             ['name' => 'ADMIN', 'guard_name' => 'admin','company_id' =>null],
             ['name' => 'DISPATCHER', 'guard_name' => 'admin','company_id' =>null],
             ['name' => 'DISPUTE', 'guard_name' => 'admin','company_id' =>null],
-            ['name' => 'ACCOUNT', 'guard_name' => 'admin','company_id' =>null],  
-            ['name' => 'FLEET', 'guard_name' => 'admin','company_id' =>null]          
+            ['name' => 'ACCOUNT', 'guard_name' => 'admin','company_id' =>null]     
         ]);
         
         Schema::enableForeignKeyConstraints();

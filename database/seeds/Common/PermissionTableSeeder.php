@@ -24,12 +24,11 @@ class PermissionTableSeeder extends Seeder
     	DB::table('permissions')->insert([
             ['name' => 'dashboard-menus', 'display_name' => 'Box Menus', 'guard_name' => 'admin', 'group_name' => 'Dashboard'],
             ['name' => 'wallet-summary', 'display_name' => 'Wallet Summary', 'guard_name' => 'admin', 'group_name' => 'Dashboard'],
-            ['name' => 'recent-rides', 'display_name' => 'Recent Rides', 'guard_name' => 'admin', 'group_name' => 'Dashboard'],
+            
             ['name' => 'graph by-country', 'display_name' => 'Graph by Country', 'guard_name' => 'admin', 'group_name' => 'Dashboard'],
-            ['name' => 'no-of-user', 'display_name' => 'No Of User', 'guard_name' => 'admin', 'group_name' => 'Dashboard'],
-            ['name' => 'no-of-provider', 'display_name' => 'No Of Provider', 'guard_name' => 'admin', 'group_name' => 'Dashboard'],
-            ['name' => 'no-of-fleet', 'display_name' => 'No Of Fleet', 'guard_name' => 'admin', 'group_name' => 'Dashboard'],
-            ['name' => 'no-of-shop', 'display_name' => 'No Of Shop', 'guard_name' => 'admin', 'group_name' => 'Dashboard'],
+            ['name' => 'no-of-user', 'display_name' => 'No Of Patient', 'guard_name' => 'admin', 'group_name' => 'Dashboard'],
+            ['name' => 'no-of-provider', 'display_name' => 'No Of CCM', 'guard_name' => 'admin', 'group_name' => 'Dashboard'],
+            ['name' => 'no-of-shop', 'display_name' => 'No Of Pharmacy', 'guard_name' => 'admin', 'group_name' => 'Dashboard'],
 
 
             ['name' => 'dispatcher-panel', 'display_name' => 'Dispatcher Menu', 'guard_name' => 'admin', 'group_name' => 'Dispatcher Panel'],
@@ -40,14 +39,6 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'dispute-edit', 'display_name' => 'Edit Dispute', 'guard_name' => 'admin', 'group_name' => 'Dispute'],
             ['name' => 'dispute-delete', 'display_name' => 'Delete Dispute', 'guard_name' => 'admin', 'group_name' => 'Dispute'],
             ['name' => 'dispute-status', 'display_name' => 'Status Dispute', 'guard_name' => 'admin', 'group_name' => 'Dispute'],
-
-
-            // RIDE DISPUTE PERMISSION SET
-            ['name' => 'ride-dispute-list', 'display_name' => 'Ride Disputes list', 'guard_name' => 'admin', 'group_name' => 'Ride Disputes'],
-            ['name' => 'ride-dispute-create', 'display_name' => 'Create Ride Disputes', 'guard_name' => 'admin', 'group_name' => 'Ride Disputes'],
-            ['name' => 'ride-dispute-edit', 'display_name' => 'Edit Ride Disputes', 'guard_name' => 'admin', 'group_name' => 'Ride Disputes'],
-            ['name' => 'ride-dispute-delete', 'display_name' => 'Delete Ride Disputes', 'guard_name' => 'admin', 'group_name' => 'Ride Disputes'],
-            ['name' => 'ride-dispute-status', 'display_name' => 'Status Ride Disputes', 'guard_name' => 'admin', 'group_name' => 'Ride Disputes'],
 
             // SERVICE DISPUTE PERMISSION SET
             ['name' => 'service-dispute-list', 'display_name' => 'Service Disputes list', 'guard_name' => 'admin', 'group_name' => 'Service Disputes'],
@@ -67,39 +58,49 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'heat-map', 'display_name' => 'Heat Map', 'guard_name' => 'admin', 'group_name' => 'Map'],
             ['name' => 'god-eye', 'display_name' => 'God\'s Eye', 'guard_name' => 'admin', 'group_name' => 'Map'],
 
-            ['name' => 'user-list', 'display_name' => 'User list', 'guard_name' => 'admin', 'group_name' => 'Users'],
-            ['name' => 'user-history', 'display_name' => 'User History', 'guard_name' => 'admin', 'group_name' => 'Users'],
-            ['name' => 'user-create', 'display_name' => 'Create User', 'guard_name' => 'admin', 'group_name' => 'Users'],
-            ['name' => 'user-edit', 'display_name' => 'Edit User', 'guard_name' => 'admin', 'group_name' => 'Users'],
-            ['name' => 'user-delete', 'display_name' => 'Delete User', 'guard_name' => 'admin', 'group_name' => 'Users'],
-            ['name' => 'user-status', 'display_name' => 'Status User', 'guard_name' => 'admin', 'group_name' => 'Users'],
+            ['name' => 'user-list', 'display_name' => 'Patient list', 'guard_name' => 'admin', 'group_name' => 'Patient'],
+            ['name' => 'user-history', 'display_name' => 'Patient History', 'guard_name' => 'admin', 'group_name' => 'Patient'],
+            ['name' => 'user-create', 'display_name' => 'Create Patient', 'guard_name' => 'admin', 'group_name' => 'Patient'],
+            ['name' => 'user-edit', 'display_name' => 'Edit Patient', 'guard_name' => 'admin', 'group_name' => 'Patient'],
+            ['name' => 'user-delete', 'display_name' => 'Delete Patient', 'guard_name' => 'admin', 'group_name' => 'Patient'],
+            ['name' => 'user-status', 'display_name' => 'Status Patient', 'guard_name' => 'admin', 'group_name' => 'Patient'],
 
-            ['name' => 'provider-list', 'display_name' => 'Provider list', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'provider-create', 'display_name' => 'Create Provider', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'provider-edit', 'display_name' => 'Edit Provider', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'provider-delete', 'display_name' => 'Delete Provider', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'provider-status', 'display_name' => 'Provider Status', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'status-provider', 'display_name' => 'Status Provider ', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'provider-history', 'display_name' => 'Ride History', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'provider-statements', 'display_name' => 'Statements', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'provider-services', 'display_name' => 'Provider Services', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'provider-service-update', 'display_name' => 'Provider Service Update', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'provider-service-delete', 'display_name' => 'Provider Service Delete', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'provider-documents', 'display_name' => 'Provider Documents', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'provider-document-edit', 'display_name' => 'Provider Document Edit', 'guard_name' => 'admin', 'group_name' => 'Providers'],
-            ['name' => 'provider-document-delete', 'display_name' => 'Provider Document Delete', 'guard_name' => 'admin', 'group_name' => 'Providers'],
+            ['name' => 'provider-list', 'display_name' => 'CCM list', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'provider-create', 'display_name' => 'Create CCM', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'provider-edit', 'display_name' => 'Edit CCM', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'provider-delete', 'display_name' => 'Delete CCM', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'provider-status', 'display_name' => 'CCM Status', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'status-provider', 'display_name' => 'Status CCM ', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'provider-history', 'display_name' => 'Ride History', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'provider-statements', 'display_name' => 'Statements', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'provider-services', 'display_name' => 'CCM Services', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'provider-service-update', 'display_name' => 'CCM Service Update', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'provider-service-delete', 'display_name' => 'CCM Service Delete', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'provider-documents', 'display_name' => 'CCM Documents', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'provider-document-edit', 'display_name' => 'CCM Document Edit', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+            ['name' => 'provider-document-delete', 'display_name' => 'CCM Document Delete', 'guard_name' => 'admin', 'group_name' => 'CCM'],
+
+            //field-executive
+            ['name' => 'field-executive-list', 'display_name' => 'Field Executive list', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'field-executive-create', 'display_name' => 'Create Field Executive', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'field-executive-edit', 'display_name' => 'Edit Field Executive', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'field-executive-delete', 'display_name' => 'Delete Field Executive', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'field-executive-status', 'display_name' => 'Field Executive Status', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'status-field-executive', 'display_name' => 'Status Field Executive ', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'field-executive-history', 'display_name' => 'Ride History', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'field-executive-statements', 'display_name' => 'Statements', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'field-executive-services', 'display_name' => 'Field Executive Services', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'field-executive-service-update', 'display_name' => 'Field Executive Service Update', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'field-executive-service-delete', 'display_name' => 'Field Executive Service Delete', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'field-executive-documents', 'display_name' => 'Field Executive Documents', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'field-executive-document-edit', 'display_name' => 'Field Executive Document Edit', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+            ['name' => 'field-executive-document-delete', 'display_name' => 'Field Executive Document Delete', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
+
 
             ['name' => 'dispatcher-list', 'display_name' => 'Dispatcher list', 'guard_name' => 'admin', 'group_name' => 'Dispatcher'],
             ['name' => 'dispatcher-create', 'display_name' => 'Create Dispatcher', 'guard_name' => 'admin', 'group_name' => 'Dispatcher'],
             ['name' => 'dispatcher-edit', 'display_name' => 'Edit Dispatcher', 'guard_name' => 'admin', 'group_name' => 'Dispatcher'],
             ['name' => 'dispatcher-delete', 'display_name' => 'Delete Dispatcher', 'guard_name' => 'admin', 'group_name' => 'Dispatcher'],
-
-            ['name' => 'fleet-list', 'display_name' => 'Fleet Owner list', 'guard_name' => 'admin', 'group_name' => 'Fleet Owner'],
-            ['name' => 'fleet-create', 'display_name' => 'Create Fleet Owner', 'guard_name' => 'admin', 'group_name' => 'Fleet Owner'],
-            ['name' => 'fleet-edit', 'display_name' => 'Edit Fleet Owner', 'guard_name' => 'admin', 'group_name' => 'Fleet Owner'],
-            ['name' => 'fleet-delete', 'display_name' => 'Delete Fleet Owner', 'guard_name' => 'admin', 'group_name' => 'Fleet Owner'],
-            ['name' => 'fleet-status', 'display_name' => 'status Fleet Owner', 'guard_name' => 'admin', 'group_name' => 'Fleet Owner'],
-            ['name' => 'fleet-providers', 'display_name' => 'Fleet Owner\'s Providers list', 'guard_name' => 'admin', 'group_name' => 'Fleet Owner'],
 
             ['name' => 'account-manager-list', 'display_name' => 'Account Manager list', 'guard_name' => 'admin', 'group_name' => 'Account Manager'],
             ['name' => 'account-manager-create', 'display_name' => 'Create Account Manager', 'guard_name' => 'admin', 'group_name' => 'Account Manager'],
@@ -114,39 +115,25 @@ class PermissionTableSeeder extends Seeder
 
             ['name' => 'statements', 'display_name' => 'Statements', 'guard_name' => 'admin', 'group_name' => 'Statements'],
 
-            ['name' => 'overall-transport-statements', 'display_name' => 'Overall Transport Statements', 'guard_name' => 'admin', 'group_name' => 'Statements'],
             ['name' => 'overall-service-statements', 'display_name' => 'Overall Service Statements', 'guard_name' => 'admin', 'group_name' => 'Statements'],
             ['name' => 'overall-order-statements', 'display_name' => 'Overall Order Statements', 'guard_name' => 'admin', 'group_name' => 'Statements'],
             ['name' => 'overall-user-history', 'display_name' => 'Overall User History', 'guard_name' => 'admin', 'group_name' => 'Statements'],
             ['name' => 'provider-earnings-statements', 'display_name' => 'Provider  Statements', 'guard_name' => 'admin', 'group_name' => 'Statements'],
             ['name' => 'overall-admin-transaction', 'display_name' => 'Overall Admin Transactions', 'guard_name' => 'admin', 'group_name' => 'Statements'],
-            ['name' => 'overall-store-transaction', 'display_name' => 'Overall Store Transactions', 'guard_name' => 'admin', 'group_name' => 'Statements'],
-            ['name' => 'overall-fleet-transaction', 'display_name' => 'Overall fleet Transactions', 'guard_name' => 'admin', 'group_name' => 'Statements'],
+            ['name' => 'overall-store-transaction', 'display_name' => 'Overall Pharmacy Transactions', 'guard_name' => 'admin', 'group_name' => 'Statements'],
           
             ['name' => 'settlements', 'display_name' => 'Settlements', 'guard_name' => 'admin', 'group_name' => 'Settlements'],
 
-            ['name' => 'user-rating', 'display_name' => 'User Ratings', 'guard_name' => 'admin', 'group_name' => 'User Ratings'],
-            ['name' => 'provider-rating', 'display_name' => 'Provider Ratings', 'guard_name' => 'admin', 'group_name' => 'Provider Ratings'],
+            ['name' => 'user-rating', 'display_name' => 'Patient Ratings', 'guard_name' => 'admin', 'group_name' => 'Patient Ratings'],
+            ['name' => 'provider-rating', 'display_name' => 'CCM Ratings', 'guard_name' => 'admin', 'group_name' => 'CCM Ratings'],
 
-            ['name' => 'ride-history', 'display_name' => 'Ride History', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-            ['name' => 'ride-delete', 'display_name' => 'Delete Ride', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-
-            ['name' => 'schedule-rides', 'display_name' => 'Schedule Rides', 'guard_name' => 'admin', 'group_name' => 'Rides'],
+    
 
             ['name' => 'promocodes-list', 'display_name' => 'Promocodes List', 'guard_name' => 'admin', 'group_name' => 'Promocodes'],
             ['name' => 'promocodes-create', 'display_name' => 'Create Promocode', 'guard_name' => 'admin', 'group_name' => 'Promocodes'],
             ['name' => 'promocodes-edit', 'display_name' => 'Edit Promocode', 'guard_name' => 'admin', 'group_name' => 'Promocodes'],
             ['name' => 'promocodes-delete', 'display_name' => 'Delete Promocode', 'guard_name' => 'admin', 'group_name' => 'Promocodes'],
 
-            ['name' => 'service-types-list', 'display_name' => 'Service Types List', 'guard_name' => 'admin', 'group_name' => 'Service Types'],
-            ['name' => 'service-types-create', 'display_name' => 'Create Service Type', 'guard_name' => 'admin', 'group_name' => 'Service Types'],
-            ['name' => 'service-types-edit', 'display_name' => 'Edit Service Type', 'guard_name' => 'admin', 'group_name' => 'Service Types'],
-            ['name' => 'service-types-delete', 'display_name' => 'Delete Service Type', 'guard_name' => 'admin', 'group_name' => 'Service Types'],
-
-            ['name' => 'peak-hour-list', 'display_name' => 'Peak Hour List', 'guard_name' => 'admin', 'group_name' => 'Service Types'],
-            ['name' => 'peak-hour-create', 'display_name' => 'Create Peak Hour', 'guard_name' => 'admin', 'group_name' => 'Service Types'],
-            ['name' => 'peak-hour-edit', 'display_name' => 'Edit Peak Hour', 'guard_name' => 'admin', 'group_name' => 'Service Types'],
-            ['name' => 'peak-hour-delete', 'display_name' => 'Delete Peak Hour', 'guard_name' => 'admin', 'group_name' => 'Service Types'],
 
             ['name' => 'documents-list', 'display_name' => 'Documents List', 'guard_name' => 'admin', 'group_name' => 'Documents'],
             ['name' => 'documents-create', 'display_name' => 'Create Document', 'guard_name' => 'admin', 'group_name' => 'Documents'],
@@ -166,11 +153,6 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'notification-delete', 'display_name' => 'Delete Notification', 'guard_name' => 'admin', 'group_name' => 'Notifications'],
             // ['name' => 'notification-status', 'display_name' => 'Notification Status', 'guard_name' => 'admin', 'group_name' => 'Notifications'],
 
-            ['name' => 'lost-item-list', 'display_name' => 'Lost Item List', 'guard_name' => 'admin', 'group_name' => 'Lost Items'],
-            ['name' => 'lost-item-create', 'display_name' => 'Create Lost Item', 'guard_name' => 'admin', 'group_name' => 'Lost Items'],
-            ['name' => 'lost-item-edit', 'display_name' => 'Edit Lost Item', 'guard_name' => 'admin', 'group_name' => 'Lost Items'],
-            ['name' => 'lost-item-staus', 'display_name' => 'Lost Item status', 'guard_name' => 'admin', 'group_name' => 'Lost Items'],
-
 
             ['name' => 'role-list', 'display_name' => 'Role list', 'guard_name' => 'admin', 'group_name' => 'Role'],
             ['name' => 'role-create', 'display_name' => 'Create Role', 'guard_name' => 'admin', 'group_name' => 'Role'],
@@ -189,12 +171,6 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'payment-settings', 'display_name' => 'Payment Settings List', 'guard_name' => 'admin', 'group_name' => 'Payment'],
 
 
-            ['name' => 'geofence-list', 'display_name' => 'Geofence list', 'guard_name' => 'admin', 'group_name' => 'Geofence'],
-            ['name' => 'geofence-create', 'display_name' => 'Create Geofence', 'guard_name' => 'admin', 'group_name' => 'Geofence'],
-            ['name' => 'geofence-edit', 'display_name' => 'Edit Geofence', 'guard_name' => 'admin', 'group_name' => 'Geofence'],
-            ['name' => 'geofence-delete', 'display_name' => 'Delete Geofence', 'guard_name' => 'admin', 'group_name' => 'Geofence'],
-            ['name' => 'geofence-status', 'display_name' => 'Geofence Status', 'guard_name' => 'admin', 'group_name' => 'Geofence'],
-
             ['name' => 'site-settings', 'display_name' => 'Site Settings', 'guard_name' => 'admin', 'group_name' => 'Settings'],
 
             ['name' => 'account-settings', 'display_name' => 'Account Settings', 'guard_name' => 'admin', 'group_name' => 'Settings'],
@@ -212,45 +188,31 @@ class PermissionTableSeeder extends Seeder
 
             ['name' => 'db-backup', 'display_name' => 'DB Backup', 'guard_name' => 'admin', 'group_name' => 'Others'],
 
-            ['name' => 'ride', 'display_name' => 'Rides', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-            ['name' => 'add-vehicle-type', 'display_name' => 'Add Vehicle Type', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-            ['name' => 'edit-vehicle-type', 'display_name' => 'Edit Vehicle Type', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-            ['name' => 'vehicle-type-price', 'display_name' => 'Vehicle Type Price', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-            ['name' => 'vehicle-type-status', 'display_name' => 'Vehicle Type Status', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-
-            ['name' => 'add-transport-type', 'display_name' => 'Add Transport Type', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-            ['name' => 'edit-transport-type', 'display_name' => 'Edit Transport Type', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-            ['name' => 'transport-type-status', 'display_name' => 'Transport Type Status', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-
-            ['name' => 'add-peak-type', 'display_name' => 'Add Peak Hour', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-            ['name' => 'edit-peak-type', 'display_name' => 'Edit Peak Hour', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-            ['name' => 'delete-peak-type', 'display_name' => 'Delete Peak Hour', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-
-            ['name' => 'ride-request-history-view', 'display_name' => 'Ride Reqeust history view', 'guard_name' => 'admin', 'group_name' => 'Rides'],
-
-            ['name' => 'service', 'display_name' => 'XUBER', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-
-            ['name' => 'add-service-categories', 'display_name' => 'Add Service Categories', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-            ['name' => 'edit-service-categories', 'display_name' => 'Edit Service Categories', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-            ['name' => 'service-categories-status', 'display_name' => 'Service Categories Status', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-
-            ['name' => 'add-sub-service-categories', 'display_name' => 'Add Sub Service Categories', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-            ['name' => 'edit-sub-service-categories', 'display_name' => 'Edit Sub Service Categories', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-            ['name' => 'sub-service-categories-status', 'display_name' => 'SubService Categories Status', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-
-            ['name' => 'add-service-categories', 'display_name' => 'Add Service Categories', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-            ['name' => 'edit-service-categories', 'display_name' => 'Edit Service Categories', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-            ['name' => 'service-categories-status', 'display_name' => 'Service Categories Status', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-
-            ['name' => 'add-service', 'display_name' => 'Add Service', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-            ['name' => 'edit-service', 'display_name' => 'Edit Service', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-            ['name' => 'service-price', 'display_name' => 'Service Price', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-            ['name' => 'service-status', 'display_name' => 'Service Status', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
-
-            ['name' => 'service-request-history', 'display_name' => 'Service Request history View', 'guard_name' => 'admin', 'group_name' => 'XUBER'],
 
 
-            ['name' => 'store', 'display_name' => 'STORE', 'guard_name' => 'admin', 'group_name' => 'STORE'],
+            ['name' => 'service', 'display_name' => 'SERVICE', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+
+            ['name' => 'add-service-categories', 'display_name' => 'Add Service Categories', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+            ['name' => 'edit-service-categories', 'display_name' => 'Edit Service Categories', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+            ['name' => 'service-categories-status', 'display_name' => 'Service Categories Status', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+
+            ['name' => 'add-sub-service-categories', 'display_name' => 'Add Sub Service Categories', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+            ['name' => 'edit-sub-service-categories', 'display_name' => 'Edit Sub Service Categories', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+            ['name' => 'sub-service-categories-status', 'display_name' => 'SubService Categories Status', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+
+            ['name' => 'add-service-categories', 'display_name' => 'Add Service Categories', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+            ['name' => 'edit-service-categories', 'display_name' => 'Edit Service Categories', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+            ['name' => 'service-categories-status', 'display_name' => 'Service Categories Status', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+
+            ['name' => 'add-service', 'display_name' => 'Add Service', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+            ['name' => 'edit-service', 'display_name' => 'Edit Service', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+            ['name' => 'service-price', 'display_name' => 'Service Price', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+            ['name' => 'service-status', 'display_name' => 'Service Status', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+
+            ['name' => 'service-request-history', 'display_name' => 'Service Request history View', 'guard_name' => 'admin', 'group_name' => 'SERVICE'],
+
+
+            ['name' => 'store', 'display_name' => 'PHARMACY', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
 
             ['name' => 'payroll', 'display_name' => 'Payroll', 'guard_name' => 'admin', 'group_name' => 'Payroll'],
             ['name' => 'payroll-list', 'display_name' => 'Payroll List', 'guard_name' => 'admin', 'group_name' => 'Payroll'],
@@ -267,23 +229,23 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'zone-status', 'display_name' => 'Status Zone', 'guard_name' => 'admin', 'group_name' => 'Zone '],
            
 
-            ['name' => 'add-shop-type', 'display_name' => 'Add Shop Type', 'guard_name' => 'admin', 'group_name' => 'STORE'],
-            ['name' => 'edit-shop-type', 'display_name' => 'Edit Shop Type', 'guard_name' => 'admin', 'group_name' => 'STORE'],
-            ['name' => 'shop-type-price', 'display_name' => 'Shop Type Price', 'guard_name' => 'admin', 'group_name' => 'STORE'],
-            ['name' => 'shop-type-status', 'display_name' => 'Shop Type Status', 'guard_name' => 'admin', 'group_name' => 'STORE'],
+            ['name' => 'add-shop-type', 'display_name' => 'Add Pharmacy Type', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
+            ['name' => 'edit-shop-type', 'display_name' => 'Edit Pharmacy Type', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
+            ['name' => 'shop-type-price', 'display_name' => 'Pharmacy Type Price', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
+            ['name' => 'shop-type-status', 'display_name' => 'Pharmacy Type Status', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
 
-            ['name' => 'add-cuisine', 'display_name' => 'Add Cuisine', 'guard_name' => 'admin', 'group_name' => 'STORE'],
-            ['name' => 'edit-cuisine', 'display_name' => 'Edit Cuisine', 'guard_name' => 'admin', 'group_name' => 'STORE'],
-            ['name' => 'cuisine-status', 'display_name' => 'Cuisine Status', 'guard_name' => 'admin', 'group_name' => 'STORE'],
+            ['name' => 'add-cuisine', 'display_name' => 'Add Cuisine', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
+            ['name' => 'edit-cuisine', 'display_name' => 'Edit Cuisine', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
+            ['name' => 'cuisine-status', 'display_name' => 'Cuisine Status', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
 
-            ['name' => 'add-shop', 'display_name' => 'Add Shop', 'guard_name' => 'admin', 'group_name' => 'STORE'],
-            ['name' => 'edit-shop', 'display_name' => 'Edit Shop', 'guard_name' => 'admin', 'group_name' => 'STORE'],
-            ['name' => 'shop-status', 'display_name' => 'Shop Status', 'guard_name' => 'admin', 'group_name' => 'STORE'],
-            ['name' => 'shop-category', 'display_name' => 'Shop Category', 'guard_name' => 'admin', 'group_name' => 'STORE'],
-            ['name' => 'shop-items', 'display_name' => 'Shop Items', 'guard_name' => 'admin', 'group_name' => 'STORE'],
-            ['name' => 'shop-log', 'display_name' => 'Shop Logs', 'guard_name' => 'admin', 'group_name' => 'STORE'],
-            ['name' => 'shop-wallet-details', 'display_name' => 'Shop Wallet Details', 'guard_name' => 'admin', 'group_name' => 'STORE'],
-            ['name' => 'shop-request-history', 'display_name' => 'Shop Request History', 'guard_name' => 'admin', 'group_name' => 'STORE'],
+            ['name' => 'add-shop', 'display_name' => 'Add Pharmacy', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
+            ['name' => 'edit-shop', 'display_name' => 'Edit Pharmacy', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
+            ['name' => 'shop-status', 'display_name' => 'Pharmacy Status', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
+            ['name' => 'shop-category', 'display_name' => 'Pharmacy Category', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
+            ['name' => 'shop-items', 'display_name' => 'Pharmacy Items', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
+            ['name' => 'shop-log', 'display_name' => 'Pharmacy Logs', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
+            ['name' => 'shop-wallet-details', 'display_name' => 'Pharmacy Wallet Details', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
+            ['name' => 'shop-request-history', 'display_name' => 'Pharmacy Request History', 'guard_name' => 'admin', 'group_name' => 'PHARMACY'],
 
             ['name' => 'add-country', 'display_name' => 'Add Country', 'guard_name' => 'admin', 'group_name' => 'BUSINESS COUNTRY'],
             ['name' => 'edit-country', 'display_name' => 'Edit Country', 'guard_name' => 'admin', 'group_name' => 'BUSINESS COUNTRY'],
@@ -299,21 +261,21 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'delete-menu', 'display_name' => 'Delete Menu', 'guard_name' => 'admin', 'group_name' => 'MENUS'],
             ['name' => 'menu-city', 'display_name' => 'Menu City', 'guard_name' => 'admin', 'group_name' => 'MENUS'],
 
-            ['name' => 'delivery', 'display_name' => 'Deliveries', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
-            ['name' => 'add-delivery-vehicle-type', 'display_name' => 'Add Vehicle Type', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
-            ['name' => 'edit-delivery-vehicle-type', 'display_name' => 'Edit Vehicle Type', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
-            ['name' => 'delivery-vehicle-type-price', 'display_name' => 'Vehicle Type Price', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
-            ['name' => 'delivery-vehicle-type-status', 'display_name' => 'Vehicle Type Status', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
+            // ['name' => 'delivery', 'display_name' => 'Deliveries', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
+            // ['name' => 'add-delivery-vehicle-type', 'display_name' => 'Add Vehicle Type', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
+            // ['name' => 'edit-delivery-vehicle-type', 'display_name' => 'Edit Vehicle Type', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
+            // ['name' => 'delivery-vehicle-type-price', 'display_name' => 'Vehicle Type Price', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
+            // ['name' => 'delivery-vehicle-type-status', 'display_name' => 'Vehicle Type Status', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
 
-            ['name' => 'add-delivery-type', 'display_name' => 'Add Delivery Type', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
-            ['name' => 'edit-delivery-type', 'display_name' => 'Edit Delivery Type', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
-            ['name' => 'delivery-type-status', 'display_name' => 'Delivery Type Status', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
+            // ['name' => 'add-delivery-type', 'display_name' => 'Add Delivery Type', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
+            // ['name' => 'edit-delivery-type', 'display_name' => 'Edit Delivery Type', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
+            // ['name' => 'delivery-type-status', 'display_name' => 'Delivery Type Status', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
 
-            ['name' => 'add-delivery-package', 'display_name' => 'Add Package Type', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
-            ['name' => 'edit-delivery-package', 'display_name' => 'Edit Package Type', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
-            ['name' => 'delivery-package-status', 'display_name' => 'Package Type Status', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
+            // ['name' => 'add-delivery-package', 'display_name' => 'Add Package Type', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
+            // ['name' => 'edit-delivery-package', 'display_name' => 'Edit Package Type', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
+            // ['name' => 'delivery-package-status', 'display_name' => 'Package Type Status', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
 
-            ['name' => 'delivery-request-history-view', 'display_name' => 'Delivery Reqeust history view', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
+            // ['name' => 'delivery-request-history-view', 'display_name' => 'Delivery Reqeust history view', 'guard_name' => 'admin', 'group_name' => 'Delivery'],
 
             // ['name' => 'payroll', 'display_name' => 'Payroll', 'guard_name' => 'admin', 'group_name' => 'Payroll']
         ]);
@@ -327,14 +289,6 @@ class PermissionTableSeeder extends Seeder
         foreach ($admin_permissions as $admin_permission) {
             $permission[] = $admin_permission->id;
         }
-
-
-        $fleet = Role::where('name', 'FLEET')->first();
-
-        $fleet_permissions = Permission::select('id')->whereIn('name', ['dashboard-menus','provider-list','provider-create','provider-edit','provider-delete','provider-status','provider-history','provider-statements','provider-rating','heat-map','god-eye','status-provider','account-settings','change-password'])->get();
-
-        $fleet->syncPermissions($fleet_permissions->toArray());
-
 
         $dispatcher = Role::where('name', 'DISPATCHER')->first();
 

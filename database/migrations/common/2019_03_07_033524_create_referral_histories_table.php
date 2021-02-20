@@ -21,11 +21,11 @@ class CreateReferralHistoriesTable extends Migration
             $table->longText('referral_data')->nullable();
             $table->enum('status', ['P', 'C'])->default('C');
             $table->unsignedInteger('company_id');
-            $table->enum('created_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('created_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('created_by')->nullable();
-            $table->enum('modified_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('modified_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('modified_by')->nullable();
-            $table->enum('deleted_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('deleted_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
             $table->timestamps();
         });

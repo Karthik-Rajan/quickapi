@@ -24,9 +24,9 @@ class CreatePayrollsTable extends Migration
             $table->enum('admin_service', ['TRANSPORT','ORDER','SERVICE','DELIVERY'])->nullable(); 
             $table->string('wallet')->nullable();
             $table->enum('type', [
-                    'PROVIDER',
-                    'FLEET',
-                    'SHOP',
+                    'CCM',
+                    'FIELD-EXECUTIVE',
+                    'PHARMACY',
                     'STORE'
                 ]);
             $table->enum('payroll_type', [

@@ -30,11 +30,11 @@ class CreateStoreItemsTable extends Migration
             $table->enum('item_discount_type', ['PERCENTAGE','AMOUNT']);
             $table->tinyInteger('is_addon')->default(0);
             $table->tinyInteger('status')->default(1)->comment('1 = Active, 0 = Inactive, 2 = Disabled');
-            $table->enum('created_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('created_type', ['ADMIN','PHARMACY'])->nullable();
             $table->unsignedInteger('created_by')->nullable();
-            $table->enum('modified_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('modified_type', ['ADMIN','PHARMACY'])->nullable();
             $table->unsignedInteger('modified_by')->nullable();
-            $table->enum('deleted_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('deleted_type', ['ADMIN','PHARMACY'])->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();

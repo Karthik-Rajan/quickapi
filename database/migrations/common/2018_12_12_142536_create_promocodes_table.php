@@ -29,12 +29,12 @@ class CreatePromocodesTable extends Migration
             $table->dateTime('expiration');
             $table->bigInteger('user_limit')->default(1);
             $table->enum('status', ['ADDED','EXPIRED']);
-            $table->tinyInteger('eligibility')->comment('1 = Everyone, 2 = Specific User,3 = New User')->default(1);
-            $table->enum('created_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->tinyInteger('eligibility')->comment('1 = Everyone, 2 = Specific Patient,3 = New Patient')->default(1);
+            $table->enum('created_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('created_by')->nullable();
-            $table->enum('modified_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('modified_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('modified_by')->nullable();
-            $table->enum('deleted_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('deleted_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();

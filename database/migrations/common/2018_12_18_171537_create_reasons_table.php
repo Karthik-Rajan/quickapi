@@ -17,7 +17,7 @@ class CreateReasonsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('company_id');
             $table->string('service')->nullable();
-            $table->enum('type',['USER','PROVIDER'])->default('USER');
+            $table->enum('type',['PATIENT','CCM'])->default('PATIENT');
             $table->text('reason')->nullable();
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->enum('created_type', ['ADMIN'])->nullable();

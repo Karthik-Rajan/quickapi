@@ -17,7 +17,7 @@ class CreateServiceRequestDisputesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('company_id');
             $table->integer('service_request_id')->nullable();
-            $table->enum('dispute_type', ['user', 'provider']);
+            $table->enum('dispute_type', ['PATIENT','CCM','FIELD-EXECUTIVE']);
             $table->integer('user_id');
             $table->integer('provider_id');
             $table->string('dispute_name');
@@ -27,11 +27,11 @@ class CreateServiceRequestDisputesTable extends Migration
             $table->enum('comments_by', ['user', 'admin']);
             $table->enum('status', ['open', 'closed'])->default('open');
             $table->tinyInteger('is_admin')->default(0);
-            $table->enum('created_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('created_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('created_by')->nullable();
-            $table->enum('modified_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('modified_type',['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('modified_by')->nullable();
-            $table->enum('deleted_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('deleted_type',['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();

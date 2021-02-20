@@ -21,7 +21,7 @@ class ServiceCategoryTableSeeder extends Seeder
 
         // $service = DB::table('admin_services')->where('admin_service', 'SERVICE')->first();
 
-        // $service_categories = [
+         $service_categories = [
         //     ['company_id' => $company, 'service_category_name' => 'Electrician', 'alias_name' => 'Electrician', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
         //     ['company_id' => $company, 'service_category_name' => 'Plumber', 'alias_name' => 'Plumber', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
         //     ['company_id' => $company, 'service_category_name' => 'Tutors', 'alias_name' => 'Tutors', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
@@ -34,7 +34,7 @@ class ServiceCategoryTableSeeder extends Seeder
         //     ['company_id' => $company, 'service_category_name' => 'Painting', 'alias_name' => 'Painting', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
         //     ['company_id' => $company, 'service_category_name' => 'Car Wash', 'alias_name' => 'Car Wash', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
         //     ['company_id' => $company, 'service_category_name' => 'PhotoGraphy', 'alias_name' => 'PhotoGraphy', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
-        //     ['company_id' => $company, 'service_category_name' => 'Doctors', 'alias_name' => 'Doctors', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
+        ['company_id' => $company, 'service_category_name' => 'Doctors', 'alias_name' => 'Doctors', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
         //     ['company_id' => $company, 'service_category_name' => 'Dog Walking', 'alias_name' => 'Dog Walking', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
         //     ['company_id' => $company, 'service_category_name' => 'Baby Sitting', 'alias_name' => 'Baby Sitting', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
         //     ['company_id' => $company, 'service_category_name' => 'Fitness Coach', 'alias_name' => 'Fitness Coach', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
@@ -71,11 +71,11 @@ class ServiceCategoryTableSeeder extends Seeder
         //     ['company_id' => $company, 'service_category_name' => 'Sofa Repairer', 'alias_name' => 'Sofa Repairer', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
         //     ['company_id' => $company, 'service_category_name' => 'Spa', 'alias_name' => 'Spa', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1],
         //     ['company_id' => $company, 'service_category_name' => 'Translator', 'alias_name' => 'Translator', 'price_choose' => 'admin_price', 'picture' => '', 'service_category_order' => 0, 'service_category_status' => 1]
-        // ];
+         ];
 
-        // foreach (array_chunk($service_categories,1000) as $service_category) {
-        //     DB::connection('service')->table('service_categories')->insert($service_category);
-        // }
+         foreach (array_chunk($service_categories,1000) as $service_category) {
+             DB::connection('service')->table('service_categories')->insert($service_category);
+         }
 
 
 	    Schema::connection('service')->enableForeignKeyConstraints();

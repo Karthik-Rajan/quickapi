@@ -173,10 +173,10 @@ class DBSeedCommand extends Command
 				(new \StoreItemAddonTableSeeder())->run($company->id);
 				(new \OrderTableSeeder())->run($company->id);
 
-				(new \DeliveryTableSeeder())->run($company->id);
-				(new \DeliveryDisputeSeeder())->run($company->id);
-				(new \DeliveryDocumentSeeder())->run($company->id);
-				(new \DeliveryReasonSeeder())->run($company->id);
+				// (new \DeliveryTableSeeder())->run($company->id);
+				// (new \DeliveryDisputeSeeder())->run($company->id);
+				// (new \DeliveryDocumentSeeder())->run($company->id);
+				// (new \DeliveryReasonSeeder())->run($company->id);
 
 				$this->info('Seed Data completed');
 			}

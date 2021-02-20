@@ -53,6 +53,8 @@ class ProviderController extends Controller
     { 
         $datum = Provider::with('admin')->where('company_id', Auth::user()->company_id);
 
+        $datum->where('type',$request->type); 
+        
         if(Auth::user()->type=='FLEET') {
             $datum->where('admin_id', Auth::user()->id);  
         }
@@ -97,6 +99,7 @@ class ProviderController extends Controller
             'password' => 'required|min:6|confirmed',
             'country_id' => 'required',
             'city_id' => 'required',
+            'type' => 'required',
         ]);
 
         $request->merge([
@@ -134,6 +137,7 @@ class ProviderController extends Controller
             // $request->request->add(['company_id' => \Auth::user()->company_id]);
             // $provider['password'] =Hash::make($request->password);
             $provider = new Provider;
+            $provider->type = $request->type;
             $provider->admin_id = Auth::user()->id;  
             $provider->company_id = Auth::user()->company_id;  
             $provider->first_name = $request->first_name; 
@@ -209,6 +213,7 @@ class ProviderController extends Controller
             'mobile' => $request->email != null ?'sometimes|digits_between:6,13':'',
             'country_id' => 'required',
             'city_id' => 'required',
+            'type' => 'required',
         ]);
 
         $company_id=Auth::user()->company_id;
@@ -246,7 +251,8 @@ class ProviderController extends Controller
                 ]);
             }
 
-            $provider = Provider::findOrFail($id);   
+            $provider = Provider::findOrFail($id);
+            $provider->type = $request->type;
             $provider->first_name = $request->first_name;
             $provider->last_name = $request->last_name;
             if($request->has('email') && $request->has('mobile')) {

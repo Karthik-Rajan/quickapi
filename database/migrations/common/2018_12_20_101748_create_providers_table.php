@@ -15,7 +15,7 @@ class CreateProvidersTable extends Migration
 	{
 		Schema::create('providers', function (Blueprint $table) {
 			$table->increments('id');
-			$table->enum('type',['PATIENT', 'CCM'])->nullable();
+			$table->enum('type',['FIELD-EXECUTIVE', 'CCM'])->default('CCM')->nullable();
 			$table->string('unique_id')->nullable();
 			$table->string('first_name');
 			$table->string('last_name');
@@ -64,11 +64,11 @@ class CreateProvidersTable extends Migration
 			$table->timestamp('email_verified_at')->nullable();
 			$table->tinyInteger('activation_status')->default('1');
 			$table->rememberToken();
-			$table->enum('created_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+			$table->enum('created_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('created_by')->nullable();
-            $table->enum('modified_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('modified_type', ['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('modified_by')->nullable();
-            $table->enum('deleted_type', ['ADMIN','USER','PROVIDER','SHOP'])->nullable();
+            $table->enum('deleted_type',['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
 			$table->unsignedInteger('company_id');
 			$table->timestamp('airport_at')->nullable();
