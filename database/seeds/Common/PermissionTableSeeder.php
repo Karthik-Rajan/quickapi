@@ -31,8 +31,8 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'no-of-shop', 'display_name' => 'No Of Pharmacy', 'guard_name' => 'admin', 'group_name' => 'Dashboard'],
 
 
-            ['name' => 'dispatcher-panel', 'display_name' => 'Dispatcher Menu', 'guard_name' => 'admin', 'group_name' => 'Dispatcher Panel'],
-            ['name' => 'dispatcher-panel-add', 'display_name' => 'Add Rides', 'guard_name' => 'admin', 'group_name' => 'Dispatcher Panel'],
+            // ['name' => 'dispatcher-panel', 'display_name' => 'Dispatcher Menu', 'guard_name' => 'admin', 'group_name' => 'Dispatcher Panel'],
+            // ['name' => 'dispatcher-panel-add', 'display_name' => 'Add Rides', 'guard_name' => 'admin', 'group_name' => 'Dispatcher Panel'],
 
             ['name' => 'dispute-list', 'display_name' => 'Dispute list', 'guard_name' => 'admin', 'group_name' => 'Dispute'],
             ['name' => 'dispute-create', 'display_name' => 'Create Dispute', 'guard_name' => 'admin', 'group_name' => 'Dispute'],
@@ -55,8 +55,8 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'order-dispute-status', 'display_name' => 'Status Order Disputes', 'guard_name' => 'admin', 'group_name' => 'Order Disputes'],
 
 
-            ['name' => 'heat-map', 'display_name' => 'Heat Map', 'guard_name' => 'admin', 'group_name' => 'Map'],
-            ['name' => 'god-eye', 'display_name' => 'God\'s Eye', 'guard_name' => 'admin', 'group_name' => 'Map'],
+            // ['name' => 'heat-map', 'display_name' => 'Heat Map', 'guard_name' => 'admin', 'group_name' => 'Map'],
+            // ['name' => 'god-eye', 'display_name' => 'God\'s Eye', 'guard_name' => 'admin', 'group_name' => 'Map'],
 
             ['name' => 'user-list', 'display_name' => 'Patient list', 'guard_name' => 'admin', 'group_name' => 'Patient'],
             ['name' => 'user-history', 'display_name' => 'Patient History', 'guard_name' => 'admin', 'group_name' => 'Patient'],
@@ -97,21 +97,21 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'field-executive-document-delete', 'display_name' => 'Field Executive Document Delete', 'guard_name' => 'admin', 'group_name' => 'Field Executive'],
 
 
-            ['name' => 'dispatcher-list', 'display_name' => 'Dispatcher list', 'guard_name' => 'admin', 'group_name' => 'Dispatcher'],
-            ['name' => 'dispatcher-create', 'display_name' => 'Create Dispatcher', 'guard_name' => 'admin', 'group_name' => 'Dispatcher'],
-            ['name' => 'dispatcher-edit', 'display_name' => 'Edit Dispatcher', 'guard_name' => 'admin', 'group_name' => 'Dispatcher'],
-            ['name' => 'dispatcher-delete', 'display_name' => 'Delete Dispatcher', 'guard_name' => 'admin', 'group_name' => 'Dispatcher'],
+            // ['name' => 'dispatcher-list', 'display_name' => 'Dispatcher list', 'guard_name' => 'admin', 'group_name' => 'Dispatcher'],
+            // ['name' => 'dispatcher-create', 'display_name' => 'Create Dispatcher', 'guard_name' => 'admin', 'group_name' => 'Dispatcher'],
+            // ['name' => 'dispatcher-edit', 'display_name' => 'Edit Dispatcher', 'guard_name' => 'admin', 'group_name' => 'Dispatcher'],
+            // ['name' => 'dispatcher-delete', 'display_name' => 'Delete Dispatcher', 'guard_name' => 'admin', 'group_name' => 'Dispatcher'],
 
-            ['name' => 'account-manager-list', 'display_name' => 'Account Manager list', 'guard_name' => 'admin', 'group_name' => 'Account Manager'],
-            ['name' => 'account-manager-create', 'display_name' => 'Create Account Manager', 'guard_name' => 'admin', 'group_name' => 'Account Manager'],
-            ['name' => 'account-manager-edit', 'display_name' => 'Edit Account Manager', 'guard_name' => 'admin', 'group_name' => 'Account Manager'],
-            ['name' => 'account-manager-delete', 'display_name' => 'Delete Account Manager', 'guard_name' => 'admin', 'group_name' => 'Account Manager'],
+            // ['name' => 'account-manager-list', 'display_name' => 'Account Manager list', 'guard_name' => 'admin', 'group_name' => 'Account Manager'],
+            // ['name' => 'account-manager-create', 'display_name' => 'Create Account Manager', 'guard_name' => 'admin', 'group_name' => 'Account Manager'],
+            // ['name' => 'account-manager-edit', 'display_name' => 'Edit Account Manager', 'guard_name' => 'admin', 'group_name' => 'Account Manager'],
+            // ['name' => 'account-manager-delete', 'display_name' => 'Delete Account Manager', 'guard_name' => 'admin', 'group_name' => 'Account Manager'],
 
 
-            ['name' => 'dispute-manager-list', 'display_name' => 'Dispute Manager list', 'guard_name' => 'admin', 'group_name' => 'Dispute Manager'],
-            ['name' => 'dispute-manager-create', 'display_name' => 'Create Dispute Manager', 'guard_name' => 'admin', 'group_name' => 'Dispute Manager'],
-            ['name' => 'dispute-manager-edit', 'display_name' => 'Edit Dispute Manager', 'guard_name' => 'admin', 'group_name' => 'Dispute Manager'],
-            ['name' => 'dispute-manager-delete', 'display_name' => 'Delete Dispute Manager', 'guard_name' => 'admin', 'group_name' => 'Dispute Manager'],
+            // ['name' => 'dispute-manager-list', 'display_name' => 'Dispute Manager list', 'guard_name' => 'admin', 'group_name' => 'Dispute Manager'],
+            // ['name' => 'dispute-manager-create', 'display_name' => 'Create Dispute Manager', 'guard_name' => 'admin', 'group_name' => 'Dispute Manager'],
+            // ['name' => 'dispute-manager-edit', 'display_name' => 'Edit Dispute Manager', 'guard_name' => 'admin', 'group_name' => 'Dispute Manager'],
+            // ['name' => 'dispute-manager-delete', 'display_name' => 'Delete Dispute Manager', 'guard_name' => 'admin', 'group_name' => 'Dispute Manager'],
 
             ['name' => 'statements', 'display_name' => 'Statements', 'guard_name' => 'admin', 'group_name' => 'Statements'],
 
