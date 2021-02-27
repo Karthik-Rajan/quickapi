@@ -91,6 +91,7 @@ $app->get('/categorylist/{id}', 'V1\Order\Admin\Resource\ShopscategoryController
 
 $app->get('/category/{id}/updateStatus', 'V1\Order\Admin\Resource\ShopscategoryController@updateStatus');
 
+$app->get('/categories-list', 'V1\Order\Admin\Resource\ShopscategoryController@allCategoryList');
 
 //Shpos Items
 

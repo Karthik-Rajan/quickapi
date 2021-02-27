@@ -18,6 +18,7 @@ class ShopscategoryController extends Controller
 
     private $model;
     private $request;
+    public $category_options = "";
     /**
      * Create a new controller instance.
      *
@@ -87,8 +88,11 @@ class ShopscategoryController extends Controller
             $storecategory->store_id = $request->store_id; 
             $storecategory->store_category_description = $request->store_category_description; 
               if($request->hasFile('picture')) {
-           $storecategory->picture = Helper::upload_file($request->file('picture'), 'shops/category');
-            }
+               $storecategory->picture = Helper::upload_file($request->file('picture'), 'shops/category');
+                }
+            if(!empty($request->category))
+                $storecategory->parent_id = $request->category;
+
             $storecategory->store_category_status = $request->store_category_status;      
             $storecategory->save();
             return Helper::getResponse(['status' => 200, 'message' => trans('admin.create')]);
@@ -113,7 +117,18 @@ class ShopscategoryController extends Controller
 
             $storecategory = StoreCategory::findOrFail($id);
             
+            $parent_categories = StoreCategory::where('store_category_status',1)->whereNull('parent_id')->get();
+            $this->category_options = "";
+            $this->category_options .= '<option value="">--Select Category--</option>';
+            foreach ($parent_categories as $parent_category) {
+                if($parent_category->id == $storecategory->parent_id)
+                    $this->category_options .= '<option style="font-weight: bold;" selected value='.$parent_category->id.'>'.ucwords($parent_category->store_category_name). '</option>';
+                else
+                    $this->category_options .= '<option value='.$parent_category->id.'>'.ucwords($parent_category->store_category_name). '</option>';
 
+                $this->getChildCategory($parent_category->id,$storecategory->parent_id);  
+            }
+            $storecategory->categories=$this->category_options;
             return Helper::getResponse(['data' => $storecategory]);
         } catch (\Throwable $e) {
             return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
@@ -203,5 +218,50 @@ class ShopscategoryController extends Controller
             return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
     }
+    public function allCategoryList(){
+        $parent_categories = StoreCategory::where('store_category_status',1)->whereNull('parent_id')->get();
+        $this->category_options = "";
+        $this->category_options .= '<option value="">--Select Category--</option>';
+        foreach ($parent_categories as $parent_category) {
+            $this->category_options .= '<option value='.$parent_category->id.'>'.ucwords($parent_category->store_category_name). '</option>';
+            $this->getChildCategory($parent_category->id,0);
+        }
+
+        return Helper::getResponse(['data' => $this->category_options]);
+       
+    }
+
+    // Start of Child category Multiple levels
+
+    public function getChildCategory($category_id,$selected_category_id){
+        $category = StoreCategory::find($category_id);
+
+        foreach ($category->childCategories as $child_category) {
+            if($child_category->id == $selected_category_id)
+                $this->category_options .= '<option style="font-weight: bold;" selected value='.$child_category->id.'>'.$this->getParentCategoryCount($child_category->id).' '.ucwords($child_category->store_category_name). '</option>';
+            else
+                $this->category_options .= '<option value='.$child_category->id.'>'.$this->getParentCategoryCount($child_category->id).' '.ucwords($child_category->store_category_name). '</option>';
+
+
+            $this->getChildCategory($child_category->id,$selected_category_id);
+            
+        }
+
+    }
+    public function getParentCategoryCount($category_id){
+        $category = StoreCategory::find($category_id);
+        if($category){
+            $level = "";
+            while ($category->parent_id != NULL) {
+                $parent_category = $category->parentCategory;
+                $level .= "&nbsp;-";  
+                $category = $parent_category;
+            }
+
+            return $level;
+        }
+    }
+
+    // End of Child category Multiple levels
 
 }
