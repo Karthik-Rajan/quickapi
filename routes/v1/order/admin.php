@@ -87,7 +87,7 @@ $app->patch('/category/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin
 
 $app->delete('/category/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\ShopscategoryController@destroy']);
 
-$app->get('/categorylist/{id}', 'V1\Order\Admin\Resource\ShopscategoryController@categorylist');
+$app->get('/categorylist/{id}', 'V1\Order\Admin\Resource\ShopscategoryController@allCategoryList');
 
 $app->get('/category/{id}/updateStatus', 'V1\Order\Admin\Resource\ShopscategoryController@updateStatus');
 

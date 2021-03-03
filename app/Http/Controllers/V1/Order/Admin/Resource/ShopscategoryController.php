@@ -218,8 +218,8 @@ class ShopscategoryController extends Controller
             return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
     }
-    public function allCategoryList(){
-        $parent_categories = StoreCategory::where('store_category_status',1)->whereNull('parent_id')->get();
+    public function allCategoryList($id){
+        $parent_categories = StoreCategory::where('store_category_status',1)->where('store_id',$id)->whereNull('parent_id')->get();
         $this->category_options = "";
         $this->category_options .= '<option value="">--Select Category--</option>';
         foreach ($parent_categories as $parent_category) {

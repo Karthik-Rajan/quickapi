@@ -112,6 +112,14 @@ class ShopsitemsController extends Controller
             $storeitem->item_discount = $request->item_discount;  
             $storeitem->item_discount_type = $request->item_discount_type;  
 
+            $storeitem->batch_number = $request->batch_number; 
+            $storeitem->brand_name = $request->brand_name;  
+            $storeitem->gender = $request->gender;  
+            $storeitem->tags = $request->tags;  
+            $storeitem->ingredients = $request->ingredients;  
+            $storeitem->uses = $request->uses; 
+            $storeitem->expiry_date = $request->expiry_date; 
+
               if($request->hasFile('picture')) {
            $storeitem->picture = Helper::upload_file($request->file('picture'), 'shops/items',null,$this->company_id);
             }
@@ -191,7 +199,16 @@ class ShopsitemsController extends Controller
             $storeitem->unit_id = $request->unit; 
             $storeitem->item_price = $request->item_price;  
             $storeitem->item_discount = $request->item_discount;  
-            $storeitem->item_discount_type = $request->item_discount_type;  
+            $storeitem->item_discount_type = $request->item_discount_type;
+
+            $storeitem->batch_number = $request->batch_number; 
+            $storeitem->brand_name = $request->brand_name;  
+            $storeitem->gender = $request->gender;  
+            $storeitem->tags = $request->tags;  
+            $storeitem->ingredients = $request->ingredients;  
+            $storeitem->uses = $request->uses; 
+            $storeitem->expiry_date = $request->expiry_date; 
+              
               if($request->hasFile('picture')) {
              $storeitem->picture = Helper::upload_file($request->file('picture'), 'shops/items',null,$this->company_id);
             }
