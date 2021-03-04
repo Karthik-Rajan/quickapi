@@ -161,6 +161,7 @@ class ProviderAuthController extends Controller
 			'email' => 'required|email|max:255',
 			'password' => ['required_if:login_by,MANUAL','min:6'],
 			'salt_key' => 'required',
+			'type' => 'required',
 		]);
 
 		$request->merge([
@@ -223,6 +224,7 @@ class ProviderAuthController extends Controller
 		$User->last_name = $request->last_name;
 		$User->email = $request->email;
 		$User->gender = $request->gender;
+		$User->type = $request->type;
 		$User->country_code = $request->country_code;
 		$User->mobile = $request->mobile;
 		$User->password = ($request->social_unique_id != null)  ? Hash::make($request->social_unique_id) : Hash::make($request->password) ;
