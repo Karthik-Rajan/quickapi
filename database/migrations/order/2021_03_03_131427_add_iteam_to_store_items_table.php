@@ -15,13 +15,14 @@ class AddIteamToStoreItemsTable extends Migration
     {
         Schema::connection('order')->table('store_items', function (Blueprint $table) {
             $table->string('batch_number')->nullable()->after('item_description');
-            $table->string('brand_name')->nullable()->after('batch_number');
-            $table->enum('gender',['Male','Female','All'])->after('brand_name')->default('All')->nullable();
+            $table->string('brand_id')->unsigned()->nullable()->after('batch_number');
+            $table->enum('gender',['Male','Female','All'])->after('brand_id')->default('All')->nullable();
             $table->string('tags')->nullable()->after('gender');
             $table->string('ingredients')->nullable()->after('tags');
             $table->string('uses')->nullable()->after('ingredients');
-            $table->string('pack_size')->nullable()->after('uses');
             $table->timestamp('expiry_date')->nullable()->after('pack_size');
+
+             $table->foreign('brand_id')->references('id')->on('brands');
         });
     }
 

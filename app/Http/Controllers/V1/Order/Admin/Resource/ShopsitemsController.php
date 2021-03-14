@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\V1\Order\Admin\Resource;
 
+use App\Models\Order\Attribute;
+use App\Models\Order\AttributeValue;
 use App\Models\Order\StoreItem;
 use App\Models\Order\StoreItemAddon;
 use Illuminate\Http\Request;
@@ -9,6 +11,7 @@ use App\Helpers\Helper;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Models\Common\Unit;
+use App\Models\Order\Brand;
 use App\Traits\Actions;
 use Exception;
 use Setting;
@@ -305,6 +308,21 @@ StoreItemAddon::where('store_item_id',$id)->delete();
         $unit = Unit::where('company_id', $this->company_id)->get();
 
         return Helper::getResponse(['data' => $unit]);
+    }
+    public function Brand(Request $request) {
+        $brands = Brand::where('company_id', $this->company_id)->where('status',1)->get();
+
+        return Helper::getResponse(['data' => $brands]);
+    }
+    public function attributes(Request $request) {
+        $attributes = Attribute::where('company_id', $this->company_id)->where('status',1)->get();
+
+        return Helper::getResponse(['data' => $attributes]);
+    }
+    public function attributeValue(Request $request,$id) {
+        $attributes = AttributeValue::where('attribute_id',$id)->get();
+
+        return Helper::getResponse(['data' => $attributes]);
     }
 
 }

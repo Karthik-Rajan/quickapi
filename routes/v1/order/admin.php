@@ -23,6 +23,32 @@ $app->get('/pricing/{store_type_id}/{city_id}', 'V1\Order\Admin\Resource\Storety
 
 $app->post('/pricings', 'V1\Order\Admin\Resource\StoretypeController@storePricePost');
 
+// Brand
+
+$app->get('/brands', 'V1\Order\Admin\Resource\BrandController@index');
+
+$app->post('/brands', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\BrandController@store']);
+
+$app->get('/brands/{id}', 'V1\Order\Admin\Resource\BrandController@show'); 
+
+$app->patch('/brands/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\BrandController@update']); 
+
+$app->delete('/brands/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\BrandController@destroy']);
+
+$app->get('/brands/{id}/updateStatus', 'V1\Order\Admin\Resource\BrandController@updateStatus');
+
+// Attriputes
+$app->get('/attributes', 'V1\Order\Admin\Resource\AttributeController@index');
+
+$app->post('/attributes', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\AttributeController@store']);
+
+$app->get('/attributes/{id}', 'V1\Order\Admin\Resource\AttributeController@show'); 
+
+$app->patch('/attributes/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\AttributeController@update']); 
+
+$app->get('/attribute_values/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\AttributeController@destroy']);
+
+$app->get('/attributes/{id}/updateStatus', 'V1\Order\Admin\Resource\AttributeController@updateStatus');
 
 
 // Cuisines
@@ -107,6 +133,9 @@ $app->delete('/items/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\R
 
 $app->get('/units', 'V1\Order\Admin\Resource\ShopsitemsController@unit');
 
+$app->get('/brands', 'V1\Order\Admin\Resource\ShopsitemsController@Brand');
+$app->get('/attributes', 'V1\Order\Admin\Resource\ShopsitemsController@attributes');
+$app->get('/attributelist/{id}', 'V1\Order\Admin\Resource\ShopsitemsController@attributeValue');
 
 $app->get('/items/{id}/updateStatus', 'V1\Order\Admin\Resource\ShopsitemsController@updateStatus');
 //request history
