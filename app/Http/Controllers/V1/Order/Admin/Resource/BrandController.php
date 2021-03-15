@@ -67,7 +67,7 @@ class BrandController extends Controller
         
          $this->validate($request, [
              'name' => 'required',
-             
+             'picture'=> 'required'
         ]);
        
         try{
@@ -86,7 +86,10 @@ class BrandController extends Controller
             $cuisine = new Brand;
             $cuisine->company_id = Auth::user()->company_id;  
             $cuisine->name = $request->name;
-            $cuisine->status = $request->status;      
+            $cuisine->status = $request->status; 
+            if($request->hasFile('picture')) {
+                $cuisine['picture'] = Helper::upload_file($request->file('picture'), 'provider/profile');
+            }     
             $cuisine->save();
             return Helper::getResponse(['status' => 200, 'message' => trans('admin.create')]);
         } 
@@ -127,7 +130,7 @@ class BrandController extends Controller
     public function update(Request $request, $id)
     {
        $this->validate($request, [
-             'name' => 'required'
+             'name' => 'required',
             
         ]);
     
@@ -145,7 +148,10 @@ class BrandController extends Controller
             }
             $cuisine = Brand::findOrFail($id);
             $cuisine->name = $request->name;
-            $cuisine->status = $request->status;                    
+            $cuisine->status = $request->status; 
+            if($request->hasFile('picture')) {
+                $cuisine['picture'] = Helper::upload_file($request->file('picture'), 'provider/profile');
+            }                      
             $cuisine->update();
            return Helper::getResponse(['status' => 200, 'message' => trans('admin.update')]);
             } catch (\Throwable $e) {

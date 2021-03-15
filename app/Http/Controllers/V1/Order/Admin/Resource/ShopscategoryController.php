@@ -41,9 +41,10 @@ class ShopscategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request,$id)
+    public function index(Request $request)
     {
-        $datum = StoreCategory::where('company_id', $this->company_id)->where('store_id',$id);
+
+        $datum = StoreCategory::where('company_id', $this->company_id);
 
         if($request->has('search_text') && $request->search_text != null) {
             $datum->Search($request->search_text);
@@ -74,7 +75,7 @@ class ShopscategoryController extends Controller
     {
         
          $this->validate($request, [
-              'store_category_name' => 'required|unique:order.store_categories,store_category_name,NULL,id,store_id,'.$request->store_id,
+              'store_category_name' => 'required',
              'store_category_description'=>'required',
              'picture' => 'mimes:jpeg,jpg,bmp,png|max:5242880'
              
@@ -84,8 +85,7 @@ class ShopscategoryController extends Controller
         try{
             $storecategory = new StoreCategory;
             $storecategory->company_id = $this->company_id;  
-            $storecategory->store_category_name = $request->store_category_name; 
-            $storecategory->store_id = $request->store_id; 
+            $storecategory->store_category_name = $request->store_category_name;  
             $storecategory->store_category_description = $request->store_category_description; 
               if($request->hasFile('picture')) {
                $storecategory->picture = Helper::upload_file($request->file('picture'), 'shops/category');
@@ -146,7 +146,7 @@ class ShopscategoryController extends Controller
     {
         $storecategory = StoreCategory::findOrFail($id);
        $this->validate($request, [
-        'store_category_name' => 'required|unique:order.store_categories,store_category_name,'.$id.',id,store_id,'.$storecategory->store_id,
+        'store_category_name' => 'required',
              
              'store_category_description'=>'required',
              
@@ -168,12 +168,12 @@ class ShopscategoryController extends Controller
             }
     }
 
-      public function categorylist($id)
+      public function categorylist()
   {
 
   try {
 
-            $categorylist = StoreCategory::with('store.storetype')->where('store_id',$id)->where('store_category_status',1)->get();
+            $categorylist = StoreCategory::with('store.storetype')->where('store_category_status',1)->get();
             return Helper::getResponse(['data' => $categorylist]);
         } catch (\Throwable $e) {
             return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
@@ -218,8 +218,8 @@ class ShopscategoryController extends Controller
             return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
     }
-    public function allCategoryList($id){
-        $parent_categories = StoreCategory::where('store_category_status',1)->where('store_id',$id)->whereNull('parent_id')->get();
+    public function allCategoryList(){
+        $parent_categories = StoreCategory::where('store_category_status',1)->whereNull('parent_id')->get();
         $this->category_options = "";
         $this->category_options .= '<option value="">--Select Category--</option>';
         foreach ($parent_categories as $parent_category) {

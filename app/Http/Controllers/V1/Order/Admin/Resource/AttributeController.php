@@ -8,15 +8,24 @@ use Illuminate\Http\Request;
 use App\Helpers\Helper;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use App\Traits\Actions;
 use Exception;
 use Setting;
 use Auth;
-use Log;
+
 
 
 class AttributeController extends Controller
 {
+
+   use Actions;
+    private $model;
+    private $request;
+     public function __construct(Attribute $model)
+    {
+        $this->model = $model;
+    }
     public function index(Request $request){
     	 $datum = Attribute::where('company_id', Auth::user()->company_id);
 
@@ -30,12 +39,12 @@ class AttributeController extends Controller
 
         
         if($request->has('page') && $request->page == 'all') {
-            $datum = $datum->get();
+            $data = $datum->get();
         } else {
-            $datum = $datum->paginate(10);
+            $data = $datum->paginate(10);
         }
         
-        return Helper::getResponse(['data' => $datum]);
+        return Helper::getResponse(['data' => $data]);
     }
 
 

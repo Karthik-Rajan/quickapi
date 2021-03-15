@@ -45,7 +45,6 @@ class ServiceCategoryController extends Controller
         } else {
             $data = $datum->paginate(10);
         }
-        
         return Helper::getResponse(['data' => $data]);
     }
     /**

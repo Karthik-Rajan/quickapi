@@ -25,7 +25,7 @@ $app->post('/pricings', 'V1\Order\Admin\Resource\StoretypeController@storePriceP
 
 // Brand
 
-$app->get('/brands', 'V1\Order\Admin\Resource\BrandController@index');
+$app->get('/brand', 'V1\Order\Admin\Resource\BrandController@index');
 
 $app->post('/brands', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\BrandController@store']);
 
@@ -38,7 +38,7 @@ $app->delete('/brands/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\
 $app->get('/brands/{id}/updateStatus', 'V1\Order\Admin\Resource\BrandController@updateStatus');
 
 // Attriputes
-$app->get('/attributes', 'V1\Order\Admin\Resource\AttributeController@index');
+$app->get('/attribute', 'V1\Order\Admin\Resource\AttributeController@index');
 
 $app->post('/attributes', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\AttributeController@store']);
 
@@ -103,7 +103,7 @@ $app->get('/addonslist/{store_id}/{item_id}', 'V1\Order\Admin\Resource\Shopsaddo
 $app->get('/addon/{id}/updateStatus', 'V1\Order\Admin\Resource\ShopsaddonController@updateStatus');
 
 //Shops Category
-$app->get('/categoryindex/{id}', 'V1\Order\Admin\Resource\ShopscategoryController@index');
+$app->get('/categoryindex', 'V1\Order\Admin\Resource\ShopscategoryController@index');
 
 $app->post('/category', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\ShopscategoryController@store']);
 
@@ -113,7 +113,7 @@ $app->patch('/category/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin
 
 $app->delete('/category/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\ShopscategoryController@destroy']);
 
-$app->get('/categorylist/{id}', 'V1\Order\Admin\Resource\ShopscategoryController@allCategoryList');
+$app->get('/categorylist', 'V1\Order\Admin\Resource\ShopscategoryController@allCategoryList');
 
 $app->get('/category/{id}/updateStatus', 'V1\Order\Admin\Resource\ShopscategoryController@updateStatus');
 
