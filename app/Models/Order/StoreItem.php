@@ -47,5 +47,9 @@ class StoreItem extends BaseModel
       {
           return $this->belongsTo('App\Models\Order\StoreCategory','store_category_id','id');
       }
+      public function attributeValue()
+      {
+          return $this->hasMany('App\Models\Order\AttributeValue','attribute_id','attribute_id');
+      }
 
 }

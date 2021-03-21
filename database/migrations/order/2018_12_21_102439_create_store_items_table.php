@@ -20,14 +20,14 @@ class CreateStoreItemsTable extends Migration
             $table->string('item_name');
             $table->string('item_description')->nullable();
             $table->string('picture')->nullable();
-            $table->unsignedInteger('store_category_id');
+            $table->unsignedInteger('store_category_id')->nullable();
             $table->enum('is_veg', ['Pure Veg','Non Veg'])->nullable();
             $table->decimal('item_price', 10, 2)->default(0);
             $table->decimal('item_discount', 10, 2)->default(0);
             $table->Integer('quantity')->nullable();
             $table->Integer('low_stock')->nullable();
             $table->Integer('unit_id')->nullable();
-            $table->enum('item_discount_type', ['PERCENTAGE','AMOUNT']);
+            $table->enum('item_discount_type', ['PERCENTAGE','AMOUNT'])->default('AMOUNT');
             $table->tinyInteger('is_addon')->default(0);
             $table->tinyInteger('status')->default(1)->comment('1 = Active, 0 = Inactive, 2 = Disabled');
             $table->enum('created_type', ['ADMIN','PHARMACY'])->nullable();

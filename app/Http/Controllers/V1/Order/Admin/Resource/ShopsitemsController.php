@@ -82,9 +82,10 @@ class ShopsitemsController extends Controller
     {
         
          $this->validate($request, [
-             'item_name' => 'required',
+             'brand_id' => 'required',
+             'attribute_id' => 'required',
              'store_category_id'=>'required',
-             'item_price'=>'required',
+             'attribute_values'=>'required',
              'picture' => 'mimes:jpeg,jpg,bmp,png|max:5242880'
              
         ]);
@@ -103,25 +104,32 @@ class ShopsitemsController extends Controller
             
             $storeitem = new StoreItem;
             $storeitem->company_id = $this->company_id;  
+            $storeitem->brand_id = $request->brand_id; 
             $storeitem->item_name = $request->item_name; 
+            $storeitem->item_number = $request->item_number; 
             $storeitem->store_id = $request->store_id; 
             $storeitem->item_description = $request->item_description; 
             $storeitem->store_category_id = $request->store_category_id; 
             $storeitem->is_veg = $request->is_veg; 
             $storeitem->quantity = $request->quantity; 
             $storeitem->low_stock = $request->low_stock; 
-            $storeitem->unit_id = $request->unit; 
-            $storeitem->item_price = $request->item_price;  
-            $storeitem->item_discount = $request->item_discount;  
-            $storeitem->item_discount_type = $request->item_discount_type;  
-
+            $storeitem->unit_id = $request->unit;  
+            $storeitem->attribute_id = $request->attribute_id; 
+            $storeitem->attribute_value_id = $request->attribute_values; 
             $storeitem->batch_number = $request->batch_number; 
             $storeitem->brand_name = $request->brand_name;  
             $storeitem->gender = $request->gender;  
             $storeitem->tags = $request->tags;  
             $storeitem->ingredients = $request->ingredients;  
             $storeitem->uses = $request->uses; 
-            $storeitem->expiry_date = $request->expiry_date; 
+            $storeitem->expiry_date = date("Y-m-d H:i:s", strtotime($request->expiry_date)); 
+            $storeitem->item_price = $request->item_price;  
+            $storeitem->item_discount = $request->item_discount;  
+            $storeitem->item_discount_type = $request->item_discount_type;  
+            $storeitem->country_id = $request->country_id;
+            $storeitem->dosage = $request->dosage;
+            $storeitem->drug = $request->drug;
+            $storeitem->manufacturer = $request->manufacturer;
 
               if($request->hasFile('picture')) {
            $storeitem->picture = Helper::upload_file($request->file('picture'), 'shops/items',null,$this->company_id);
@@ -129,6 +137,10 @@ class ShopsitemsController extends Controller
             $storeitem->status = $request->status;
             
             $storeitem->save();
+
+         
+
+
                if($request->has('addon')) {
                 $addon_price = $request->addon_price;
                 foreach($request->addon as $key => $addon) 
@@ -167,7 +179,7 @@ class ShopsitemsController extends Controller
     public function show($id)
     {
         try {
-            $storeitem = StoreItem::with('itemsaddon')->findOrFail($id);
+            $storeitem = StoreItem::with(['itemsaddon','attributeValue'])->findOrFail($id);
             return Helper::getResponse(['data' => $storeitem]);
         } catch (\Throwable $e) {
             return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
@@ -193,26 +205,34 @@ class ShopsitemsController extends Controller
 
         try {
             $storeitem = StoreItem::findOrFail($id);
+            $storeitem->brand_id = $request->brand_id; 
             $storeitem->item_name = $request->item_name; 
+            $storeitem->item_number = $request->item_number; 
+            $storeitem->store_id = $request->store_id; 
             $storeitem->item_description = $request->item_description; 
             $storeitem->store_category_id = $request->store_category_id; 
-            $storeitem->is_veg =$request->is_veg;  
+            $storeitem->is_veg = $request->is_veg; 
             $storeitem->quantity = $request->quantity; 
             $storeitem->low_stock = $request->low_stock; 
-            $storeitem->unit_id = $request->unit; 
-            $storeitem->item_price = $request->item_price;  
-            $storeitem->item_discount = $request->item_discount;  
-            $storeitem->item_discount_type = $request->item_discount_type;
-
+            $storeitem->unit_id = $request->unit;  
+            $storeitem->attribute_id = $request->attribute_id; 
+            $storeitem->attribute_value_id = $request->attribute_values; 
             $storeitem->batch_number = $request->batch_number; 
             $storeitem->brand_name = $request->brand_name;  
             $storeitem->gender = $request->gender;  
             $storeitem->tags = $request->tags;  
             $storeitem->ingredients = $request->ingredients;  
             $storeitem->uses = $request->uses; 
-            $storeitem->expiry_date = $request->expiry_date; 
-              
-              if($request->hasFile('picture')) {
+            $storeitem->expiry_date = date("Y-m-d H:i:s", strtotime($request->expiry_date)); 
+            $storeitem->item_price = $request->item_price;  
+            $storeitem->item_discount = $request->item_discount;  
+            $storeitem->item_discount_type = $request->item_discount_type;  
+            $storeitem->country_id = $request->country_id;
+            $storeitem->dosage = $request->dosage;
+            $storeitem->drug = $request->drug;
+            $storeitem->manufacturer = $request->manufacturer;
+
+            if($request->hasFile('picture')) {
              $storeitem->picture = Helper::upload_file($request->file('picture'), 'shops/items',null,$this->company_id);
             }
 
