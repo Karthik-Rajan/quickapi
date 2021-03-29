@@ -955,7 +955,8 @@ class ProviderServices {
          try{
 
 
-         	$historyStatus = array('COMPLETED','CANCELLED');
+         	// $historyStatus = array('COMPLETED','CANCELLED');
+         	$historyStatus = array($request->status);
             $UserRequest->with($callback)->withCount(['dispute', 'dispute as dispute_count' => function ($query) {
         												$query->where('dispute_type','provider');
     			}])->HistoryProvider(Auth::guard('provider')->user()->id,$historyStatus);
