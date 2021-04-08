@@ -242,7 +242,7 @@ class HomeController extends Controller
 
         $settings = json_decode(json_encode(Setting::where('company_id', $company_id)->first()->settings_data));
 
-        $all_products = StoreItem::where('status', 1)->where('company_id', $company_id)->get();
+        $all_products = StoreItem::with('store')->where('status', 1)->where('company_id', $company_id)->get();
         
 		// if($request->has('latitude') && $request->has('latitude')!='' && $request->has('longitude') && $request->has('longitude')!='')
         // {

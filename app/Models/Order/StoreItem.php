@@ -33,7 +33,7 @@ class StoreItem extends BaseModel
       }
 
       public function store() {
-        return $this->hasOne('App\Models\Order\Store','id','store_id')->select('store_name','store_packing_charges','store_gst','commission','offer_min_amount','offer_percent','free_delivery','id','rating','estimated_delivery_time');
+        return $this->hasOne('App\Models\Order\Store','id','store_id')->select('store_name','store_packing_charges','store_gst','commission','offer_min_amount','offer_percent','free_delivery','id','rating','estimated_delivery_time', 'currency_symbol');
       }
 
       public function itemcart() {
