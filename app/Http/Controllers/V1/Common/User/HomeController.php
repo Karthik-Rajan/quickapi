@@ -901,7 +901,7 @@ class HomeController extends Controller
 
 		$article_category = HealthArticleCategory::where('company_id',$company_id)
                         ->get();
-        $all_products = StoreItem::where('status', '!=', 2)->where('company_id', $company_id)->get();
+        $all_products = StoreItem::with('brand', 'attribute', 'attribute_value')->where('status', '!=', 2)->where('company_id', $company_id)->get();
 
         $product_timeline = $settings->order->product_timeline;
         $all_products->map(function($products) use ($product_timeline) {
