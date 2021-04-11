@@ -26,6 +26,7 @@ use App\Models\Common\HealthArticleCategory;
 use App\Models\Common\HealthArticleSubcategory;
 use App\Models\Common\HealthArticle;
 use App\Models\Order\StoreItem;
+use App\Models\Order\Brand;
 use App\Services\SendPushNotification;
 use App\Helpers\Helper;
 use Carbon\Carbon;
@@ -945,6 +946,7 @@ class HomeController extends Controller
 
         $offers_banner = ['https://api.pega10x.com/storage/1/home_services/banner1.jpg', 'https://api.pega10x.com/storage/1/home_services/banner2.jpg'];
         $new_arrivals_banner = ['https://api.pega10x.com/storage/1/home_services/banner3.jpg', 'https://api.pega10x.com/storage/1/home_services/banner4.jpg'];
+        $brands = Brand::get();
                         
         $data = [];
         $data['services'] = Helper::getServices();
@@ -952,6 +954,7 @@ class HomeController extends Controller
         $data['products'] = $all_products;
         $data['new_arrivals_banner'] = $new_arrivals_banner;
         $data['article_category'] = $article_category;
+        $data['brands'] = $brands;
 
         return Helper::getResponse(['data' => $data]);
 	}
