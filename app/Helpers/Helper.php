@@ -652,7 +652,12 @@ class Helper {
 	public static function getServices() {
 		$services = [
 		['name' => 'Medicine', 'picture' => 'https://api.pega10x.com/storage/1/home_services/pills.png'],
-		['name' => 'Lab', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png']
+		['name' => 'Lab', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png'],
+		['name' => 'Covid Essential', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png'],
+		['name' => 'Our Products', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png'],
+		['name' => 'Cashback Offer', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png'],
+		['name' => 'Medical Device', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png'],
+		['name' => 'Nutritions', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png'],
 		];
 		return $services;
 	}
