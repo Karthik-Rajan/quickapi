@@ -80,7 +80,7 @@ class ShopsitemsController extends Controller
      */
     public function store(Request $request)
     {
-        
+       
          $this->validate($request, [
              'brand_id' => 'required',
              'attribute_id' => 'required',
@@ -128,7 +128,11 @@ class ShopsitemsController extends Controller
             $storeitem->item_discount_type = $request->item_discount_type;  
             $storeitem->country_id = $request->country_id;
             $storeitem->dosage = $request->dosage;
-            $storeitem->drug = $request->drug;
+            $storeitem->drug_id = $request->drug_id;
+            if($request->has('drug_id'))
+                $storeitem->is_drug =1;
+            else
+                $storeitem->is_drug =0;
             $storeitem->manufacturer = $request->manufacturer;
 
               if($request->hasFile('picture')) {
@@ -195,6 +199,7 @@ class ShopsitemsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        \log::info($request);
         $this->validate($request, [
              'item_name' => 'required',
              'store_category_id'=>'required',
@@ -229,7 +234,12 @@ class ShopsitemsController extends Controller
             $storeitem->item_discount_type = $request->item_discount_type;  
             $storeitem->country_id = $request->country_id;
             $storeitem->dosage = $request->dosage;
-            $storeitem->drug = $request->drug;
+            $storeitem->drug_id = $request->drug_id;
+            if($request->has('drug_id'))
+                $storeitem->is_drug =1;
+            else
+                $storeitem->is_drug =0;
+           
             $storeitem->manufacturer = $request->manufacturer;
 
             if($request->hasFile('picture')) {

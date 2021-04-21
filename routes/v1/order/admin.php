@@ -23,6 +23,20 @@ $app->get('/pricing/{store_type_id}/{city_id}', 'V1\Order\Admin\Resource\Storety
 
 $app->post('/pricings', 'V1\Order\Admin\Resource\StoretypeController@storePricePost');
 
+// Drugs
+$app->get('/druglist', 'V1\Order\Admin\Resource\DrugController@drugList'); 
+
+$app->get('/drug', 'V1\Order\Admin\Resource\DrugController@index');
+
+$app->post('/drugs', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\DrugController@store']);
+
+$app->get('/drugs/{id}', 'V1\Order\Admin\Resource\DrugController@show'); 
+
+$app->patch('/drugs/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\DrugController@update']); 
+
+$app->delete('/drugs/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\DrugController@destroy']);
+$app->get('/drugs/{id}/updateStatus', 'V1\Order\Admin\Resource\DrugController@updateStatus');
+
 // Brand
 
 $app->get('/brand', 'V1\Order\Admin\Resource\BrandController@index');

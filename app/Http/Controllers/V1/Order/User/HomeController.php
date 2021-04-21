@@ -41,6 +41,7 @@ use App\Traits\Actions;
 use App\Models\Common\CompanyCity;
 use App\Models\Common\Notifications;
 use App\Notifications\WebPushNotification;
+use App\Models\Order\StoreDrug;
 use Notification;
 use App\Models\Common\Admin;
 class HomeController extends Controller
@@ -109,6 +110,25 @@ class HomeController extends Controller
         });
         return Helper::getResponse(['data' => $store_list]);
 	}
+    public function drugList(Request $request) {
+        $user = Auth::guard('user')->user();
+        $company_id = $user ? $user->company_id : 1;
+        $storeDrug = StoreDrug::where('company_id',$company_id)->get();
+
+        return Helper::getResponse(['data' => $storeDrug]);
+    }
+    //store details 
+    public function drugDetails(Request $request,$id){
+
+        $user = Auth::guard('user')->user();
+
+        $company_id = $user ? $user->company_id : 1;
+
+        $products = StoreItem::where('status', 1)->where('drug_id',$id)->where('company_id', $company_id)->get();
+
+        return Helper::getResponse(['data' => $products]);
+    }
+    
 	//Service Sub Category
 	public function cusine_list(Request $request,$id) {
 
