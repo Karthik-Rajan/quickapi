@@ -60,7 +60,7 @@ class Store extends BaseModel implements JWTSubject, AuthenticatableContract, Au
 
     public function products()
     {
-        return $this->hasMany('App\Models\Order\StoreItem', 'store_id', 'id');
+        return $this->hasMany('App\Models\Order\StoreItem', 'store_id', 'id')->with('brand', 'attribute', 'attribute_value');
     }
     public function StoreCusinie()
     {

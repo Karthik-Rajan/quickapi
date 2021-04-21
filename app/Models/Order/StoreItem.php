@@ -32,8 +32,20 @@ class StoreItem extends BaseModel
         return $this->belongsTo('App\Models\Common\Unit','unit_id','id')->select('id', 'name');
       }
 
+      public function brand() {
+        return $this->belongsTo('App\Models\Order\Brand','brand_id','id');
+      }
+
+      public function attribute() {
+        return $this->belongsTo('App\Models\Order\Attribute','attribute_id','id');
+      }
+
+      public function attribute_value() {
+        return $this->belongsTo('App\Models\Order\AttributeValue','attribute_value_id','id');
+      }
+
       public function store() {
-        return $this->hasOne('App\Models\Order\Store','id','store_id')->select('store_name','store_packing_charges','store_gst','commission','offer_min_amount','offer_percent','free_delivery','id','rating','estimated_delivery_time');
+        return $this->hasOne('App\Models\Order\Store','id','store_id')->select('store_name','store_packing_charges','store_gst','commission','offer_min_amount','offer_percent','free_delivery','id','rating','estimated_delivery_time', 'currency_symbol');
       }
 
       public function itemcart() {
