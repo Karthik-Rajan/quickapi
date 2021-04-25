@@ -653,11 +653,11 @@ class Helper {
 		$services = [
 		['name' => 'Medicine', 'picture' => 'https://api.pega10x.com/storage/1/home_services/pills.png'],
 		['name' => 'Lab', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png'],
-		['name' => 'Covid Essential', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png'],
-		['name' => 'Our Products', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png'],
-		['name' => 'Cashback Offer', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png'],
-		['name' => 'Medical Device', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png'],
-		['name' => 'Nutritions', 'picture' => 'https://api.pega10x.com/storage/1/home_services/lab.png'],
+		['name' => 'Covid Essential', 'picture' => 'https://api.pega10x.com/storage/1/home_services/nurse.png'],
+		['name' => 'Our Products', 'picture' => 'https://api.pega10x.com/storage/1/home_services/package.png'],
+		['name' => 'Cashback Offer', 'picture' => 'https://api.pega10x.com/storage/1/home_services/cashback.png'],
+		['name' => 'Medical Device', 'picture' => 'https://api.pega10x.com/storage/1/home_services/healthcare-device.png'],
+		['name' => 'Nutritions', 'picture' => 'https://api.pega10x.com/storage/1/home_services/plan.png'],
 		];
 		return $services;
 	}
