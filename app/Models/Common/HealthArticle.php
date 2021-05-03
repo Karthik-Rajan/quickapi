@@ -14,5 +14,12 @@ class HealthArticle extends BaseModel
      ];
 
 
-
+    public function articleCategory()
+    {
+        return $this->belongsTo('App\Models\Common\HealthArticleCategory');
+    }
+    public function articleSubCategory()
+    {
+        return $this->belongsTo('App\Models\Common\HealthArticleSubcategory','article_subcategory_id');
+    }
 }

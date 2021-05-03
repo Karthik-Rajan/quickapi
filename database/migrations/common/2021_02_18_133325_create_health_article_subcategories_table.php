@@ -21,8 +21,14 @@ class CreateHealthArticleSubcategoriesTable extends Migration
             $table->string('picture')->nullable();
             $table->mediumInteger('article_subcategory_order');
             $table->tinyInteger('article_subcategory_status');
+            $table->enum('created_type',['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->enum('modified_type',['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
+            $table->unsignedInteger('modified_by')->nullable();
+            $table->enum('deleted_type',['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+   
         });
     }
 

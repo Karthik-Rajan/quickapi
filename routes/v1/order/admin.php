@@ -194,5 +194,47 @@ $app->get('getordercity', 'V1\Order\Admin\Resource\StoretypeController@getcity')
 
 
 
+  // SERVICE MAIN CATEGORIES
+    $app->get('/health/categories', 'V1\Order\Admin\Resource\HealthCategoryController@index');
+
+    $app->post('/health/categories', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\HealthCategoryController@store']);
+
+    $app->get('/health/categories/{id}', 'V1\Order\Admin\Resource\HealthCategoryController@show');
+
+    $app->patch('/health/categories/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\HealthCategoryController@update']);
+
+    $app->delete('/health/categories/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\HealthCategoryController@destroy']);
+
+    $app->get('/health/categories/{id}/updateStatus', 'V1\Order\Admin\Resource\HealthCategoryController@updateStatus');
+
+    // SERVICE SUB CATEGORIES
+    $app->get('/health/categories-list', 'V1\Order\Admin\Resource\HealthSubCategoryController@categoriesList');
+
+    $app->get('/health/subcategories', 'V1\Order\Admin\Resource\HealthSubCategoryController@index');
+
+    $app->post('/health/subcategories', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\HealthSubCategoryController@store']);
+
+    $app->get('/health/subcategories/{id}', 'V1\Order\Admin\Resource\HealthSubCategoryController@show');
+
+    $app->patch('/health/subcategories/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\HealthSubCategoryController@update']);
+
+    $app->delete('/health/subcategories/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\HealthSubCategoryController@destroy']);
+
+    $app->get('/health/subcategories/{id}/updateStatus', 'V1\Order\Admin\Resource\HealthSubCategoryController@updateStatus');
+
+    // SERVICES
+    $app->get('/health/subcategories-list/{categoryId}', 'V1\Order\Admin\Resource\HealthController@subcategoriesList');
+
+    $app->get('/health/listing', 'V1\Order\Admin\Resource\HealthController@index');
+
+    $app->post('/health/listing', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\HealthController@store']);
+
+    $app->get('/health/listing/{id}', 'V1\Order\Admin\Resource\HealthController@show');
+
+    $app->patch('/health/listing/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\HealthController@update']);
+
+    $app->delete('/health/listing/{id}', ['middleware' => 'demo', 'uses' => 'V1\Order\Admin\Resource\HealthController@destroy']);
+
+    $app->get('/health/listing/{id}/updateStatus', 'V1\Order\Admin\Resource\HealthController@updateStatus');
 
 });
