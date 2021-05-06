@@ -20,6 +20,7 @@ class CreateHealthArticlesTable extends Migration
             $table->unsignedInteger('company_id');
             $table->string('article_name');
             $table->string('picture')->nullable();
+            $table->string('url')->nullable();
             $table->text('description')->nullable();
             $table->tinyInteger('article_status')->default(1);
             $table->enum('created_type',['ADMIN','PATIENT','CCM','FIELD-EXECUTIVE','PHARMACY'])->nullable();

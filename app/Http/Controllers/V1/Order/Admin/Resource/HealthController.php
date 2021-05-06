@@ -97,6 +97,7 @@ class HealthController extends Controller
             $SubCategory->article_category_id = $request->article_category_id;            
             $SubCategory->article_subcategory_id = $request->article_subcategory_id;
             $SubCategory->article_status = $request->article_status;
+            $SubCategory->url = $request->url;
 
             // if(!empty($request->is_professional))
             //     $SubCategory->is_professional = $request->is_professional;
@@ -182,6 +183,7 @@ class HealthController extends Controller
                 $ServiceQuery->article_category_id = $request->article_category_id;            
                 $ServiceQuery->article_subcategory_id = $request->article_subcategory_id;
                 $ServiceQuery->article_status = $request->article_status;
+                $ServiceQuery->url = $request->url;
                 // if(!empty($request->is_professional))
                 //     $ServiceQuery->is_professional = $request->is_professional;
                 // else
