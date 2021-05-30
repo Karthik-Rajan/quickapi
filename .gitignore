@@ -5,7 +5,6 @@
 /node_modules
 Homestead.json
 Homestead.yaml
-.env
 /nbproject/
 /nbproject/private/
 /nbproject/project.properties
