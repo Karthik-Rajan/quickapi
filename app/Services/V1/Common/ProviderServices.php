@@ -16,6 +16,7 @@ use App\Models\Order\StoreOrder;
 use App\Models\Order\StoreOrderDispute;
 use App\Models\Service\Service;
 use App\Models\Service\ServiceRequest;
+use App\Models\Service\ServiceRequestDispute;
 use App\Services\ReferralResource;
 use App\Services\SendPushNotification;
 use App\Traits\Actions;
@@ -522,6 +523,7 @@ class ProviderServices
             } else if ("ORDER" == $request->admin_service) {
                 return Helper::getResponse(['message' => trans('api.order.request_rejected')]);
             } else if ("SERVICE" == $request->admin_service) {
+                echo 'spe1';
                 return Helper::getResponse(['message' => trans('api.service.request_rejected')]);
             } else if ("DELIVERY" == $request->admin_service) {
                 return Helper::getResponse(['message' => trans('api.delivery.request_rejected')]);
@@ -538,8 +540,10 @@ class ProviderServices
             if ("TRANSPORT" == $request->admin_service) {
                 return trans('api.ride.request_rejected');
             } else if ("ORDER" == $request->admin_service) {
+                $this->cancel($request->id, $request->admin_service);
                 return trans('api.order.request_rejected');
             } else if ("SERVICE" == $request->admin_service) {
+                $this->cancel($request->id, $request->admin_service);
                 return trans('api.service.request_rejected');
             } else if ("DELIVERY" == $request->admin_service) {
                 return trans('api.delivery.request_rejected');
@@ -792,28 +796,33 @@ class ProviderServices
                     $other_request_filter = RequestFilter::where('request_id', $userRequest->id)
                         ->where('admin_service', $admin_service)->get();
                     //dd($other_request_filter);
-                    if (count($other_request_filter) <= 0) {
-                        \Log::info('cancel provider request' . count($other_request_filter));
-                        $OrderDetails     = $newRequest;
-                        $storedisputedata = StoreOrderDispute::where('store_order_id', $id)->where('dispute_name', 'Provider Not Available')->where('status', 'open')->get();
-                        if (count($storedisputedata) == 0) {
-                            $storedispute                        = new StoreOrderDispute;
-                            $storedispute->dispute_type          = 'system';
-                            $storedispute->user_id               = $newRequest->user_id;
-                            $storedispute->store_id              = $OrderDetails->store_id;
-                            $storedispute->store_order_id        = $OrderDetails->id;
-                            $storedispute->dispute_name          = "Provider Not Available";
-                            $storedispute->dispute_type_comments = "Provider Not Available";
-                            $storedispute->status                = "open";
-                            $storedispute->company_id            = $newRequest->company_id;
-                            $storedispute->save();
+                    // if (count($other_request_filter) <= 0) {
+                    \Log::info('cancel provider request' . count($other_request_filter));
+                    $OrderDetails     = $newRequest;
+                    $storedisputedata = StoreOrderDispute::where('store_order_id', $id)->where('dispute_name', 'Provider Not Available')->where('status', 'open')->get();
+                    if (count($storedisputedata) == 0) {
+                        $storedispute                        = new StoreOrderDispute;
+                        $storedispute->dispute_type          = 'system';
+                        $storedispute->user_id               = $newRequest->user_id;
+                        $storedispute->store_id              = $OrderDetails->store_id;
+                        $storedispute->store_order_id        = $OrderDetails->id;
+                        $storedispute->dispute_name          = "Provider Not Available";
+                        $storedispute->dispute_type_comments = "Provider Not Available";
+                        $storedispute->status                = "open";
+                        $storedispute->company_id            = $newRequest->company_id;
+                        $storedispute->save();
 
+                        if ($newRequest) {
                             $newRequest->status = 'PROVIDEREJECTED';
                             $newRequest->save();
+                        }
+
+                        if ($userRequest) {
                             $userRequest->status = 'PROVIDEREJECTED';
                             $userRequest->save();
                         }
                     }
+                    // }
                 }
 
                 /*$newRequest->status = 'CANCELLED';
@@ -831,12 +840,26 @@ class ProviderServices
                 $newRequest->status = 'CANCELLED';
                 $newRequest->save();
 
+                $storedisputedata = ServiceRequestDispute::where('service_request_id', $id)->where('dispute_name', 'Provider Not Available')->where('status', 'open')->get();
+                //if (count($storedisputedata) == 0) {
+                $storedispute                     = new ServiceRequestDispute;
+                $storedispute->dispute_type       = 'provider';
+                $storedispute->user_id            = $newRequest->user_id;
+                $storedispute->provider_id        = $this->user->id;
+                $storedispute->service_request_id = $id;
+                $storedispute->dispute_name       = "Provider Not Available";
+                $storedispute->dispute_title      = "Provider Not Available";
+                $storedispute->status             = "open";
+                $storedispute->company_id         = $newRequest->company_id;
+                $storedispute->save();
+                // }
                 $requestData = ['type' => 'SERVICE', 'room' => 'room_' . $this->company_id, 'id' => $newRequest->id, 'user' => $newRequest->user_id, 'city' => (0 == $this->settings->demo_mode) ? $newRequest->city_id : 0];
                 app('redis')->publish('newRequest', json_encode($requestData));
 
                 $requestData = ['type' => 'SERVICE', 'room' => 'room_' . $this->company_id, 'id' => $newRequest->id, 'user' => $newRequest->user_id, 'city' => (0 == $this->settings->demo_mode) ? $newRequest->city_id : 0];
                 app('redis')->publish('checkServiceRequest', json_encode($requestData));
-            } catch (\Throwable $e) {}
+            } catch (\Throwable $e) {
+            }
         } else if ("DELIVERY" == $admin_service) {
             //try {
             $newRequest         = \App\Models\Delivery\DeliveryRequest::findOrFail($id);
@@ -965,7 +988,7 @@ class ProviderServices
         try {
 
             // $historyStatus = array('COMPLETED','CANCELLED');
-            $historyStatus = [$request->status];
+            $historyStatus = $request->has('status') ? explode(',', $request->status) : ['SEARCHING', 'SCHEDULED', 'STARTED', 'ACCEPTED', 'CANCELLED', 'ARRIVED', 'PICKEDUP', 'DROPPED'];
             $UserRequest->with($callback)->withCount(['dispute', 'dispute as dispute_count' => function ($query) {
                 $query->where('dispute_type', 'provider');
             }])->HistoryProvider(Auth::guard('provider')->user()->id, $historyStatus);

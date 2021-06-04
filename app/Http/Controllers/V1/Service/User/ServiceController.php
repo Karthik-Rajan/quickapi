@@ -58,46 +58,58 @@ class ServiceController extends Controller
         //$timezone =  (Auth::guard('user')->user()->state_id) ? State::find(Auth::guard('user')->user()->state_id)->timezone : '';
         // $currency =  Country::find(Auth::guard('user')->user()->country_id) ? Country::find(Auth::guard('user')->user()->country_id)->country_currency : '' ;
 
-        $admin_service = AdminService::where('admin_service', 'SERVICE')->where('company_id', Auth::guard('user')->user()->company_id)->first();
+        $admin_service = AdminService::where('admin_service', 'SERVICE')
+        //->where('company_id', Auth::guard('user')->user()->company_id)
+            ->first();
 
-        $currency                = CompanyCountry::where('company_id', Auth::guard('user')->user()->company_id)->where('country_id', Auth::guard('user')->user()->country_id)->first();
-        $service_cancel_provider = ServiceCancelProvider::select('id', 'provider_id')->where('company_id', Auth::guard('user')->user()->company_id)->where('user_id', Auth::guard('user')->user()->id)->pluck('provider_id', 'provider_id')->toArray();
+        $currency = CompanyCountry::
+            // where('company_id', Auth::guard('user')->user()->company_id)->where('country_id', Auth::guard('user')->user()->country_id)->
+            first();
+        $service_cancel_provider = ServiceCancelProvider::select('id', 'provider_id')
+        // ->where('company_id', Auth::guard('user')->user()->company_id)
+        // ->where('user_id', Auth::guard('user')->user()->id)
+            ->pluck('provider_id', 'provider_id')->toArray();
 
         $admin_id = $admin_service->id;
         $callback = function ($q) use ($admin_id, $service_id) {
-            $q->where('admin_service', 'SERVICE');
-            $q->where('status', 'active');
-            $q->where('service_id', $service_id);
+            //$q->where('admin_service', 'SERVICE');
+            //$q->where('status', 'active');
+            //$q->where('service_id', $service_id);
+            return $q;
         };
 
         $provider_service_init = Provider::with(['service' => $callback, 'service_city' => function ($q) use ($service_id) {
-            return $q->where('service_id', $service_id);
+            // return $q->where('service_id', $service_id);
+            return $q;
         }, 'request_filter'])
             ->select(DB::Raw("(6371 * acos( cos( radians('$latitude') ) * cos( radians(latitude) ) * cos( radians(longitude) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians(latitude) ) ) ) AS distance"), 'id', 'first_name', 'last_name', 'picture', 'rating', 'city_id', 'latitude', 'longitude')
-            ->where('status', 'approved')
-            ->where('is_online', 1)->where('is_assigned', 0)->where('activation_status', 1)
-            ->where('company_id', Auth::guard('user')->user()->company_id)
-            ->where('city_id', Auth::guard('user')->user()->city_id)
-            ->whereRaw("(6371 * acos( cos( radians('$latitude') ) * cos( radians(latitude) ) * cos( radians(longitude) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians(latitude) ) ) ) <= $distance")
-            ->whereDoesntHave('request_filter')
-            ->whereHas('service', function ($q) use ($admin_id, $service_id) {
-                $q->where('admin_service', 'SERVICE');
-                $q->where('service_id', $service_id);
-            })
-            ->where('wallet_balance', '>=', $siteConfig->provider_negative_balance);
+        // ->where('status', 'approved')
+        // ->where('is_online', 1)->where('is_assigned', 0)->where('activation_status', 1)
+        // ->where('company_id', Auth::guard('user')->user()->company_id)
+        //->where('city_id', Auth::guard('user')->user()->city_id)
+        // ->whereRaw("(6371 * acos( cos( radians('$latitude') ) * cos( radians(latitude) ) * cos( radians(longitude) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians(latitude) ) ) ) <= $distance")
+        // ->whereDoesntHave('request_filter')
+        // ->whereHas('service', function ($q) use ($admin_id, $service_id) {
+        //     $q->where('admin_service', 'SERVICE');
+        //     $q->where('service_id', $service_id);
+        // })
+        // ->where('wallet_balance', '>=', $siteConfig->provider_negative_balance);
+            ->where('type', 'CCM');
         if ($request->has('name')) {
-            $provider_service_init->where('first_name', 'LIKE', '%' . $request->name . '%');
+            //  $provider_service_init->where('first_name', 'LIKE', '%' . $request->name . '%');
             //$provider_service_init->orderBy('first_name','asc');
         }
         $provider_service_init->orderBy('distance', 'asc');
 
-        $provider_service_init->whereNotIn('id', $service_cancel_provider);
+        //$provider_service_init->whereNotIn('id', $service_cancel_provider);
         $provider_service = $provider_service_init->get();
 
         if ($provider_service) {
             $providers = [];
             if (!empty($provider_service[0]->service)) {
-                $serviceDetails = Service::with('serviceCategory')->where('id', $service_id)->where('company_id', Auth::guard('user')->user()->company_id)->first();
+                $serviceDetails = Service::with('serviceCategory')
+                // ->where('id', $service_id)
+                    ->where('company_id', Auth::guard('user')->user()->company_id)->first();
                 foreach ($provider_service as $key => $service) {
                     unset($service->request_filter);
                     $provider             = new \stdClass();

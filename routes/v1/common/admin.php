@@ -9,7 +9,7 @@ $router->post('/resetOtp', 'V1\Common\Admin\Auth\AdminAuthController@resetPasswo
 
 $router->group(['middleware' => 'auth:admin'], function ($app) {
 
-    $app->post('/push-subscription','V1\Common\Admin\Auth\AdminController@push_subscription');
+    $app->post('/push-subscription', 'V1\Common\Admin\Auth\AdminController@push_subscription');
 
     $app->post('/permission_list', 'V1\Common\Admin\Auth\AdminAuthController@permission_list');
 
@@ -36,7 +36,6 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
     $app->get('/services/main/list', 'V1\Common\CommonController@admin_services');
 
     $app->get('/services/list/{id}', 'V1\Common\Admin\Resource\ProviderController@provider_services');
-
 
     //Document
     $app->get('/document', ['uses' => 'V1\Common\Admin\Resource\DocumentController@index', 'middleware' => ['permission:documents-list']]);
@@ -75,7 +74,6 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
 
     $app->delete('/notification/{id}', ['uses' => 'V1\Common\Admin\Resource\NotificationController@destroy', 'middleware' => ['permission:notification-delete', 'demo']]);
 
-
     //Reason
     $app->get('/reason', ['uses' => 'V1\Common\Admin\Resource\ReasonController@index', 'middleware' => ['permission:cancel-reasons-list']]);
 
@@ -99,7 +97,6 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
     $app->delete('/fleet/{id}', ['uses' => 'V1\Common\Admin\Resource\FleetController@destroy', 'middleware' => ['permission:fleet-delete', 'demo']]);
 
     $app->get('/fleet/{id}/updateStatus', ['uses' => 'V1\Common\Admin\Resource\FleetController@updateStatus', 'middleware' => ['permission:fleet-list']]);
-
 
     $app->post('/card', ['middleware' => 'demo', 'uses' => 'V1\Common\Admin\Resource\FleetController@addcard']);
 
@@ -137,7 +134,7 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
 
     $app->post('/dispatcher/service/cancel', 'V1\Common\Admin\Resource\DispatcherController@cancel_service');
 
-    $app->get('/fare' , 'V1\Common\Admin\Resource\DispatcherController@fare');
+    $app->get('/fare', 'V1\Common\Admin\Resource\DispatcherController@fare');
 
     //Account Manager
     $app->get('/accountmanager', ['uses' => 'V1\Common\Admin\Resource\AccountManagerController@index', 'middleware' => ['permission:account-manager-list']]);
@@ -149,7 +146,6 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
     $app->patch('/accountmanager/{id}', ['uses' => 'V1\Common\Admin\Resource\AccountManagerController@update', 'middleware' => ['permission:account-manager-edit', 'demo']]);
 
     $app->delete('/accountmanager/{id}', ['uses' => 'V1\Common\Admin\Resource\AccountManagerController@destroy', 'middleware' => ['permission:account-manager-delete', 'demo']]);
-    
 
     //Promocodes
     $app->get('/promocode', ['uses' => 'V1\Common\Admin\Resource\PromocodeController@index', 'middleware' => ['permission:promocodes-list']]);
@@ -186,7 +182,6 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
 
     $app->delete('/dispute/{id}', ['uses' => 'V1\Common\Admin\Resource\DisputeController@destroy', 'middleware' => ['permission:dispute-delete', 'demo']]);
 
-
     //Provider
     $app->get('/provider', ['uses' => 'V1\Common\Admin\Resource\ProviderController@index', 'middleware' => ['permission:provider-list']]);
 
@@ -198,14 +193,12 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
 
     $app->delete('/provider/{id}', ['uses' => 'V1\Common\Admin\Resource\ProviderController@destroy', 'middleware' => ['permission:provider-delete', 'demo']]);
 
-
-
     $app->get('/provider/{id}/updateStatus', ['uses' => 'V1\Common\Admin\Resource\ProviderController@updateStatus', 'middleware' => ['permission:provider-status']]);
     $app->get('/provider/approve/{id}', ['uses' => 'V1\Common\Admin\Resource\ProviderController@approveStatus', 'middleware' => ['permission:provider-status']]);
     $app->get('/provider/zoneapprove/{id}', ['uses' => 'V1\Common\Admin\Resource\ProviderController@zoneStatus', 'middleware' => ['permission:provider-status']]);
     $app->get('/provider/address_profile/{id}', ['uses' => 'V1\Common\Admin\Resource\ProviderController@addressProfileStatus', 'middleware' => ['permission:provider-status']]);
     $app->post('/provider/addamount/{id}', ['uses' => 'V1\Common\Admin\Resource\ProviderController@addamount', 'middleware' => ['permission:provider-status']]);
-   
+
     //sub admin
 
     $app->get('/subadminlist/{type}', 'V1\Common\Admin\Resource\AdminController@index');
@@ -220,11 +213,10 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
 
     $app->get('/subadmin/{id}/updateStatus', 'V1\Common\Admin\Resource\AdminController@updateStatus');
 
-    
     $app->get('/heatmap', ['uses' => 'V1\Common\Admin\Resource\AdminController@heatmap', 'middleware' => ['permission:heat-map']]);
 
     $app->get('/role_list', ['uses' => 'V1\Common\Admin\Resource\AdminController@role_list', 'middleware' => ['permission:role-list']]);
- 
+
     //cmspages
     $app->get('/cmspage', 'V1\Common\Admin\Resource\CmsController@index');
 
@@ -312,7 +304,7 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
     $app->delete('/companycityservice/{id}', ['middleware' => 'demo', 'uses' => 'V1\Common\Admin\Resource\CompanyCitiesController@destroy']);
 
     $app->get('/countrycities/{id}', 'V1\Common\Admin\Resource\CompanyCitiesController@countrycities');
-    
+
     //Account setting details
     $app->get('/profile', 'V1\Common\Admin\Resource\AdminController@show_profile');
     $app->post('/profile', ['middleware' => 'demo', 'uses' => 'V1\Common\Admin\Resource\AdminController@update_profile']);
@@ -325,7 +317,6 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
     $app->get('/heatmap', 'V1\Common\Admin\Resource\AdminController@heatmap');
     $app->get('/godsview', 'V1\Common\Admin\Resource\AdminController@godsview');
 
-
     //Admin Seeder
     $app->post('/companyuser', 'V1\Common\Admin\Resource\UserController@companyuser');
 
@@ -333,7 +324,7 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
 
     $app->post('/settings', ['uses' => 'V1\Common\Admin\Auth\AdminController@settings_store', 'middleware' => ['permission:site-settings', 'demo']]);
 
-    //Roles   
+    //Roles
     $app->get('/roles', ['uses' => 'V1\Common\Admin\Resource\RolesController@index', 'middleware' => ['permission:role-list']]);
 
     $app->post('/roles', ['uses' => 'V1\Common\Admin\Resource\RolesController@store', 'middleware' => ['permission:role-create']]);
@@ -344,10 +335,9 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
 
     $app->delete('/roles/{id}', ['uses' => 'V1\Common\Admin\Resource\RolesController@destroy', 'middleware' => ['permission:role-delete', 'demo']]);
 
-
     //peakhours
     $app->get('/permission', ['uses' => 'V1\Common\Admin\Resource\RolesController@permission']);
-    
+
     $app->get('/peakhour', ['uses' => 'V1\Common\Admin\Resource\PeakHourController@index', 'middleware' => ['permission:peak-hour-list']]);
 
     $app->post('/peakhour', ['uses' => 'V1\Common\Admin\Resource\PeakHourController@store', 'middleware' => ['permission:peak-hour-create']]);
@@ -357,7 +347,6 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
     $app->patch('/peakhour/{id}', ['uses' => 'V1\Common\Admin\Resource\PeakHourController@update', 'middleware' => ['permission:peak-hour-edit', 'demo']]);
 
     $app->delete('/peakhour/{id}', ['uses' => 'V1\Common\Admin\Resource\PeakHourController@destroy', 'middleware' => ['permission:peak-hour-delete', 'demo']]);
-
 
     // ratings
     $app->get('/userreview', 'V1\Common\Admin\Resource\AdminController@userReview');
@@ -380,7 +369,7 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
     $app->get('/service_type', 'V1\Common\Admin\Resource\MenuController@service_type');
 
     $app->get('/order_type', 'V1\Common\Admin\Resource\MenuController@order_type');
-    
+
     // $app->get('/getcity', 'V1\Common\Admin\Resource\MenuController@getcity');
     $app->get('/getCountryCity/{serviceId}/{CountryId}', 'V1\Common\Admin\Resource\MenuController@getCountryCity');
     $app->get('/getmenucity/{id}', 'V1\Common\Admin\Resource\MenuController@getmenucity');
@@ -409,7 +398,6 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
 
     $app->get('/payroll-templates/{id}/updateStatus', 'V1\Common\Admin\Resource\PayrollTemplateController@updateStatus');
 
-
     $app->get('/payroll', 'V1\Common\Admin\Resource\PayrollController@index');
 
     $app->post('/payroll', ['middleware' => 'demo', 'uses' => 'V1\Common\Admin\Resource\PayrollController@store']);
@@ -421,7 +409,7 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
     $app->delete('/payroll/{id}', ['middleware' => 'demo', 'uses' => 'V1\Common\Admin\Resource\PayrollController@destroy']);
 
     $app->get('/payrolls/{id}/updateStatus', 'V1\Common\Admin\Resource\PayrollController@updateStatus');
-    
+
     $app->post('/payroll/update-payroll', 'V1\Common\Admin\Resource\PayrollController@updatePayroll');
 
     $app->get('/zoneprovider/{type}/{id}', 'V1\Common\Admin\Resource\PayrollController@zoneprovider');
@@ -429,24 +417,29 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
     $app->get('/cityzones/{id}', 'V1\Common\Admin\Resource\ZoneController@cityzones');
     $app->get('/zonetype/{id}', 'V1\Common\Admin\Resource\ZoneController@cityzonestype');
     Route::get('bankdetails/template', 'V1\Common\Provider\HomeController@template');
-    $app->post('/addbankdetails', 'V1\Common\Provider\HomeController@addbankdetails'); 
-    $app->post('/editbankdetails', 'V1\Common\Provider\HomeController@editbankdetails'); 
+    $app->post('/addbankdetails', 'V1\Common\Provider\HomeController@addbankdetails');
+    $app->post('/editbankdetails', 'V1\Common\Provider\HomeController@editbankdetails');
 
     $app->get('/provider_total_deatils/{id}', 'V1\Common\Admin\Resource\ProviderController@provider_total_deatils');
 
-     $app->get('/dashboard/{id}', 'V1\Common\Admin\Auth\AdminController@dashboarddata');
+    $app->get('/dashboard/{id}', 'V1\Common\Admin\Auth\AdminController@dashboarddata');
 
+    $app->get('/statement/provider', 'V1\Common\Admin\Resource\AllStatementController@statement_provider');
+    $app->get('/statement/user', 'V1\Common\Admin\Resource\AllStatementController@statement_user');
+    $app->get('/transactions', 'V1\Common\Admin\Resource\AllStatementController@statement_admin');
+    $app->get('/fleettransactions', 'V1\Common\Admin\Resource\AllStatementController@statement_fleet');
 
-     $app->get('/statement/provider', 'V1\Common\Admin\Resource\AllStatementController@statement_provider');
-     $app->get('/statement/user', 'V1\Common\Admin\Resource\AllStatementController@statement_user');
-     $app->get('/transactions', 'V1\Common\Admin\Resource\AllStatementController@statement_admin');
-     $app->get('/fleettransactions', 'V1\Common\Admin\Resource\AllStatementController@statement_fleet');
+    //search
 
-     //search
+    $app->get('/getdata', 'V1\Common\Admin\Resource\AllStatementController@getData');
+    $app->get('/getfleetprovider', 'V1\Common\Admin\Resource\AllStatementController@getFleetProvider');
 
-      $app->get('/getdata', 'V1\Common\Admin\Resource\AllStatementController@getData');
-      $app->get('/getfleetprovider', 'V1\Common\Admin\Resource\AllStatementController@getFleetProvider');
-    
+    $app->get('/booking-list', 'V1\Order\Admin\Resource\BookingController@index');
+
+    $app->put('/booking-list/{id}', 'V1\Order\Admin\Resource\BookingController@updateProvider');
+
+    $app->get('/provider-list', 'V1\Common\Admin\Resource\AdminController@providerlist');
+
 });
 
 $router->get('/payrolls/download/{id}', 'V1\Common\Admin\Resource\PayrollController@PayrollDownload');

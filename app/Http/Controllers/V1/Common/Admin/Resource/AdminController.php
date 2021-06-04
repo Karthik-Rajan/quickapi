@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers\V1\Common\Admin\Resource;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Helpers\Helper;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
+use App\Models\Common\Admin;
 use App\Models\Common\AdminService;
 use App\Models\Common\CustomPush;
-use App\Traits\Actions;
-use App\Models\Common\Admin;
 use App\Models\Common\Provider;
-use App\Models\Common\Setting;
 use App\Models\Common\Rating;
 use App\Models\Service\Service;
-use App\Traits\Encryptable;
-use Spatie\Permission\Models\Role;
-use Illuminate\Validation\Rule;
-use DB;
-use Auth;
 use App\Services\SendPushNotification;
+use App\Traits\Actions;
+use App\Traits\Encryptable;
+use Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
+
 class AdminController extends Controller
 {
     use Actions, Encryptable;
@@ -36,6 +35,7 @@ class AdminController extends Controller
     {
         $this->model = $model;
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -44,7 +44,7 @@ class AdminController extends Controller
      */
     public function show_profile()
     {
-        $account_setting = Admin::where('id',Auth::user()->id)->where('company_id',\Auth::user()->company_id)->first();
+        $account_setting = Admin::where('id', Auth::user()->id)->where('company_id', \Auth::user()->company_id)->first();
         return Helper::getResponse(['data' => $account_setting]);
     }
 
@@ -56,33 +56,33 @@ class AdminController extends Controller
      */
     public function update_profile(Request $request)
     {
-        if($request->has('email') &&  $request->email != null) $request->request->add(['email' => strtolower($request->email)]);
+        if ($request->has('email') && null != $request->email) {
+            $request->request->add(['email' => strtolower($request->email)]);
+        }
 
-        $this->validate($request,[
-            'name' => 'required|max:255',
-            'email' => 'required|max:255|email',
+        $this->validate($request, [
+            'name'    => 'required|max:255',
+            'email'   => 'required|max:255|email',
             'picture' => 'mimes:jpeg,jpg,bmp,png|max:5242880',
         ]);
 
-        try{
+        try {
             //$admin = Auth::guard('admin')->user();
-            $admin = Admin::where('id',Auth::user()->id)->where('company_id',\Auth::user()->company_id)->first();
-            $admin->name = $request->name;
+            $admin        = Admin::where('id', Auth::user()->id)->where('company_id', \Auth::user()->company_id)->first();
+            $admin->name  = $request->name;
             $admin->email = $request->email;
-            if($request->hasFile('picture')) {
+            if ($request->hasFile('picture')) {
                 $admin->picture = Helper::upload_file($request->file('picture'), 'admin/picture');
-                
             }
             $admin->language = $request->language;
             $admin->save();
 
-            return Helper::getResponse(['status' => 200,'data' => $admin, 'message' => trans('admin.update')]);
-        }
-        catch (\Throwable $e) {
+            return Helper::getResponse(['status' => 200, 'data' => $admin, 'message' => trans('admin.update')]);
+        } catch (\Throwable $e) {
             return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
-        
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -91,7 +91,7 @@ class AdminController extends Controller
      */
     public function password()
     {
-        $password = Admin::where('id',Auth::user()->id)->where('company_id',\Auth::user()->company_id)->first();
+        $password = Admin::where('id', Auth::user()->id)->where('company_id', \Auth::user()->company_id)->first();
         return Helper::getResponse(['data' => $password]);
     }
 
@@ -103,35 +103,35 @@ class AdminController extends Controller
      */
     public function password_update(Request $request)
     {
-        
-        if($request->has('email') &&  $request->email != null) $request->request->add(['email' => strtolower($request->email)]);
 
-        $this->validate($request,[
+        if ($request->has('email') && null != $request->email) {
+            $request->request->add(['email' => strtolower($request->email)]);
+        }
+
+        $this->validate($request, [
             'old_password' => 'required',
-            'password' => 'required|min:6|confirmed',
+            'password'     => 'required|min:6|confirmed',
         ]);
 
         try {
 
-           $Admin = Admin::where('id',Auth::user()->id)->where('company_id',\Auth::user()->company_id)->first();
+            $Admin = Admin::where('id', Auth::user()->id)->where('company_id', \Auth::user()->company_id)->first();
 
-            if(password_verify($request->old_password, $Admin->password))
-            {
+            if (password_verify($request->old_password, $Admin->password)) {
                 $Admin->password = Hash::make($request->password);
                 $Admin->save();
-            }
-            else
-            {
-              return Helper::getResponse(['status' => 422, 'message' => trans('admin.old_password_incorrect')]);
+            } else {
+                return Helper::getResponse(['status' => 422, 'message' => trans('admin.old_password_incorrect')]);
             }
             return Helper::getResponse(['status' => 200, 'message' => trans('admin.update')]);
-        }  catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
     }
+
     public function admin_service(Request $request)
     {
-        $admin_service = AdminService::where('company_id',Auth::user()->company_id)->where('status',1)->get();
+        $admin_service = AdminService::where('company_id', Auth::user()->company_id)->where('status', 1)->get();
         return Helper::getResponse(['data' => $admin_service]);
     }
 
@@ -141,34 +141,33 @@ class AdminController extends Controller
         return Helper::getResponse(['data' => $services]);
     }
 
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($type=null,Request $request)
+    public function index($type = null, Request $request)
     {
         $roles = Role::get();
-        if($type=="Admin"){
-            $datum = Admin::whereHas('roles', function ($query) use($type) {
-                        $query->where('roles.id','>',5);
-                        })->where('company_id',\Auth::user()->company_id);
-        }else{
-            $datum = Admin::whereHas('roles', function ($query) use($type) {
-                    $query->where('roles.name', $type);
-                    })->where('company_id',\Auth::user()->company_id);
+        if ("Admin" == $type) {
+            $datum = Admin::whereHas('roles', function ($query) use ($type) {
+                $query->where('roles.id', '>', 5);
+            })->where('company_id', \Auth::user()->company_id);
+        } else {
+            $datum = Admin::whereHas('roles', function ($query) use ($type) {
+                $query->where('roles.name', $type);
+            })->where('company_id', \Auth::user()->company_id);
         }
 
-        if($request->has('search_text') && $request->search_text != null) {
-            
+        if ($request->has('search_text') && null != $request->search_text) {
             $datum->Search($request->search_text);
         }
 
-        if($request->has('order_by')) {
+        if ($request->has('order_by')) {
             $datum->orderby($request->order_by, $request->order_direction);
         }
 
-        if($request->has('page') && $request->page == 'all') {
+        if ($request->has('page') && 'all' == $request->page) {
             $data = $datum->get();
         } else {
             $data = $datum->paginate(10);
@@ -176,6 +175,7 @@ class AdminController extends Controller
 
         return Helper::getResponse(['data' => $data]);
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -184,68 +184,66 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->has('email') &&  $request->email != null) $request->request->add(['email' => strtolower($request->email)]);
-       
+        if ($request->has('email') && null != $request->email) {
+            $request->request->add(['email' => strtolower($request->email)]);
+        }
+
         $this->validate($request, [
-            'name' => 'required|max:20',
-            'email' => 'required|email|max:255',
-            'mobile' => 'required|digits_between:6,13',
+            'name'     => 'required|max:20',
+            'email'    => 'required|email|max:255',
+            'mobile'   => 'required|digits_between:6,13',
             // 'email' => 'required|unique:accounts,email|email|max:255',
             'password' => 'required|min:6|confirmed|max:15',
-            'role' => 'required'
+            'role'     => 'required',
 
-        ],['role.required'=>'Please create a role for this Admin. ']);
+        ], ['role.required' => 'Please create a role for this Admin. ']);
 
-        
         $request->merge([
-            'email' => $this->cusencrypt($request->email,env('DB_SECRET')),
-            'mobile' => $this->cusencrypt($request->mobile,env('DB_SECRET'))
+            'email'  => $this->cusencrypt($request->email, env('DB_SECRET')),
+            'mobile' => $this->cusencrypt($request->mobile, env('DB_SECRET')),
         ]);
 
         $company_id = Auth::user()->company_id;
-        $email = $request->email;
-        $mobile=$request->mobile;
-        $type = $request->type;
-        
-        $this->validate($request, [          
-            'email' =>[ Rule::unique('admins')->where(function ($query) use($email,$company_id, $type) {
-                            return $query->where('email', $email)->where('company_id', $company_id)->where('type', $type);
-                         }),
-                       ],
-            'mobile' =>[ Rule::unique('admins')->where(function ($query) use($mobile,$company_id) {
-                            return $query->where('mobile', $mobile)->where('company_id', $company_id);
-                         }),
-                       ],
+        $email      = $request->email;
+        $mobile     = $request->mobile;
+        $type       = $request->type;
+
+        $this->validate($request, [
+            'email'  => [Rule::unique('admins')->where(function ($query) use ($email, $company_id, $type) {
+                return $query->where('email', $email)->where('company_id', $company_id)->where('type', $type);
+            }),
+            ],
+            'mobile' => [Rule::unique('admins')->where(function ($query) use ($mobile, $company_id) {
+                return $query->where('mobile', $mobile)->where('company_id', $company_id);
+            }),
+            ],
         ]);
 
-       
-        try{
+        try {
 
             $request->merge([
-                'email' => $this->cusdecrypt($request->email,env('DB_SECRET')),
-                'mobile' => $this->cusdecrypt($request->mobile,env('DB_SECRET'))
-            ]); 
+                'email'  => $this->cusdecrypt($request->email, env('DB_SECRET')),
+                'mobile' => $this->cusdecrypt($request->mobile, env('DB_SECRET')),
+            ]);
 
             $request->request->add(['company_id' => \Auth::user()->company_id]);
             $admin = $request->all();
 
             $admin['password'] = Hash::make($request->password);
-            $admin['type'] = $type;
-            $admin = Admin::create($admin);
+            $admin['type']     = $type;
+            $admin             = Admin::create($admin);
             $admin->assignRole($request->input('role'));
-            
-            if($request->hasFile('picture')) {
+
+            if ($request->hasFile('picture')) {
                 $admin->picture = Helper::upload_file($request->file('picture'), 'admin/picture');
             }
             $admin->country_code = $request->country_code;
             $admin->save();
             $request->merge(["body" => "registered"]);
             $this->sendUserData($request->all());
-      
-            return Helper::getResponse(['status' => 200, 'message' => trans('admin.create')]);
-        } 
 
-        catch (\Throwable $e) {
+            return Helper::getResponse(['status' => 200, 'message' => trans('admin.create')]);
+        } catch (\Throwable $e) {
             return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
     }
@@ -261,12 +259,12 @@ class AdminController extends Controller
         try {
 
             $admin = Admin::findOrFail($id);
-            $admin->roles->pluck('id','id');
+            $admin->roles->pluck('id', 'id');
             $admin->role = $admin->roles[0]->id;
 
-           return Helper::getResponse(['data' => $admin]);
+            return Helper::getResponse(['data' => $admin]);
         } catch (\Throwable $e) {
-            return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
+            return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
     }
 
@@ -279,126 +277,124 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if($request->has('email') &&  $request->email != null) $request->request->add(['email' => strtolower($request->email)]);
+        if ($request->has('email') && null != $request->email) {
+            $request->request->add(['email' => strtolower($request->email)]);
+        }
 
         $this->validate($request, [
-            'name' => 'required|max:20',
-            'email' => $request->email != null ?'sometimes|required|email|max:255':'',
+            'name'   => 'required|max:20',
+            'email'  => null != $request->email ? 'sometimes|required|email|max:255' : '',
             'mobile' => 'digits_between:6,13',
             // 'email' => 'require|d|unique:dispatchers,email|email|max:255',
         ]);
 
-        if($request->has('email')) {
+        if ($request->has('email')) {
             $request->merge(['email' => $this->cusencrypt($request->email, env('DB_SECRET'))]);
         }
-        if($request->has('mobile')) {
+        if ($request->has('mobile')) {
             $request->merge(['mobile' => $this->cusencrypt($request->mobile, env('DB_SECRET'))]);
         }
 
-        $company_id=Auth::user()->company_id;
-        if($request->has('email')) {
-        $email = $request->email;
+        $company_id = Auth::user()->company_id;
+        if ($request->has('email')) {
+            $email = $request->email;
         }
-        if($request->has('mobile')) {
-        $mobile = $request->mobile;
+        if ($request->has('mobile')) {
+            $mobile = $request->mobile;
         }
         $type = $request->type;
 
-
-        if($request->has('email')) {
-        $this->validate($request, [
-            'email' =>[ Rule::unique('admins')->where(function ($query) use($email,$company_id,$type,$id) {
-                return $query->where('email', $email)->where('company_id', $company_id)->where('type', $type)->whereNotIn('id', [$id]);
-                })
-            ], 
-        ]);
-        } 
-        if($request->has('mobile')) {
-        $this->validate($request, [
-            'mobile' =>[ Rule::unique('admins')->where(function ($query) use($mobile,$company_id,$id) {
+        if ($request->has('email')) {
+            $this->validate($request, [
+                'email' => [Rule::unique('admins')->where(function ($query) use ($email, $company_id, $type, $id) {
+                    return $query->where('email', $email)->where('company_id', $company_id)->where('type', $type)->whereNotIn('id', [$id]);
+                }),
+                ],
+            ]);
+        }
+        if ($request->has('mobile')) {
+            $this->validate($request, [
+                'mobile' => [Rule::unique('admins')->where(function ($query) use ($mobile, $company_id, $id) {
                     return $query->where('mobile', $mobile)->where('company_id', $company_id)->whereNotIn('id', [$id]);
-                 }),
-               ]
-        ]);
+                }),
+                ],
+            ]);
         }
 
-        
-      
-        try{
+        try {
 
-            if($request->has('email')) {
+            if ($request->has('email')) {
                 $request->merge(['email' => $this->cusdecrypt($request->email, env('DB_SECRET'))]);
             }
-            if($request->has('mobile')) {
+            if ($request->has('mobile')) {
                 $request->merge(['mobile' => $this->cusdecrypt($request->mobile, env('DB_SECRET'))]);
             }
 
-            $admin = Admin::findOrFail($id);
+            $admin       = Admin::findOrFail($id);
             $admin->name = $request->name;
-            if($request->has('mobile')) {
-            $admin->country_code = $request->country_code;
-            $admin->mobile = $request->mobile;
+            if ($request->has('mobile')) {
+                $admin->country_code = $request->country_code;
+                $admin->mobile       = $request->mobile;
             }
-            if($request->has('email')) {
-            $admin->email = $request->email;
+            if ($request->has('email')) {
+                $admin->email = $request->email;
             }
-            
-            $admin->type = $request->type;
-            if($request->password != '' || $request->password != null){
 
+            $admin->type = $request->type;
+            if ('' != $request->password || null != $request->password) {
                 $admin->password = Hash::make($request->password);
             }
             $admin->syncRoles($request->input('role'));
-           
-            if($request->hasFile('picture')) {
+
+            if ($request->hasFile('picture')) {
                 $admin->picture = Helper::upload_file($request->file('picture'), 'admin/picture');
             }
-            if($request->has('country_id')) {
-            $admin->country_id = $request->country_id;
-             }
-             if($request->has('city_id')) {
-            $admin->city_id = $request->city_id;
-             }
-             if($request->has('country_id')) {
-            $admin->zone_id = $request->zone_id;
-             }
-             if($request->has('company_name')) {
-            $admin->company_name = $request->company_name;
-             }if($request->has('commision')) {
-            $admin->commision = $request->commision;
-             }
+            if ($request->has('country_id')) {
+                $admin->country_id = $request->country_id;
+            }
+            if ($request->has('city_id')) {
+                $admin->city_id = $request->city_id;
+            }
+            if ($request->has('country_id')) {
+                $admin->zone_id = $request->zone_id;
+            }
+            if ($request->has('company_name')) {
+                $admin->company_name = $request->company_name;
+            }if ($request->has('commision')) {
+                $admin->commision = $request->commision;
+            }
             $admin->save();
 
-            $request->merge(["body"=>"updated"]);
-            if($request->has('email')) {
-            $this->sendUserData($request->all());
+            $request->merge(["body" => "updated"]);
+            if ($request->has('email')) {
+                $this->sendUserData($request->all());
             }
 
             return Helper::getResponse(['status' => 200, 'message' => trans('admin.update')]);
         } catch (\Throwable $e) {
-            return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
+            return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
     }
 
     public function updateStatus(Request $request, $id)
     {
-        
+
         try {
 
             $datum = Admin::findOrFail($id);
-            
-            if($request->has('status')){
-                if($request->status == 1){
+
+            if ($request->has('status')) {
+                if (1 == $request->status) {
                     $datum->status = 0;
-                }else{
+                } else {
                     $datum->status = 1;
                 }
             }
             $datum->save();
 
-            if($request->status == 1){
+            if (1 == $request->status) {
                 $status = "disabled";
-            }else{
+            } else {
                 $status = "enabled";
             }
 
@@ -406,10 +402,7 @@ class AdminController extends Controller
             $this->sendUserData($datum);
 
             return Helper::getResponse(['status' => 200, 'message' => trans('admin.activation_status')]);
-
-        } 
-
-        catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
     }
@@ -423,424 +416,386 @@ class AdminController extends Controller
     public function destroy($id)
     {
         $datum = Admin::findOrFail($id);
-       
+
         $datum['body'] = "deleted";
         $this->sendUserData($datum);
 
         return $this->removeModel($id);
     }
+
     public function role_list()
     {
-        
-        $roles = Role::where("id",'>',"5")->where('company_id','=',NULL)->orwhere('company_id',\Auth::user()->company_id)->get();
+
+        $roles = Role::where("id", '>', "5")->where('company_id', '=', null)->orwhere('company_id', \Auth::user()->company_id)->get();
         return Helper::getResponse(['data' => $roles]);
     }
-    
-    public function userReview(Request $request) 
+
+    public function userReview(Request $request)
     {
         try {
-            $datum = Rating::whereHas('service' ,function($query){  
-                      $query->where('status',1);  
-                    })->where([['company_id', Auth::user()->company_id],['user_id', '!=', 0]])->with('user', 'provider');
+            $datum = Rating::whereHas('service', function ($query) {
+                $query->where('status', 1);
+            })->where([['company_id', Auth::user()->company_id], ['user_id', '!=', 0]])->with('user', 'provider');
 
-         
-            if($request->has('search_text') && $request->search_text != null) {
+            if ($request->has('search_text') && null != $request->search_text) {
                 $datum->Usersearch($request->search_text);
             }
-    
-            if($request->has('order_by')) {
+
+            if ($request->has('order_by')) {
                 $datum->orderby($request->order_by, $request->order_direction);
             }
-    
+
             $data = $datum->paginate(10);
-            foreach ($data as $key => $value){
-              if($value['admin_service']=='TRANSPORT'){
+            foreach ($data as $key => $value) {
+                if ('TRANSPORT' == $value['admin_service']) {
                     try {
-                        $transportdata=\App\Models\Transport\RideRequest::where('id',$value['request_id'])->first();  
-                        $data[$key]['booking_id']=!empty($transportdata)?$transportdata->booking_id:"XXXXXX";
-                    }catch (\Throwable $e) {
-                        return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
+                        $transportdata            = \App\Models\Transport\RideRequest::where('id', $value['request_id'])->first();
+                        $data[$key]['booking_id'] = !empty($transportdata) ? $transportdata->booking_id : "XXXXXX";
+                    } catch (\Throwable $e) {
+                        return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
                     }
-               } else if($value['admin_service']=='SERVICE'){
+                } else if ('SERVICE' == $value['admin_service']) {
                     try {
-                        $servicedata=\App\Models\Service\ServiceRequest::where('id',$value['request_id'])->first();  
-                        $data[$key]['booking_id']=!empty($servicedata)?$servicedata->booking_id:"XXXXXX";
-                    }catch (\Throwable $e) {
-                        return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
+                        $servicedata              = \App\Models\Service\ServiceRequest::where('id', $value['request_id'])->first();
+                        $data[$key]['booking_id'] = !empty($servicedata) ? $servicedata->booking_id : "XXXXXX";
+                    } catch (\Throwable $e) {
+                        return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
                     }
-
-               } else {
-                    try {  
-                         $storedata=\App\Models\Order\StoreOrder::where('id',$value['request_id'])->first();
-                         $data[$key]['booking_id']=!empty($storedata)?$storedata->store_order_invoice_id:"XXXXXX";
-                    }catch (\Throwable $e) {
-                        return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
+                } else {
+                    try {
+                        $storedata                = \App\Models\Order\StoreOrder::where('id', $value['request_id'])->first();
+                        $data[$key]['booking_id'] = !empty($storedata) ? $storedata->store_order_invoice_id : "XXXXXX";
+                    } catch (\Throwable $e) {
+                        return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
                     }
-
-               } 
+                }
             }
-          
 
-    
             return Helper::getResponse(['data' => $data]);
-
         } catch (\Throwable $e) {
-            return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
+            return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
     }
+
     public function providerReview(Request $request)
     {
         try {
-           
-            $is_fleet = Auth::user()->hasRole('FLEET');
+
+            $is_fleet  = Auth::user()->hasRole('FLEET');
             $logged_id = Auth::user()->id;
-            $datum = Rating::whereHas('service' ,function($query){  
-                      $query->where('status',1);  
-                    })->where('company_id', Auth::user()->company_id)->with('user', 'provider')
-                    ->whereHas('provider', function($query) use ($is_fleet, $logged_id){
-                        if($is_fleet) {
-                            $query->where('admin_id',$logged_id);
-                        }
-                    });
-            if($request->has('search_text') && $request->search_text != null) {
+            $datum     = Rating::whereHas('service', function ($query) {
+                $query->where('status', 1);
+            })->where('company_id', Auth::user()->company_id)->with('user', 'provider')
+                ->whereHas('provider', function ($query) use ($is_fleet, $logged_id) {
+                    if ($is_fleet) {
+                        $query->where('admin_id', $logged_id);
+                    }
+                });
+            if ($request->has('search_text') && null != $request->search_text) {
                 $datum->Providersearch($request->search_text);
             }
-    
-            if($request->has('order_by')) {
+
+            if ($request->has('order_by')) {
                 $datum->orderby($request->order_by, $request->order_direction);
             }
-    
+
             $data = $datum->paginate(10);
-               foreach ($data as $key => $value){
-              if($value['admin_service']=='TRANSPORT'){
+            foreach ($data as $key => $value) {
+                if ('TRANSPORT' == $value['admin_service']) {
                     try {
-                        $transportdata=\App\Models\Transport\RideRequest::where('id',$value['request_id'])->first();  
-                        $data[$key]['booking_id']=!empty($transportdata)?$transportdata->booking_id:"XXXXXX";
-                    }catch (\Throwable $e) {
-                        return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
+                        $transportdata            = \App\Models\Transport\RideRequest::where('id', $value['request_id'])->first();
+                        $data[$key]['booking_id'] = !empty($transportdata) ? $transportdata->booking_id : "XXXXXX";
+                    } catch (\Throwable $e) {
+                        return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
                     }
-               } else if($value['admin_service']=='SERVICE'){
+                } else if ('SERVICE' == $value['admin_service']) {
                     try {
-                        $servicedata=\App\Models\Service\ServiceRequest::where('id',$value['request_id'])->first();  
-                        $data[$key]['booking_id']=!empty($servicedata)?$servicedata->booking_id:"XXXXXX";
-                        
-                    }catch (\Throwable $e) {
-                        return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
+                        $servicedata              = \App\Models\Service\ServiceRequest::where('id', $value['request_id'])->first();
+                        $data[$key]['booking_id'] = !empty($servicedata) ? $servicedata->booking_id : "XXXXXX";
+                    } catch (\Throwable $e) {
+                        return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
                     }
-
-               } else {
-                    try {  
-                         $storedata=\App\Models\Order\StoreOrder::where('id',$value['request_id'])->first();
-                         $data[$key]['booking_id']=!empty($storedata)?$storedata->store_order_invoice_id:"XXXXXX";
-
-                    }catch (\Throwable $e) {
-                        return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
+                } else {
+                    try {
+                        $storedata                = \App\Models\Order\StoreOrder::where('id', $value['request_id'])->first();
+                        $data[$key]['booking_id'] = !empty($storedata) ? $storedata->store_order_invoice_id : "XXXXXX";
+                    } catch (\Throwable $e) {
+                        return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
                     }
-
-               } 
+                }
             }
 
             return Helper::getResponse(['data' => $data]);
         } catch (\Throwable $e) {
-            return Helper::getResponse(['status' => 404,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
+            return Helper::getResponse(['status' => 404, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
     }
-    public function heatmap(Request $request) {
+
+    public function heatmap(Request $request)
+    {
         try {
 
             $services = [];
 
             $type = strtoupper($request->type);
 
-
-
-            if($type == 'TRANSPORT') {
+            if ('TRANSPORT' == $type) {
                 try {
-                    $services = \App\Models\Transport\RideRequest::whereIn('status', ['SEARCHING'])->orderBy('id','desc')->get();
-                } catch(\Throwable $e) {  }
-            } else if($type == 'ORDER') {
+                    $services = \App\Models\Transport\RideRequest::whereIn('status', ['SEARCHING'])->orderBy('id', 'desc')->get();
+                } catch (\Throwable $e) {}
+            } else if ('ORDER' == $type) {
                 try {
-                    $services = \App\Models\Order\StoreOrder::whereIn('status', ['SEARCHING'])->orderBy('id','desc')->get();
-                } catch(\Throwable $e) { }
-            } else if($type == 'SERVICE') {
+                    $services = \App\Models\Order\StoreOrder::whereIn('status', ['SEARCHING'])->orderBy('id', 'desc')->get();
+                } catch (\Throwable $e) {}
+            } else if ('SERVICE' == $type) {
                 try {
-                    $services = \App\Models\Service\ServiceRequest::whereIn('status', ['SEARCHING'])->orderBy('id','desc')->get();
-                } catch(\Throwable $e) { }
+                    $services = \App\Models\Service\ServiceRequest::whereIn('status', ['SEARCHING'])->orderBy('id', 'desc')->get();
+                } catch (\Throwable $e) {}
             }
-            
+
             $data = [];
             foreach ($services as $service) {
                 $data[] = ['lat' => $service->s_latitude, 'lng' => $service->s_longitude];
             }
             return Helper::getResponse(['data' => $data]);
-        }catch (\Throwable $e) {
-            return Helper::getResponse(['status' => 500,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
+        } catch (\Throwable $e) {
+            return Helper::getResponse(['status' => 500, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
     }
-
 
     public function godsview(Request $request)
     {
-       try{
+        try {
 
-            $type = strtoupper($request->type);
+            $type   = strtoupper($request->type);
             $status = $request->status;
-            if($type == 'TRANSPORT') {
-                if($request->status == 'STARTED' || $request->status == 'ARRIVED' || $request->status == 'PICKEDUP') {
-
-                    $providers = Provider::with(['request', 'current_vehicle.ride_vehicle','current_vehicle.ride_vehicle.ride_type', 'service.ride_vehicle'])->whereHas('request', function ($query) use($status) {
+            if ('TRANSPORT' == $type) {
+                if ('STARTED' == $request->status || 'ARRIVED' == $request->status || 'PICKEDUP' == $request->status) {
+                    $providers = Provider::with(['request', 'current_vehicle.ride_vehicle', 'current_vehicle.ride_vehicle.ride_type', 'service.ride_vehicle'])->whereHas('request', function ($query) use ($status) {
                         $query->where('status', $status)
-                        ->where('admin_service','TRANSPORT');
-                    })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned','is_online')->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
-                } else if($request->status == 'ACTIVE') {
-                    $providers = Provider::with(['providerservice'=>function($q){
-                        $q->where('admin_service','TRANSPORT')->whereNotNull('category_id')
-                        ->select('id','provider_id','admin_service','provider_vehicle_id','ride_delivery_id','category_id');
-                    },'providerservice.ride_vehicle' => function($q){
-                            $q->select('id','vehicle_name');
-                    },'providerservice.maintransport','service', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned','is_online')->where('is_online',1)->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->where('is_assigned',0)->get();
+                            ->where('admin_service', 'TRANSPORT');
+                    })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned', 'is_online')->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
+                } else if ('ACTIVE' == $request->status) {
+                    $providers = Provider::with(['providerservice' => function ($q) {
+                        $q->where('admin_service', 'TRANSPORT')->whereNotNull('category_id')
+                            ->select('id', 'provider_id', 'admin_service', 'provider_vehicle_id', 'ride_delivery_id', 'category_id');
+                    }, 'providerservice.ride_vehicle' => function ($q) {
+                        $q->select('id', 'vehicle_name');
+                    }, 'providerservice.maintransport', 'service', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned', 'is_online')->where('is_online', 1)->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->where('is_assigned', 0)->get();
                 } else {
                     /*$providers = Provider::with(['service', 'current_vehicle.ride_vehicle', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->get();*/
 
-                    $providers = Provider::with(['providerservice'=>function($q){
-                        $q->where('admin_service','TRANSPORT')->whereNotNull('category_id')
-                        ->select('id','provider_id','admin_service','provider_vehicle_id','ride_delivery_id','category_id');
-                    },'providerservice.ride_vehicle' => function($q){
-                            $q->select('id','vehicle_name');
-                    },'providerservice.maintransport','service', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned','is_online')->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
+                    $providers = Provider::with(['providerservice' => function ($q) {
+                        $q->where('admin_service', 'TRANSPORT')->whereNotNull('category_id')
+                            ->select('id', 'provider_id', 'admin_service', 'provider_vehicle_id', 'ride_delivery_id', 'category_id');
+                    }, 'providerservice.ride_vehicle' => function ($q) {
+                        $q->select('id', 'vehicle_name');
+                    }, 'providerservice.maintransport', 'service', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned', 'is_online')->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
                 }
-               /* } else if($request->status == 'ACTIVE') {
-                    $providers = Provider::with(['providerservice'=>function($q){
-                        $q->where('admin_service','TRANSPORT')->whereNotNull('category_id')
-                        ->select('id','provider_id','admin_service','provider_vehicle_id','ride_delivery_id','category_id');
-                    },'providerservice.ride_vehicle' => function($q){
-                            $q->select('id','vehicle_name');
-                    },'providerservice.maintransport','request', 'service.ride_vehicle'])->whereHas('service', function ($query) {
+                /* } else if($request->status == 'ACTIVE') {
+            $providers = Provider::with(['providerservice'=>function($q){
+            $q->where('admin_service','TRANSPORT')->whereNotNull('category_id')
+            ->select('id','provider_id','admin_service','provider_vehicle_id','ride_delivery_id','category_id');
+            },'providerservice.ride_vehicle' => function($q){
+            $q->select('id','vehicle_name');
+            },'providerservice.maintransport','request', 'service.ride_vehicle'])->whereHas('service', function ($query) {
+            $query->where('status', 'active');
+            })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->get();
+            } else {
+            $providers = Provider::with(['providerservice'=>function($q){
+            $q->where('admin_service','TRANSPORT')->whereNotNull('category_id')
+            ->select('id','provider_id','admin_service','provider_vehicle_id','ride_delivery_id','category_id');
+            },'providerservice.ride_vehicle' => function($q){
+            $q->select('id','vehicle_name');
+            },'providerservice.maintransport','service', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->get();
+
+            }*/
+            } else if ('ORDER' == $type) {
+                if ('RECEIVED' == $request->status || 'ARRIVED' == $request->status || 'REACHED' == $request->status || 'PICKEDUP' == $request->status || 'STARTED' == $request->status) {
+                    $providers = Provider::with(['request', 'current_store_detail', 'current_store_detail.storetype'])
+                        ->whereHas('request', function ($query) use ($status) {
+                            $query->where('status', $status)
+                                ->where('admin_service', 'ORDER');
+                        })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
+                } else if ('ACTIVE' == $request->status) {
+                    $providers = Provider::with(['providerservice' => function ($q) {
+                        $q->where('admin_service', 'ORDER')->whereNotNull('category_id')
+                            ->select('id', 'provider_id', 'admin_service', 'provider_vehicle_id', 'ride_delivery_id', 'category_id');
+                    }, 'providerservice.ride_vehicle' => function ($q) {
+                        $q->select('id', 'vehicle_name');
+                    }, 'providerservice.mainshop', 'request', 'service.ride_vehicle'])->whereHas('service', function ($query) {
                         $query->where('status', 'active');
-                    })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->get();
+                    })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned', 'is_online')->where('is_online', 1)->where('is_assigned', 0)->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
                 } else {
-                    $providers = Provider::with(['providerservice'=>function($q){
-                        $q->where('admin_service','TRANSPORT')->whereNotNull('category_id')
-                        ->select('id','provider_id','admin_service','provider_vehicle_id','ride_delivery_id','category_id');
-                    },'providerservice.ride_vehicle' => function($q){
-                            $q->select('id','vehicle_name');
-                    },'providerservice.maintransport','service', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->get();
-
-                }*/
-            } else if($type == 'ORDER') {    
-                if($request->status == 'RECEIVED' || $request->status == 'ARRIVED' || $request->status == 'REACHED'  || $request->status == 'PICKEDUP' || $request->status == 'STARTED') {
-                    $providers = Provider::with(['request','current_store_detail','current_store_detail.storetype'])
-                        ->whereHas('request', function ($query) use($status) {
-                            $query->where('status', $status)
-                            ->where('admin_service','ORDER');
-                        })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
-                } else if($request->status == 'ACTIVE') {
-                    $providers = Provider::with(['providerservice'=>function($q){
-                        $q->where('admin_service','ORDER')->whereNotNull('category_id')
-                        ->select('id','provider_id','admin_service','provider_vehicle_id','ride_delivery_id','category_id');
-                        },'providerservice.ride_vehicle' => function($q){
-                                $q->select('id','vehicle_name');
-                        },'providerservice.mainshop','request', 'service.ride_vehicle'])->whereHas('service', function ($query) {
-                            $query->where('status', 'active');
-                        })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned','is_online')->where('is_online',1)->where('is_assigned',0)->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
-                } else {
-                    $providers = Provider::with(['providerservice'=>function($q){
-                        $q->where('admin_service','ORDER')->whereNotNull('category_id')
-                        ->select('id','provider_id','admin_service','provider_vehicle_id','ride_delivery_id','category_id');
-                    },'providerservice.mainshop','service', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned','is_online')->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
-                }            
+                    $providers = Provider::with(['providerservice' => function ($q) {
+                        $q->where('admin_service', 'ORDER')->whereNotNull('category_id')
+                            ->select('id', 'provider_id', 'admin_service', 'provider_vehicle_id', 'ride_delivery_id', 'category_id');
+                    }, 'providerservice.mainshop', 'service', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned', 'is_online')->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
+                }
                 /*$providers = Provider::with(['request'])
-                    ->whereHas('request', function ($query) use($status) {
-                        $query->where('status', $status);
-                    })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->get();*/
-                
-            } else if($type == 'SERVICE') {
-                if($request->status == 'STARTED' || $request->status == 'ARRIVED' || $request->status == 'PICKEDUP' || $request->status == 'DROPPED') {
+            ->whereHas('request', function ($query) use($status) {
+            $query->where('status', $status);
+            })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->get();*/
+            } else if ('SERVICE' == $type) {
+                if ('STARTED' == $request->status || 'ARRIVED' == $request->status || 'PICKEDUP' == $request->status || 'DROPPED' == $request->status) {
                     $providers = Provider::with(['request'])
-                        ->whereHas('request', function ($query) use($status) {
+                        ->whereHas('request', function ($query) use ($status) {
                             $query->where('status', $status)
-                            ->where('admin_service','SERVICE');
+                                ->where('admin_service', 'SERVICE');
                         })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
-                } else if($request->status == 'ACTIVE') {
-                    $providers = Provider::with(['providerservice'=>function($q){
-                        $q->where('admin_service','SERVICE')->whereNotNull('service_id')
-                        ->select('id','provider_id','admin_service','provider_vehicle_id','ride_delivery_id','category_id');
-                        },'providerservice.ride_vehicle' => function($q){
-                                $q->select('id','vehicle_name');
-                        },'providerservice.mainservice','request', 'service.ride_vehicle'])->whereHas('service', function ($query) {
-                            $query->where('status', 'active');
-                        })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned','is_online')->where('is_online',1)->where('is_assigned',0)->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
+                } else if ('ACTIVE' == $request->status) {
+                    $providers = Provider::with(['providerservice' => function ($q) {
+                        $q->where('admin_service', 'SERVICE')->whereNotNull('service_id')
+                            ->select('id', 'provider_id', 'admin_service', 'provider_vehicle_id', 'ride_delivery_id', 'category_id');
+                    }, 'providerservice.ride_vehicle' => function ($q) {
+                        $q->select('id', 'vehicle_name');
+                    }, 'providerservice.mainservice', 'request', 'service.ride_vehicle'])->whereHas('service', function ($query) {
+                        $query->where('status', 'active');
+                    })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned', 'is_online')->where('is_online', 1)->where('is_assigned', 0)->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
                 } else {
-                    $providers = Provider::with(['providerservice'=>function($q){
-                        $q->where('admin_service','SERVICE')->whereNotNull('service_id')
-                        ->select('id','provider_id','admin_service','provider_vehicle_id','ride_delivery_id','category_id');
-                    },'providerservice.mainservice','service', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned','is_online')->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
+                    $providers = Provider::with(['providerservice' => function ($q) {
+                        $q->where('admin_service', 'SERVICE')->whereNotNull('service_id')
+                            ->select('id', 'provider_id', 'admin_service', 'provider_vehicle_id', 'ride_delivery_id', 'category_id');
+                    }, 'providerservice.mainservice', 'service', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned', 'is_online')->when(Auth::user()->type == 'FLEET', function ($q) {return $q->where('admin_id', Auth::user()->id);})->get();
                 }
 
-
-               /* $providers = Provider::with(['request'])
-                ->whereHas('request', function ($query) use($status) {
-                    $query->where('status', $status);
-                })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->get();*/
-                
-            }else if($type == 'DELIVERY') {
-                if($request->status == 'STARTED' || $request->status == 'ARRIVED' || $request->status == 'PICKEDUP' || $request->status == 'DROPPED') {
+                /* $providers = Provider::with(['request'])
+            ->whereHas('request', function ($query) use($status) {
+            $query->where('status', $status);
+            })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->get();*/
+            } else if ('DELIVERY' == $type) {
+                if ('STARTED' == $request->status || 'ARRIVED' == $request->status || 'PICKEDUP' == $request->status || 'DROPPED' == $request->status) {
                     $providers = Provider::with(['request'])
-                        ->whereHas('request', function ($query) use($status) {
+                        ->whereHas('request', function ($query) use ($status) {
                             $query->where('status', $status)
-                            ->where('admin_service','DELIVERY');
+                                ->where('admin_service', 'DELIVERY');
                         })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->get();
-                } else if($request->status == 'ACTIVE') {
-                    $providers = Provider::with(['providerservice'=>function($q){
-                        $q->where('admin_service','DELIVERY')->whereNotNull('service_id')
-                        ->select('id','provider_id','admin_service','provider_vehicle_id','ride_delivery_id','category_id');
-                        },'providerservice.ride_vehicle' => function($q){
-                                $q->select('id','vehicle_name');
-                        },'providerservice.mainservice','request', 'service.ride_vehicle'])->whereHas('service', function ($query) {
-                            $query->where('status', 'active');
-                        })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned','is_online')->where('is_online',1)->where('is_assigned',0)->get();
+                } else if ('ACTIVE' == $request->status) {
+                    $providers = Provider::with(['providerservice' => function ($q) {
+                        $q->where('admin_service', 'DELIVERY')->whereNotNull('service_id')
+                            ->select('id', 'provider_id', 'admin_service', 'provider_vehicle_id', 'ride_delivery_id', 'category_id');
+                    }, 'providerservice.ride_vehicle' => function ($q) {
+                        $q->select('id', 'vehicle_name');
+                    }, 'providerservice.mainservice', 'request', 'service.ride_vehicle'])->whereHas('service', function ($query) {
+                        $query->where('status', 'active');
+                    })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned', 'is_online')->where('is_online', 1)->where('is_assigned', 0)->get();
                 } else {
-                    $providers = Provider::with(['providerservice'=>function($q){
-                        $q->where('admin_service','DELIVERY')->whereNotNull('service_id')
-                        ->select('id','provider_id','admin_service','provider_vehicle_id','ride_delivery_id','category_id');
-                    },'providerservice.mainservice','service', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned','is_online')->get();
+                    $providers = Provider::with(['providerservice' => function ($q) {
+                        $q->where('admin_service', 'DELIVERY')->whereNotNull('service_id')
+                            ->select('id', 'provider_id', 'admin_service', 'provider_vehicle_id', 'ride_delivery_id', 'category_id');
+                    }, 'providerservice.mainservice', 'service', 'service.vehicle', 'request', 'service.ride_vehicle'])->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned', 'is_online')->get();
                 }
 
+                /* $providers = Provider::with(['request'])
+            ->whereHas('request', function ($query) use($status) {
+            $query->where('status', $status);
+            })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->get();*/
+            }
 
-               /* $providers = Provider::with(['request'])
-                ->whereHas('request', function ($query) use($status) {
-                    $query->where('status', $status);
-                })->select('id', 'first_name', 'last_name', 'mobile', 'email', 'picture', 'status', 'latitude', 'longitude', 'is_assigned')->get();*/
-                
-            }                              
-            
             $locations = [];
 
             foreach ($providers as $provider) {
-                $locations[] = ['name' => $provider->first_name." ".$provider->last_name, 'lat' =>  $provider->latitude, 'lng' => $provider->longitude, 'car_image' =>  'asset/img/cars/car.png'];
+                $locations[] = ['name' => $provider->first_name . " " . $provider->last_name, 'lat' => $provider->latitude, 'lng' => $provider->longitude, 'car_image' => 'asset/img/cars/car.png'];
             }
-            return Helper::getResponse(['data' => ['providers' => $providers, 'locations' => $locations] ]);
-        }
-        catch(Exception $e){
-             return Helper::getResponse(['status' => 500,'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
+            return Helper::getResponse(['data' => ['providers' => $providers, 'locations' => $locations]]);
+        } catch (Exception $e) {
+            return Helper::getResponse(['status' => 500, 'message' => trans('admin.something_wrong'), 'error' => $e->getMessage()]);
         }
     }
 
-    public function SendCustomPush($CustomPush){
+    public function SendCustomPush($CustomPush)
+    {
 
-        try{
+        try {
 
             \Log::notice("Starting Custom Push");
 
             $Push = CustomPush::findOrFail($CustomPush);
 
-            if($Push->send_to == 'USERS'){
-
+            if ('USERS' == $Push->send_to) {
                 $Users = [];
 
-                if($Push->condition == 'ACTIVE'){
-
-                    if($Push->condition_data == 'HOUR'){
-
-                        $Users = User::whereHas('trips', function($query) {
-                            $query->where('created_at','>=',Carbon::now()->subHour());
+                if ('ACTIVE' == $Push->condition) {
+                    if ('HOUR' == $Push->condition_data) {
+                        $Users = User::whereHas('trips', function ($query) {
+                            $query->where('created_at', '>=', Carbon::now()->subHour());
                         })->get();
-                        
-                    }elseif($Push->condition_data == 'WEEK'){
+                    } elseif ('WEEK' == $Push->condition_data) {
 
-                        $Users = User::whereHas('trips', function($query){
-                            $query->where('created_at','>=',Carbon::now()->subWeek());
+                        $Users = User::whereHas('trips', function ($query) {
+                            $query->where('created_at', '>=', Carbon::now()->subWeek());
                         })->get();
+                    } elseif ('MONTH' == $Push->condition_data) {
 
-                    }elseif($Push->condition_data == 'MONTH'){
-
-                        $Users = User::whereHas('trips', function($query){
-                            $query->where('created_at','>=',Carbon::now()->subMonth());
+                        $Users = User::whereHas('trips', function ($query) {
+                            $query->where('created_at', '>=', Carbon::now()->subMonth());
                         })->get();
-
                     }
+                } elseif ('RIDES' == $Push->condition) {
 
-                }elseif($Push->condition == 'RIDES'){
-
-                    $Users = User::whereHas('trips', function($query) use ($Push){
-                                $query->where('status','COMPLETED');
-                                $query->groupBy('id');
-                                $query->havingRaw('COUNT(*) >= '.$Push->condition_data);
-                            })->get();
-
-
-                }elseif($Push->condition == 'LOCATION'){
+                    $Users = User::whereHas('trips', function ($query) use ($Push) {
+                        $query->where('status', 'COMPLETED');
+                        $query->groupBy('id');
+                        $query->havingRaw('COUNT(*) >= ' . $Push->condition_data);
+                    })->get();
+                } elseif ('LOCATION' == $Push->condition) {
 
                     $Location = explode(',', $Push->condition_data);
 
-                    $distance = config('constants.provider_search_radius', '10');
-                    $latitude = $Location[0];
+                    $distance  = config('constants.provider_search_radius', '10');
+                    $latitude  = $Location[0];
                     $longitude = $Location[1];
 
                     $Users = User::whereRaw("(1.609344 * 3956 * acos( cos( radians('$latitude') ) * cos( radians(latitude) ) * cos( radians(longitude) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians(latitude) ) ) ) <= $distance")
-                            ->get();
-
+                        ->get();
                 }
-
 
                 foreach ($Users as $key => $user) {
                     (new SendPushNotification)->sendPushToUser($user->id, $Push->message);
                 }
-
-            }elseif($Push->send_to == 'PROVIDERS'){
-
+            } elseif ('PROVIDERS' == $Push->send_to) {
 
                 $Providers = [];
 
-                if($Push->condition == 'ACTIVE'){
-
-                    if($Push->condition_data == 'HOUR'){
-
-                        $Providers = Provider::whereHas('trips', function($query){
-                            $query->where('created_at','>=',Carbon::now()->subHour());
+                if ('ACTIVE' == $Push->condition) {
+                    if ('HOUR' == $Push->condition_data) {
+                        $Providers = Provider::whereHas('trips', function ($query) {
+                            $query->where('created_at', '>=', Carbon::now()->subHour());
                         })->get();
-                        
-                    }elseif($Push->condition_data == 'WEEK'){
+                    } elseif ('WEEK' == $Push->condition_data) {
 
-                        $Providers = Provider::whereHas('trips', function($query){
-                            $query->where('created_at','>=',Carbon::now()->subWeek());
+                        $Providers = Provider::whereHas('trips', function ($query) {
+                            $query->where('created_at', '>=', Carbon::now()->subWeek());
                         })->get();
+                    } elseif ('MONTH' == $Push->condition_data) {
 
-                    }elseif($Push->condition_data == 'MONTH'){
-
-                        $Providers = Provider::whereHas('trips', function($query){
-                            $query->where('created_at','>=',Carbon::now()->subMonth());
+                        $Providers = Provider::whereHas('trips', function ($query) {
+                            $query->where('created_at', '>=', Carbon::now()->subMonth());
                         })->get();
-
                     }
+                } elseif ('RIDES' == $Push->condition) {
 
-                }elseif($Push->condition == 'RIDES'){
-
-                    $Providers = Provider::whereHas('trips', function($query) use ($Push){
-                               $query->where('status','COMPLETED');
-                                $query->groupBy('id');
-                                $query->havingRaw('COUNT(*) >= '.$Push->condition_data);
-                            })->get();
-
-                }elseif($Push->condition == 'LOCATION'){
+                    $Providers = Provider::whereHas('trips', function ($query) use ($Push) {
+                        $query->where('status', 'COMPLETED');
+                        $query->groupBy('id');
+                        $query->havingRaw('COUNT(*) >= ' . $Push->condition_data);
+                    })->get();
+                } elseif ('LOCATION' == $Push->condition) {
 
                     $Location = explode(',', $Push->condition_data);
 
-                    $distance = config('constants.provider_search_radius', '10');
-                    $latitude = $Location[0];
+                    $distance  = config('constants.provider_search_radius', '10');
+                    $latitude  = $Location[0];
                     $longitude = $Location[1];
 
                     $Providers = Provider::whereRaw("(1.609344 * 3956 * acos( cos( radians('$latitude') ) * cos( radians(latitude) ) * cos( radians(longitude) - radians('$longitude') ) + sin( radians('$latitude') ) * sin( radians(latitude) ) ) ) <= $distance")
-                            ->get();
-
+                        ->get();
                 }
-
 
                 foreach ($Providers as $key => $provider) {
                     (new SendPushNotification)->sendPushToProvider($provider->id, $Push->message);
                 }
-
-            }elseif($Push->send_to == 'ALL'){
+            } elseif ('ALL' == $Push->send_to) {
 
                 $Users = User::all();
                 foreach ($Users as $key => $user) {
@@ -851,13 +806,16 @@ class AdminController extends Controller
                 foreach ($Providers as $key => $provider) {
                     (new SendPushNotification)->sendPushToProvider($provider->id, $Push->message);
                 }
-
             }
-        }
-
-        catch (Exception $e) {
-             return back()->with('flash_error','Something Went Wrong!');
+        } catch (Exception $e) {
+            return back()->with('flash_error', 'Something Went Wrong!');
         }
     }
 
+    public function providerlist()
+    {
+        $provider_list = Provider::where('company_id', Auth::guard('admin')->user()->company_id)->->where('is_online', 1)->with('country')->first();
+        $provider_list->makeVisible(['qrcode_url']);
+        return Helper::getResponse(['data' => $provider_list]);
+    }
 }
