@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\V1\Common\Provider;
 
+//V1\Common\Provider\HomeController
+
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Common\Admin;
@@ -605,6 +607,7 @@ class HomeController extends Controller
         $adminservices_list = AdminService::with('providerservices')
             ->where('company_id', Auth::guard('provider')->user()->company_id)
             ->where('status', 1)
+            ->where('admin_service',"COMMON")
             ->get();
         $adminservices = [];
 

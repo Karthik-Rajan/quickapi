@@ -27,6 +27,8 @@ $router->post('countries', 'V1\Common\Provider\HomeController@countries');
 $router->post('cities/{id}', 'V1\Common\Provider\HomeController@cities');
 
 $router->post('/updatelocation', 'V1\Common\Provider\HomeController@updatelocation');
+//$router->get('/adminservices', 'V1\Common\Provider\HomeController@adminservices');
+
 
 $router->group(['middleware' => 'auth:provider'], function ($app) {
 
