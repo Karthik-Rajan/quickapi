@@ -34,6 +34,9 @@ use Auth;
 use App\Traits\Encryptable;
 use Illuminate\Validation\Rule;
 use App\Services\ReferralResource;
+use App\Models\Common\Faq;
+use App\Models\Common\CmsPage;
+
 
 class HomeController extends Controller
 {
@@ -958,5 +961,33 @@ class HomeController extends Controller
 
         return Helper::getResponse(['data' => $data]);
 	}
-	
+	public function listFaq(Request $request)
+    {
+        $data = Faq::get();
+
+
+        return Helper::getResponse(['data' => $data]);
+    }
+
+    public function cmsPages(Request $request)
+    {
+        //$data = CmsPage::get();
+
+        $page_name = $request->input('page_name');
+
+        if(is_null($page_name) || $page_name=="")
+        {
+            $data = CmsPage::get();
+        }
+        else
+        {
+            $data = CmsPage::where('page_name',$page_name)->get();
+        }
+
+
+        
+
+
+        return Helper::getResponse(['data' => $data]);
+    }
 }

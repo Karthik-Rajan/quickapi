@@ -25,7 +25,7 @@ $router->get('/logout', 'V1\Common\User\UserAuthController@logout');
 $router->post('countries', 'V1\Common\User\HomeController@countries');
 $router->post('/socket', 'V1\Common\User\SocketController@checkDomain');
 // $router->get('/stable', 'V1\Common\User\HomeController@stable');
-
+$router->get('cmspage', 'V1\Common\User\HomeController@cmsPages');
 
 $router->group(['middleware' => 'authless:user'], function($app) {
 
