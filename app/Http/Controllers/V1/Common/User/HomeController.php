@@ -34,6 +34,7 @@ use Auth;
 use App\Traits\Encryptable;
 use Illuminate\Validation\Rule;
 use App\Services\ReferralResource;
+use App\Models\Common\Faq;
 
 class HomeController extends Controller
 {
@@ -958,5 +959,11 @@ class HomeController extends Controller
 
         return Helper::getResponse(['data' => $data]);
 	}
-	
+	public function listFaq(Request $request)
+    {
+        $data = Faq::get();
+
+
+        return Helper::getResponse(['data' => $data]);
+    }
 }

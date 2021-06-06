@@ -9,7 +9,7 @@
 | It is a breeze. Simply tell Lumen the URIs it should respond to
 | and give it the Closure to call when that URI is requested.
 |
-*/
+ */
 
 $router->post('/login', 'V1\Common\User\UserAuthController@login');
 $router->post('/verify', 'V1\Common\User\UserAuthController@verify');
@@ -24,10 +24,10 @@ $router->post('/reset/otp', 'V1\Common\User\UserAuthController@resetPasswordOTP'
 $router->get('/logout', 'V1\Common\User\UserAuthController@logout');
 $router->post('countries', 'V1\Common\User\HomeController@countries');
 $router->post('/socket', 'V1\Common\User\SocketController@checkDomain');
+$router->get('/faq', 'V1\Common\User\HomeController@listFaq');
 // $router->get('/stable', 'V1\Common\User\HomeController@stable');
 
-
-$router->group(['middleware' => 'authless:user'], function($app) {
+$router->group(['middleware' => 'authless:user'], function ($app) {
 
     $app->get('/country/{id}', 'V1\Common\User\HomeController@country');
     $app->get('cities', 'V1\Common\User\HomeController@cities');
@@ -39,13 +39,13 @@ $router->group(['middleware' => 'authless:user'], function($app) {
 
 });
 
-$router->group(['middleware' => 'auth:user'], function($app) {
+$router->group(['middleware' => 'auth:user'], function ($app) {
 
     $app->get('/reasons', 'V1\Common\User\HomeController@reasons');
 
     $app->get('/ongoing', 'V1\Common\User\HomeController@ongoing_services');
 
-	$app->get('/users', function() {
+    $app->get('/users', function () {
         return response()->json([
             'message' => \Auth::guard('user')->user(),
         ]);
@@ -60,7 +60,7 @@ $router->group(['middleware' => 'auth:user'], function($app) {
     $app->get('/address', 'V1\Common\User\HomeController@listmanageaddress');
     $app->delete('/address/{id}', 'V1\Common\User\HomeController@deletemanageaddress');
 
-	$app->get('/profile', 'V1\Common\User\HomeController@show_profile');
+    $app->get('/profile', 'V1\Common\User\HomeController@show_profile');
     $app->post('/profile', 'V1\Common\User\HomeController@update_profile');
     $app->post('password', 'V1\Common\User\HomeController@password_update');
     $app->post('card', 'V1\Common\User\HomeController@addcard');
@@ -84,9 +84,8 @@ $router->group(['middleware' => 'auth:user'], function($app) {
     $app->get('/article_category', 'V1\Common\User\HomeController@article_category');
     $app->get('/article_sub_category/{id}', 'V1\Common\User\HomeController@article_sub_category');
     $app->get('/articles/{id}/{ids}', 'V1\Common\User\HomeController@article');
-    
 
-	$app->get('/home', 'V1\Common\User\HomeController@home');
+    $app->get('/home', 'V1\Common\User\HomeController@home');
 
 });
 
