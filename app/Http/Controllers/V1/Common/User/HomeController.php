@@ -37,7 +37,6 @@ use App\Services\ReferralResource;
 use App\Models\Common\Faq;
 use App\Models\Common\CmsPage;
 
-
 class HomeController extends Controller
 {
 	use Encryptable;
@@ -990,4 +989,5 @@ class HomeController extends Controller
 
         return Helper::getResponse(['data' => $data]);
     }
+
 }

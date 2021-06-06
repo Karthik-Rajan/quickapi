@@ -8,7 +8,7 @@ return [
 
         'common' => [
             'driver' => 'mysql',
-            'charset'   => 'utf8mb4',
+            'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'host' => env('DB_COMMON_HOST', '127.0.0.1'),
             'port' => env('DB_COMMON_PORT', '3306'),
@@ -20,7 +20,7 @@ return [
 
         'transport' => [
             'driver' => 'mysql',
-            'charset'   => 'utf8mb4',
+            'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'host' => env('DB_TRANSPORT_HOST', '127.0.0.1'),
             'port' => env('DB_TRANSPORT_PORT', '3306'),
@@ -32,7 +32,7 @@ return [
 
         'order' => [
             'driver' => 'mysql',
-            'charset'   => 'utf8mb4',
+            'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'host' => env('DB_ORDER_HOST', '127.0.0.1'),
             'port' => env('DB_ORDER_PORT', '3306'),
@@ -44,7 +44,7 @@ return [
 
         'service' => [
             'driver' => 'mysql',
-            'charset'   => 'utf8mb4',
+            'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'host' => env('DB_SERVICE_HOST', '127.0.0.1'),
             'port' => env('DB_SERVICE_PORT', '3306'),
@@ -56,7 +56,7 @@ return [
 
         'delivery' => [
             'driver' => 'mysql',
-            'charset'   => 'utf8mb4',
+            'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'host' => env('DB_DELIVERY_HOST', '127.0.0.1'),
             'port' => env('DB_DELIVERY_PORT', '3306'),
@@ -65,7 +65,17 @@ return [
             'password' => env('DB_DELIVERY_PASSWORD', 'root'),
             'strict' => false,
         ],
-
+        'web' => [
+            'driver' => 'mysql',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'host' => env('DB_WEB_HOST', '127.0.0.1'),
+            'port' => env('DB_WEB_PORT', '3306'),
+            'database' => env('DB_WEB_DATABASE', 'multix_delivery'),
+            'username' => env('DB_WEB_USERNAME', 'root'),
+            'password' => env('DB_WEB_PASSWORD', ''),
+            'strict' => false,
+        ],
     ],
 
     /*
@@ -77,7 +87,7 @@ return [
     | your application. Using this information, we can determine which of
     | the migrations on disk haven't actually been run in the database.
     |
-    */
+     */
 
     'migrations' => 'migrations',
 
@@ -93,6 +103,5 @@ return [
         ],
 
     ],
-
 
 ];

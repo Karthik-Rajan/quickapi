@@ -941,7 +941,7 @@ class HomeController extends Controller
     public function notification(Request $request)
     {
         try {
-            $timezone     = (Auth::guard('provider')->user()->state_id) ? State::find(Auth::guard('provider')->user()->state_id)->timezone : '';
+            $timezone     = (Auth::guard('provider')->user()->state_id) ? State::find(Auth::guard('provider')->user()->state_id)->timezone : 'UTC';
             $jsonResponse = [];
             if ($request->has('limit')) {
                 $query = Notifications::where('company_id', Auth::guard('provider')->user()->company_id)->whereIn('notify_type', ['provider', 'all']);
