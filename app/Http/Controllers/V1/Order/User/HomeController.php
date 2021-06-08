@@ -42,6 +42,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Notification;
 
+
 class HomeController extends Controller
 {
     use Actions;
@@ -1642,5 +1643,15 @@ class HomeController extends Controller
         }
 
         return Helper::getResponse(['data' => $order_request_dispute]);
+    }
+    public function upload_prescription(Request $request)
+    {
+               
+            $file = $request->file('file');
+            $filename = time() . '.' . $request->file('file')->extension();
+            $file->move(app()->basePath('storage/prescription'), $filename);
+            
+        return Helper::getResponse(['data' => "Success"]);
+
     }
 }
