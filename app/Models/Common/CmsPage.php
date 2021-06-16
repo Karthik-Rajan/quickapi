@@ -6,8 +6,6 @@ use App\Models\BaseModel;
 
 class CmsPage extends BaseModel
 {
-    protected $fillable = [
-        'page_name', 'description', 'status', 
-        'page_name', 'content', 'status', 
-    ];
+    protected $connection = 'common';
+    protected $table = 'cms_pages';
 }

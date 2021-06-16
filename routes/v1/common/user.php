@@ -27,7 +27,9 @@ $router->post('/socket', 'V1\Common\User\SocketController@checkDomain');
 $router->get('/faq', 'V1\Common\User\HomeController@listFaq');
 // $router->get('/stable', 'V1\Common\User\HomeController@stable');
 
-$router->group(['middleware' => 'authless:user'], function ($app) {
+$router->get('cmspage', 'V1\Common\User\HomeController@cmsPages');
+
+$router->group(['middleware' => 'authless:user'], function($app) {
 
     $app->get('/country/{id}', 'V1\Common\User\HomeController@country');
     $app->get('cities', 'V1\Common\User\HomeController@cities');
