@@ -105,7 +105,14 @@ class ProviderAuthController extends Controller
             return Helper::getResponse(['status' => 500, 'message' => $e->getMessage()]);
         }
 
-        $User = Provider::find(Auth::guard('provider')->user()->id);
+        if ($request->input('type')) {
+            $User = Provider::where('type', $request->input('type'))->find(Auth::guard('provider')->user()->id);
+            if (!$User) {
+                return Helper::getResponse(['status' => 422, 'message' => 'Invalid Credentials']);
+            }
+        } else {
+            $User = Provider::find(Auth::guard('provider')->user()->id);
+        }
 
         try {
             if (null != $User->jwt_token) {

@@ -435,10 +435,18 @@ $router->group(['middleware' => 'auth:admin'], function ($app) {
     $app->get('/getfleetprovider', 'V1\Common\Admin\Resource\AllStatementController@getFleetProvider');
 
     $app->get('/booking-list', 'V1\Order\Admin\Resource\BookingController@index');
+    $app->get('/booking-list/{id}', 'V1\Order\Admin\Resource\BookingController@index');
 
     $app->put('/booking-list/{id}', 'V1\Order\Admin\Resource\BookingController@updateProvider');
 
     $app->get('/provider-list', 'V1\Common\Admin\Resource\AdminController@providerlist');
+    $app->get('/ambulancelist', 'V1\Common\Admin\Resource\AdminController@getAmbulanceList');
+    $app->get('/ambulance', 'V1\Common\Admin\Resource\AdminController@getAmbulanceDetails');
+    $app->get('/driverlist', 'V1\Common\Admin\Resource\AdminController@getDriverList');
+    $app->get('/driverlist/{id}', 'V1\Common\Admin\Resource\AdminController@getDriverList');
+    $app->post('/driverlist', 'V1\Common\Admin\Resource\AdminController@addDriver');
+    $app->patch('/driverlist/{id}', 'V1\Common\Admin\Resource\AdminController@updateDriver');
+    $app->post('/assign/driver', 'V1\Common\Admin\Resource\AdminController@assignDriver');
 
 });
 

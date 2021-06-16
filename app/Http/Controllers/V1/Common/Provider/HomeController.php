@@ -591,9 +591,10 @@ class HomeController extends Controller
 
     public function reasons(Request $request)
     {
+        $for    = $request->has('for') ? $request->input('for') : 'FIELD-EXECUTIVE';
         $reason = Reason::where('company_id', Auth::guard('provider')->user()->company_id)
             ->where('service', $request->type)
-            ->where('type', 'PROVIDER')
+            ->where('type', $for)
             ->where('status', 'active')
             ->get();
 

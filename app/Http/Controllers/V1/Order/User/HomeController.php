@@ -393,7 +393,7 @@ class HomeController extends Controller
                 $addonStatus = $response['addonStatus'];
                 ($request->repeat ? $checkAddons = $response['totalAddons'] : '');
                 $cart     = $response['cart'] ? StoreCart::where('user_id', $this->user->id)->where('store_item_id', $request->item_id)->where('id', $response['cart'])->first() : 0;
-                $quantity = $request->repeat ? (($request->cart_id) ? $quantity : $cart->quantity + 1) : ($cart ? $cart->quantity + 1 : $quantity);
+                $quantity = $request->repeat ? (($request->cart_id) ? $quantity : $cart->quantity + 1) : $quantity;
             }
         }
 

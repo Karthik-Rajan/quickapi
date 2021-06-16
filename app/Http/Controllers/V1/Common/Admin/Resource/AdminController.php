@@ -6,7 +6,10 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Common\Admin;
 use App\Models\Common\AdminService;
+use App\Models\Common\Ambulance;
+use App\Models\Common\AmbulanceDriver;
 use App\Models\Common\CustomPush;
+use App\Models\Common\Driver;
 use App\Models\Common\Provider;
 use App\Models\Common\Rating;
 use App\Models\Service\Service;
@@ -814,8 +817,64 @@ class AdminController extends Controller
 
     public function providerlist()
     {
-        $provider_list = Provider::where('company_id', Auth::guard('admin')->user()->company_id)->->where('is_online', 1)->with('country')->first();
+        $provider_list = Provider::where('company_id', Auth::guard('admin')->user()->company_id)->where('is_online', 1)->with('country')->first();
         $provider_list->makeVisible(['qrcode_url']);
         return Helper::getResponse(['data' => $provider_list]);
+    }
+
+    public function getAmbulanceList()
+    {
+        $data = Ambulance::with(['assigned', 'assigned.driver'])->get();
+        return Helper::getResponse(['data' => $data]);
+    }
+
+    public function getDriverList(Request $request, $id = 0)
+    {
+        if ($id) {
+            if ($request->has('_method')) {
+                return $this->updateDriver($request, $id);
+            }
+            $data = Driver::find($id);
+        } else {
+            $data = Driver::get();
+        }
+        return Helper::getResponse(['data' => $data]);
+    }
+
+    public function addDriver(Request $request)
+    {
+        $data = $request->except(['_method', 'id']);
+        Driver::create($data);
+        return Helper::getResponse(['data' => []]);
+    }
+
+    public function updateDriver(Request $request, $id)
+    {
+        $data = $request->except(['_method', 'id']);
+        Driver::where('id', $id)->update($data);
+        return Helper::getResponse(['data' => []]);
+    }
+
+    public function deleteDriver(Request $request, $id)
+    {
+        $data = Driver::where('id', $id)->delete();
+        return Helper::getResponse(['data' => []]);
+    }
+
+    public function getAmbulanceDetails(Request $request)
+    {
+        $data = Service::where('service_category_id', 2)->where('service_subcategory_id', 8)->first();
+        return Helper::getResponse(['data' => $data]);
+    }
+
+    public function assignDriver(Request $request)
+    {
+        $data = AmbulanceDriver::where('ambulance_id', $request->input('ambulance_id'))->first();
+        if ($data) {
+            $data->update(['driver_id' => $request->input('driver_id'), 'status' => 'ASSIGNED', 'updated_by' => 'ADMIN']);
+        } else {
+            AmbulanceDriver::create(['ambulance_id' => $request->input('ambulance_id'), 'driver_id' => $request->input('driver_id'), 'status' => 'ASSIGNED', 'created_by' => 'ADMIN']);
+        }
+        return Helper::getResponse(['data' => []]);
     }
 }

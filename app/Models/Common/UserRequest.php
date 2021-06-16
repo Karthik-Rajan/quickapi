@@ -8,11 +8,13 @@ class UserRequest extends BaseModel
 {
     protected $connection = 'common';
 
-	protected $appends = ['request'];
+    protected $appends = ['request'];
 
-	protected $hidden = [
-     	'request_data', 'created_by', 'modified_type', 'modified_by', 'deleted_type', 'deleted_by', 'updated_at', 'deleted_at'
-     ];
+    protected $hidden = [
+        'request_data', 'created_by', 'modified_type', 'modified_by', 'deleted_type', 'deleted_by', 'updated_at', 'deleted_at',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at'];
     /**
      * The user who created the request.
      */
@@ -20,8 +22,6 @@ class UserRequest extends BaseModel
     {
         return $this->belongsTo('App\Models\Common\User');
     }
-
-   
 
     public function service()
     {
@@ -36,8 +36,9 @@ class UserRequest extends BaseModel
         return $this->belongsTo('App\Models\Common\Provider', 'provider_id');
     }
 
-    public function getRequestAttribute() {
+    public function getRequestAttribute()
+    {
         return json_decode($this->attributes['request_data']);
-        
+
     }
 }

@@ -33,11 +33,11 @@ class Services
         $provider_id = $request->id;
         $provider    = Provider::find($provider_id);
 
-        $FilterCheck = RequestFilter::where(['admin_service' => 'SERVICE', 'provider_id' => $provider_id, 'company_id' => $this->company_id])->first();
+        // $FilterCheck = RequestFilter::where(['admin_service' => 'SERVICE', 'provider_id' => $provider_id, 'company_id' => $this->company_id])->first();
 
-        if (null != $FilterCheck) {
-            return ['status' => 422, 'message' => trans('api.ride.request_inprogress')];
-        }
+        // if (null != $FilterCheck) {
+        //     return ['status' => 422, 'message' => trans('api.ride.request_inprogress')];
+        // }
 
         $ActiveRequests = ServiceRequest::PendingRequest(Auth::guard('user')->user()->id)->count();
 
@@ -144,7 +144,7 @@ class Services
                 }*/
 
                 if ($request->has('schedule_date') && $request->has('schedule_time') && "" != $request->schedule_date && "" != $request->schedule_time) {
-                    $serviceRequest->status       = 'SCHEDULED';
+                    $serviceRequest->status       = 'SEARCHING';
                     $serviceRequest->schedule_at  = (Carbon::createFromFormat('Y-m-d H:i:s', (Carbon::parse($request->schedule_date . ' ' . $request->schedule_time)->format('Y-m-d H:i:s')), $timezone))->setTimezone('UTC');
                     $serviceRequest->is_scheduled = 'YES';
                 }
