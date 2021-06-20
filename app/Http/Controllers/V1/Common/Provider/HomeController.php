@@ -126,7 +126,7 @@ class HomeController extends Controller
 
     public function show_profile()
     {
-        $provider_details = Provider::with('service', 'country', 'state', 'city')->where('id', Auth::guard('provider')->user()->id)->where('company_id', Auth::guard('provider')->user()->company_id)->first();
+        $provider_details = Provider::with('service', 'country', 'state', 'city', 'bank_detail')->where('id', Auth::guard('provider')->user()->id)->where('company_id', Auth::guard('provider')->user()->company_id)->first();
 
         $provider_details['referral'] = (object) [];
         $provider_details->makeVisible(['qrcode_url']);

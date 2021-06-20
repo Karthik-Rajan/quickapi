@@ -44,6 +44,10 @@ class ProviderAuthController extends Controller
             $request->request->add(['email' => strtolower($request->email)]);
         }
 
+        if (!$request->has('type')) {
+            $request->request->add(['type' => 'FIELD-EXECUTIVE']);
+        }
+
         $this->validate($request, [
             'email'    => 'email|max:255',
             'password' => 'required',
@@ -86,11 +90,11 @@ class ProviderAuthController extends Controller
             $request->request->remove('salt_key');
 
             if ($request->has('email') && '' != $request->email) {
-                if (!$token = Auth::guard('provider')->attempt($request->only('email', 'password', 'company_id'))) {
+                if (!$token = Auth::guard('provider')->attempt($request->only('email', 'password', 'company_id', 'type'))) {
                     return Helper::getResponse(['status' => 422, 'message' => 'Invalid Credentials']);
                 }
             } else {
-                if (!$token = Auth::guard('provider')->attempt($request->only('country_code', 'mobile', 'password', 'company_id'))) {
+                if (!$token = Auth::guard('provider')->attempt($request->only('country_code', 'mobile', 'password', 'company_id', 'type'))) {
                     return Helper::getResponse(['status' => 422, 'message' => 'Invalid Credentials']);
                 }
             }

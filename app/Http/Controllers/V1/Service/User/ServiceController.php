@@ -106,55 +106,57 @@ class ServiceController extends Controller
 
         if ($provider_service) {
             $providers = [];
-            if (!empty($provider_service[0]->service)) {
-                $serviceDetails = Service::with('serviceCategory')
-                // ->where('id', $service_id)
-                    ->where('company_id', Auth::guard('user')->user()->company_id)->first();
-                foreach ($provider_service as $key => $service) {
-                    unset($service->request_filter);
-                    $provider             = new \stdClass();
-                    $provider->distance   = $service->distance;
-                    $provider->id         = $service->id;
-                    $provider->first_name = $service->first_name;
-                    $provider->last_name  = $service->last_name;
-                    $provider->picture    = $service->picture;
-                    $provider->rating     = $service->rating;
-                    $provider->city_id    = $service->city_id;
-                    $provider->latitude   = $service->latitude;
-                    $provider->longitude  = $service->longitude;
-                    if (null == $service->service_city) {
-                        $provider->fare_type    = 'FIXED';
-                        $provider->base_fare    = '0';
-                        $provider->per_miles    = '0';
-                        $provider->per_mins     = '0';
-                        $provider->price_choose = '';
-                    } else {
-                        $provider->fare_type = $service->service_city->fare_type;
-                        if ('admin_price' == $serviceDetails->serviceCategory->price_choose) {
-                            if (!empty($request->qty)) {
-                                $provider->base_fare = Helper::decimalRoundOff($service->service_city->base_fare * $request->qty);
-                            } else {
-                                $provider->base_fare = Helper::decimalRoundOff($service->service_city->base_fare);
-                            }
 
-                            $provider->per_miles = Helper::decimalRoundOff($service->service_city->per_miles);
-                            $provider->per_mins  = Helper::decimalRoundOff($service->service_city->per_mins * 60);
+            $serviceDetails = Service::with('serviceCategory')
+            // ->where('id', $service_id)
+                ->where('company_id', Auth::guard('user')->user()->company_id)->first();
+            foreach ($provider_service as $key => $service) {
+                if (empty($service->service)) {
+                    continue;
+                }
+                unset($service->request_filter);
+                $provider             = new \stdClass();
+                $provider->distance   = $service->distance;
+                $provider->id         = $service->id;
+                $provider->first_name = $service->first_name;
+                $provider->last_name  = $service->last_name;
+                $provider->picture    = $service->picture;
+                $provider->rating     = $service->rating;
+                $provider->city_id    = $service->city_id;
+                $provider->latitude   = $service->latitude;
+                $provider->longitude  = $service->longitude;
+                if (null == $service->service_city) {
+                    $provider->fare_type    = 'FIXED';
+                    $provider->base_fare    = '0';
+                    $provider->per_miles    = '0';
+                    $provider->per_mins     = '0';
+                    $provider->price_choose = '';
+                } else {
+                    $provider->fare_type = $service->service_city->fare_type;
+                    if ('admin_price' == $serviceDetails->serviceCategory->price_choose) {
+                        if (!empty($request->qty)) {
+                            $provider->base_fare = Helper::decimalRoundOff($service->service_city->base_fare * $request->qty);
                         } else {
-                            if (!empty($request->qty)) {
-                                $provider->base_fare = Helper::decimalRoundOff($service->service->base_fare * $request->qty);
-                            } else {
-                                $provider->base_fare = Helper::decimalRoundOff($service->service->base_fare);
-                            }
-
-                            $provider->per_miles = Helper::decimalRoundOff($service->service->per_miles);
-                            $provider->per_mins  = Helper::decimalRoundOff($service->service->per_mins * 60);
+                            $provider->base_fare = Helper::decimalRoundOff($service->service_city->base_fare);
                         }
 
-                        $provider->price_choose = $serviceDetails->serviceCategory->price_choose;
+                        $provider->per_miles = Helper::decimalRoundOff($service->service_city->per_miles);
+                        $provider->per_mins  = Helper::decimalRoundOff($service->service_city->per_mins * 60);
+                    } else {
+                        if (!empty($request->qty)) {
+                            $provider->base_fare = Helper::decimalRoundOff($service->service->base_fare * $request->qty);
+                        } else {
+                            $provider->base_fare = Helper::decimalRoundOff($service->service->base_fare);
+                        }
+
+                        $provider->per_miles = Helper::decimalRoundOff($service->service->per_miles);
+                        $provider->per_mins  = Helper::decimalRoundOff($service->service->per_mins * 60);
                     }
 
-                    $providers[] = $provider;
+                    $provider->price_choose = $serviceDetails->serviceCategory->price_choose;
                 }
+
+                $providers[] = $provider;
             }
 
             return Helper::getResponse(['data' => ['provider_service' => $providers, 'currency' => (null != $currency) ? $currency->currency : '']]);

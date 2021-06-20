@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Common\Card;
 use App\Models\Common\Chat;
 use App\Models\Common\City;
+use App\Models\Common\CmsPage;
 use App\Models\Common\CompanyCity;
 use App\Models\Common\CompanyCountry;
 use App\Models\Common\Country;
@@ -35,9 +36,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use App\Services\ReferralResource;
-use App\Models\Common\Faq;
-use App\Models\Common\CmsPage;
 
 class HomeController extends Controller
 {
@@ -973,20 +971,12 @@ class HomeController extends Controller
 
         $page_name = $request->input('page_name');
 
-        if(is_null($page_name) || $page_name=="")
-        {
+        if (is_null($page_name) || "" == $page_name) {
             $data = CmsPage::get();
+        } else {
+            $data = CmsPage::where('page_name', $page_name)->get();
         }
-        else
-        {
-            $data = CmsPage::where('page_name',$page_name)->get();
-        }
-
-
-        
-
 
         return Helper::getResponse(['data' => $data]);
     }
-
 }
