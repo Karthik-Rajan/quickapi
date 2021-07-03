@@ -150,6 +150,8 @@ class ProviderServices
 
         try {
 
+            $requestData = [];
+
             $provider_vehicle = null;
 
             try {
@@ -427,7 +429,9 @@ class ProviderServices
             if (null != $user_request_last) {
                 DB::table('request_filters')->whereIn('id', $Filters)->update(['request_id' => $user_request_last->id]);
 
-                app('redis')->publish('newRequest', json_encode($requestData));
+                if ($requestData) {
+                    app('redis')->publish('newRequest', json_encode($requestData));
+                }
             } else {
                 foreach ($Filters as $Filter) {
                     $Filter->delete();

@@ -176,4 +176,18 @@ class HomeController extends Controller
         $dispute = Dispute::select('id', 'dispute_name', 'service')->where('service', 'SERVICE')->where('dispute_type', 'user')->where('status', 'active')->get();
         return Helper::getResponse(['data' => $dispute]);
     }
+
+    public function cmsPages(Request $request)
+    {
+
+        $pageName = $request->input('page_name');
+
+        if (!$pageName) {
+            $data = CmsPage::get();
+        } else {
+            $data = CmsPage::where('page_name', $pageName)->first();
+        }
+
+        return Helper::getResponse(['data' => $data]);
+    }
 }

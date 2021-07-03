@@ -37,6 +37,19 @@ class BookingController extends Controller
 
             if ($request->has('lab_order')) {
                 ServiceRequest::where('id', $id)->update(['status' => $request->input('status')]);
+
+                $serviceReq = ServiceRequest::find($id);
+
+                $data                       = [];
+                $data['service_request_id'] = $serviceReq->id;
+                $data['user_id']            = $serviceReq->user_id;
+                $data['provider_id']        = $serviceReq->provider_id;
+                $data['company_id']         = $serviceReq->company_id;
+                $data['total']              = $serviceReq->price;
+                $data['payable']            = $serviceReq->price;
+                $data['cash']               = 'CASH' == $serviceReq->payment_mode ? $serviceReq->price : 0;
+                $data['payment_mode']       = $serviceReq->payment_mode;
+                ServiceRequestPayment::create($data);
             } else {
 
                 $setting = Setting::where('company_id', Auth::user()->company_id)->first();

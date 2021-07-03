@@ -25,11 +25,12 @@ $router->get('/logout', 'V1\Common\User\UserAuthController@logout');
 $router->post('countries', 'V1\Common\User\HomeController@countries');
 $router->post('/socket', 'V1\Common\User\SocketController@checkDomain');
 $router->get('/faq', 'V1\Common\User\HomeController@listFaq');
+$router->get('/pages', 'V1\Common\User\HomeController@cmsPages');
 // $router->get('/stable', 'V1\Common\User\HomeController@stable');
 
 $router->get('cmspage', 'V1\Common\User\HomeController@cmsPages');
 
-$router->group(['middleware' => 'authless:user'], function($app) {
+$router->group(['middleware' => 'authless:user'], function ($app) {
 
     $app->get('/country/{id}', 'V1\Common\User\HomeController@country');
     $app->get('cities', 'V1\Common\User\HomeController@cities');
@@ -52,6 +53,8 @@ $router->group(['middleware' => 'auth:user'], function ($app) {
             'message' => \Auth::guard('user')->user(),
         ]);
     });
+
+    $app->get('/global/search', 'V1\Common\User\HomeController@autoComplete');
 
     $app->post('/logout', 'V1\Common\User\UserAuthController@logout');
 

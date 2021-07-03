@@ -9,6 +9,6 @@ class StoreOrderStatus extends BaseModel
     protected $connection = 'order';
 
     protected $hidden = [
-     	'company_id','created_type', 'created_by', 'modified_type', 'modified_by', 'deleted_type', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'
-     ];
+        'company_id', 'created_type', 'modified_type', 'modified_by', 'deleted_type', 'deleted_by', 'updated_at', 'deleted_at',
+    ];
 }

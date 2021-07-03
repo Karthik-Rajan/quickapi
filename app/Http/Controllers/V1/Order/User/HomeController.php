@@ -422,6 +422,8 @@ class HomeController extends Controller
             $cart->item_price = $Item->item_price = $Item->item_price - (($Item->item_discount / 100) * $Item->item_price);
         } else if ("AMOUNT" == $Item->item_discount_type) {
             $cart->item_price = $Item->item_price = $Item->item_price - ($Item->item_discount);
+        } else {
+            $cart->item_price = $Item->item_price;
         }
         $cart->item_price = $Item->item_price = $cart->item_price > 0 ? $cart->item_price : 0;
 
@@ -459,6 +461,89 @@ class HomeController extends Controller
         $cart->total_item_price += ($quantity * $tot_item_addon_price);
         $cart->save();
         return $this->viewcart($request);
+    }
+
+    public function addPrescription(Request $request)
+    {
+        $this->validate($request, [
+            'prescription'    => 'required|file|mimes:pdf,jpg,jpeg,png,bmp|max:5242880',
+            'payment_mode'    => 'required',
+            'order_type'      => 'required',
+            'leave_at_door'   => 'required',
+            'description'     => 'filled',
+            'user_address_id' => 'required',
+        ]);
+
+        $path = 'user/prescriptions/';
+
+        $uploadedFile = Helper::upload_file($request->file('prescription'), $path, 'Prescription' . time());
+
+        $bookingprefix = $this->settings->order->booking_prefix;
+        $invoiceId     = $bookingprefix . time() . rand('0', '999');
+
+        $data = [
+            'admin_service'          => 'ORDER',
+            'user_id'                => $this->user->id,
+            'company_id'             => $this->user->company_id,
+            'prescription_image'     => $uploadedFile,
+            'store_order_invoice_id' => $invoiceId,
+            'city_id'                => $this->user->city_id,
+            'country_id'             => $this->user->country_id,
+        ];
+
+        StoreOrder::insert($data);
+
+        $address_details = UserAddress::select('id', 'latitude', 'longitude', 'map_address', 'flat_no', 'street')->find($request->user_address_id);
+
+        $order = StoreOrder::where('store_order_invoice_id', $invoiceId)->first();
+
+        $order->user_address_id        = $request->user_address_id;
+        $order->delivery_address       = json_encode($address_details);
+        $order->description            = isset($request->description) ? $request->description : '';
+        $bookingprefix                 = $this->settings->order->booking_prefix;
+        $order->store_order_invoice_id = $bookingprefix . time() . rand('0', '999');
+        $order->assigned_at            = (Carbon::now())->toDateTimeString();
+        $order->order_type             = $request->order_type;
+        if (1 == $this->settings->order->manual_request) {
+            $order->request_type = 'MANUAL';
+        }
+        $order->order_otp          = mt_rand(1000, 9999);
+        $order->leave_at_door      = 'CASH' != $request->payment_mode && 'DELIVERY' == $request->order_type ? $request->leave_at_door : 0;
+        $order->timezone           = (Auth::guard('user')->user()->state_id) ? State::find(Auth::guard('user')->user()->state_id)->timezone : '';
+        $order->order_ready_status = 0;
+        $order->company_id         = $this->company_id;
+        $order->currency           = $this->user->currency_symbol;
+        $order->status             = 'ORDERED';
+        $order->save();
+
+        $log                   = new PaymentLog();
+        $log->transaction_id   = $order->id;
+        $log->transaction_code = $order->store_order_invoice_id;
+        $log->response         = json_encode($order);
+        $log->save();
+
+        $orderinvoice                 = new StoreOrderInvoice();
+        $orderinvoice->store_order_id = $order->id;
+        $orderinvoice->payment_mode   = $request->payment_mode;
+        $orderinvoice->company_id     = $this->company_id;
+        $orderinvoice->save();
+
+        $user_request                = new UserRequest();
+        $user_request->company_id    = $this->company_id;
+        $user_request->user_id       = $this->user->id;
+        $user_request->request_id    = $order->id;
+        $user_request->request_data  = json_encode(StoreOrder::with('invoice', 'store.storetype')->where('id', $order->id)->first());
+        $user_request->admin_service = 'ORDER';
+        $user_request->status        = 'ORDERED';
+        $user_request->save();
+
+        $orderstatus                 = new StoreOrderStatus();
+        $orderstatus->company_id     = $this->company_id;
+        $orderstatus->store_order_id = $order->id;
+        $orderstatus->status         = 'ORDERED';
+        $orderstatus->save();
+
+        return $this->orderdetails($order->id, true);
     }
 
     public function findCart($request, $checkAddons)
@@ -563,18 +648,24 @@ class HomeController extends Controller
             $payable              = 0;
             $discount_promo       = 0;
             $cusines_list         = [];
+
             if (!$CartItems->isEmpty()) {
-                if ($CartItems[0]->store->StoreCusinie->count() > 0) {
+                if ($CartItems[0]->store && $CartItems[0]->store->StoreCusinie->count() > 0) {
                     foreach ($CartItems[0]->store->StoreCusinie as $cusine) {
                         $cusines_list[] = $cusine->cuisine->name;
                     }
                 }
+
                 $store_type_id = $CartItems[0]->store->store_type_id;
                 $city_id       = $CartItems[0]->store->city_id;
                 $cityprice     = StoreCityPrice::where('store_type_id', $store_type_id)->where('company_id', $this->company_id)
                     ->where('city_id', $city_id)
                     ->first();
                 foreach ($CartItems as $Product) {
+                    if (!$Product->product) {
+                        continue;
+                    }
+
                     $tot_qty = $Product->quantity;
                     //$Product->quantity. '--' .$Product->product->item_price;
                     // if($Product->product->item_discount_type=="PERCENTAGE"){
@@ -1157,15 +1248,17 @@ class HomeController extends Controller
         }
     }
 
-    public function orderdetails($id)
+    public function orderdetails($id, $checkStore = false)
     {
-        $order = StoreOrder::with(['store', 'store.storetype', 'deliveryaddress', 'invoice', 'user', 'chat',
-            'provider' => function ($query) {$query->select('id', 'first_name', 'last_name', 'country_code', 'mobile', 'rating', 'latitude', 'longitude', 'picture');},
-        ])->whereHas('store.storetype', function ($q) {
-            $q->where('status', 1);
-        })->find($id);
 
-        return Helper::getResponse(['data' => $order]);
+        $data          = [];
+        $data['order'] = StoreOrder::with(['store', 'store.storetype', 'deliveryaddress', 'invoice', 'user', 'chat',
+            'provider' => function ($query) {$query->select('id', 'first_name', 'last_name', 'country_code', 'mobile', 'rating', 'latitude', 'longitude', 'picture');},
+        ])->find($id);
+
+        $data['status'] = StoreOrderStatus::where('store_order_id', $id)->get();
+
+        return Helper::getResponse(['data' => $data]);
     }
 
     //status check request
@@ -1228,6 +1321,7 @@ class HomeController extends Controller
             $jsonResponse         = [];
             $jsonResponse['type'] = 'order';
             $withCallback         = [
+                'store',
                 'user'     => function ($query) {$query->select('id', 'first_name', 'last_name', 'rating', 'picture', 'currency_symbol');},
                 'provider' => function ($query) {$query->select('id', 'first_name', 'last_name', 'rating', 'picture', 'mobile');},
                 'reason'   => function ($query) {$query->select('id', 'reason');},
@@ -1642,5 +1736,46 @@ class HomeController extends Controller
         }
 
         return Helper::getResponse(['data' => $order_request_dispute]);
+    }
+
+    public function newArrival(Request $request)
+    {
+        $limit = $request->input('limit', 15);
+
+        $storeItem = StoreItem::active()->with(['store', 'categories', 'brand'])
+            ->orderBy('created_at', 'desc');
+
+        if ($request->has('country_id')) {
+            $storeItem = $storeItem->where('country_id', $request->input('country_id'));
+        }
+
+        if ($request->has('store_id')) {
+            $storeItem = $storeItem->where('store_id', $request->input('store_id'));
+        }
+
+        $data = $storeItem->paginate($limit);
+
+        return Helper::getResponse(['data' => $data]);
+    }
+
+    public function brandItems(Request $request, $id = 0)
+    {
+        $limit = $request->input('limit', 15);
+
+        $storeItem = StoreItem::active()->with(['store', 'categories', 'brand'])
+            ->where('brand_id', $id)
+            ->orderBy('created_at', 'desc');
+
+        if ($request->has('country_id')) {
+            $storeItem = $storeItem->where('country_id', $request->input('country_id'));
+        }
+
+        if ($request->has('store_id')) {
+            $storeItem = $storeItem->where('store_id', $request->input('store_id'));
+        }
+
+        $data = $storeItem->paginate($limit);
+
+        return Helper::getResponse(['data' => $data]);
     }
 }

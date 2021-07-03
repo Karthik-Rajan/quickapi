@@ -245,7 +245,7 @@ class OrderController extends Controller
                 $this->callTransaction($request->id);
             }
             //Send message to socket
-            $requestData = ['type' => 'ORDER', 'room' => 'room_' . Auth::guard('provider')->user()->company_id, 'id' => $serveRequest->id, 'city' => (0 == $setting->demo_mode) ? $serveRequest->store->city_id : 0, 'user' => $serveRequest->user_id];
+            $requestData = ['type' => 'ORDER', 'room' => 'room_' . Auth::guard('provider')->user()->company_id, 'id' => $serveRequest->id, 'city' => (0 == $setting->demo_mode) ? (isset($serveRequest->store->city_id) ? $serveRequest->store : 0) : 0, 'user' => $serveRequest->user_id];
             app('redis')->publish('checkOrderRequest', json_encode($requestData));
             app('redis')->publish('newRequest', json_encode($requestData));
 
@@ -368,6 +368,10 @@ class OrderController extends Controller
                             $cusines_list[] = $cusine->cuisine->name;
                         }
                     }
+                    $deliveryLat                     = isset($value->delivery->latitude) ? $value->delivery->latitude : 0;
+                    $deliveryLng                     = isset($value->delivery->longitude) ? $value->delivery->longitude : 0;
+                    $pickupLat                       = isset($value->pickup->latitude) ? $value->pickup->latitude : 0;
+                    $pickupLng                       = isset($value->pickup->longitude) ? $value->pickup->longitude : 0;
                     $cuisinelist                     = implode($cusines_list, ',');
                     $OrderRequests[$key]->cuisines   = $cuisinelist;
                     $OrderRequests[$key]->static_map = "https://maps.googleapis.com/maps/api/staticmap?" .
@@ -376,8 +380,8 @@ class OrderController extends Controller
                     "&maptype=terrian" .
                     "&format=png" .
                     "&visual_refresh=true" .
-                    "&markers=icon:" . $map_icon_start . "%7C" . $value->pickup->latitude . "," . $value->pickup->longitude .
-                    "&markers=icon:" . $map_icon_end . "%7C" . $value->delivery->latitude . "," . $value->delivery->longitude .
+                    "&markers=icon:" . $map_icon_start . "%7C" . $pickupLat . "," . $pickupLng .
+                    "&markers=icon:" . $map_icon_end . "%7C" . $deliveryLat . "," . $deliveryLng .
                     "&path=color:0x000000|weight:3|enc:" . $value->route_key .
                     "&key=" . $siteConfig->server_key;
                 }
@@ -407,7 +411,7 @@ class OrderController extends Controller
             }, 'dispute' => function ($query) {
                 $query->where('dispute_type', 'provider');
             }, 'rating' => function ($query) {$query->select('request_id', 'user_rating', 'provider_rating', 'user_comment', 'provider_comment', 'store_comment', 'store_rating');}])
-                ->select('id', 'store_order_invoice_id', 'user_id', 'provider_id', 'admin_service', 'company_id', 'pickup_address', 'delivery_address', 'created_at', 'timezone', 'status');
+                ->select('id', 'store_order_invoice_id', 'user_id', 'provider_id', 'admin_service', 'company_id', 'pickup_address', 'delivery_address', 'created_at', 'timezone', 'status', 'prescription_image');
             $request->request->add(['admin_service' => 'ORDER', 'id' => $id]);
             $data                  = (new ProviderServices())->providerTripsDetails($request, $providerrequest);
             $jsonResponse['order'] = $data;
@@ -468,7 +472,7 @@ class OrderController extends Controller
 
     public function getUserdisputedetails(Request $request)
     {
-        $dispute = Dispute::select('id', 'dispute_name', 'service')->where('service', 'ORDER')->where('dispute_type', 'user')->where('status', 'active')->get();
+        $dispute = Dispute::select('id', 'dispute_name', 'service')->where('service', 'ORDER')->where('dispute_type', 'PATIENT')->where('status', 'active')->get();
         return Helper::getResponse(['data' => $dispute]);
     }
 

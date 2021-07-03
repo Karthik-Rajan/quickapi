@@ -113,6 +113,9 @@ class StoreOrder extends BaseModel
                 ->whereIn('status', $history_status)
                 ->orderBy('created_at', 'desc');
         }
+
+        return $query->where('user_id', $user_id)
+            ->orderBy('created_at', 'desc');
     }
 
     public function scopeHistoryProvider($query, $provider_id, $historyStatus)

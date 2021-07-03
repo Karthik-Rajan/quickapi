@@ -26,6 +26,8 @@ use App\Models\Common\UserAddress;
 use App\Models\Common\UserRequest;
 use App\Models\Common\UserWallet;
 use App\Models\Order\Brand;
+use App\Models\Order\Store;
+use App\Models\Order\StoreDrug;
 use App\Models\Order\StoreItem;
 use App\Models\Service\Service;
 use App\Services\ReferralResource;
@@ -944,16 +946,53 @@ class HomeController extends Controller
         $new_arrivals_banner = ['https://api.pega10x.com/storage/1/home_services/banner3.jpg', 'https://api.pega10x.com/storage/1/home_services/banner4.jpg'];
         $brands              = Brand::get();
 
-        $ambulance = Service::where('company_id', $company_id)->where('service_category_id', 2)->where('service_subcategory_id', 8)->where('service_status', 1)->first(['service_name', 'picture', 'description', 'emergency_contact']);
+        $ambulance = Service::where('company_id', $company_id)->where('service_category_id', 2)->where('service_subcategory_id', 8)->where('service_status', 1)->first(['service_name as name', 'picture', 'description', 'emergency_contact']);
+
+        $newArrivals = StoreItem::active()
+            ->with('brand', 'attribute', 'attribute_value', 'store', 'unit')
+            ->orderBy('created_at', 'desc')
+            ->limit(4)
+            ->get()
+            ->toArray();
 
         $data                        = [];
         $data['services']            = Helper::getServices();
+        $data['services'][]          = $ambulance;
         $data['offers_banner']       = $offers_banner;
         $data['products']            = $all_products;
+        $data['new_arrivals']        = $newArrivals;
         $data['new_arrivals_banner'] = $new_arrivals_banner;
         $data['article_category']    = $article_category;
         $data['brands']              = $brands;
         $data['ambulance']           = $ambulance;
+
+        return Helper::getResponse(['data' => $data]);
+    }
+
+    public function autoComplete(Request $request)
+    {
+        $this->validate($request, [
+            'query' => 'required|min:3',
+        ]);
+
+        $terms = $request->input('query');
+
+        $user = Auth::guard('user')->user();
+
+        $data = [];
+
+        $data['drugs']  = StoreDrug::where('name', 'like', '%' . $terms . '%')->where('company_id', Auth::guard('user')->user()->company_id)->where('status', 1)->get();
+        $data['brands'] = Brand::where('name', 'like', '%' . $terms . '%')->where('company_id', Auth::guard('user')->user()->company_id)->where('status', 1)->get();
+
+        $data['medicines'] = StoreItem::active()
+            ->where('company_id', Auth::guard('user')->user()->company_id)
+            ->where('item_name', 'like', '%' . $terms . '%')
+            ->get();
+
+        $data['stores'] = Store::where('status', 1)
+            ->where('company_id', Auth::guard('user')->user()->company_id)
+            ->where('store_name', 'like', '%' . $terms . '%')
+            ->get();
 
         return Helper::getResponse(['data' => $data]);
     }
