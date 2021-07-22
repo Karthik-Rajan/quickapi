@@ -49,7 +49,7 @@ class Services
         // $currency =  Country::find(Auth::guard('user')->user()->country_id) ? Country::find(Auth::guard('user')->user()->country_id)->country_currency : '' ;
         $currency = CompanyCountry::where('company_id', $this->company_id)->where('country_id', $this->user->country_id)->first();
         if ($request->has('schedule_date') && $request->has('schedule_time')) {
-            $schedule_date = (Carbon::createFromFormat('Y-m-d H:i:s', (Carbon::parse($request->schedule_date . ' ' . $request->schedule_time)->format('Y-m-d H:i:s')), $timezone))->setTimezone('UTC');
+            $schedule_date = (Carbon::createFromFormat('Y-m-d H:i:s', (Carbon::parse($request->schedule_date . ' ' . $request->schedule_time)->format('Y-m-d H:i:s')), $timezone))->setTimezone('Asia/Kolkata');
 
             $beforeschedule_time = (new Carbon($schedule_date))->subHour(1);
             $afterschedule_time  = (new Carbon($schedule_date))->addHour(1);
@@ -145,7 +145,7 @@ class Services
 
                 if ($request->has('schedule_date') && $request->has('schedule_time') && "" != $request->schedule_date && "" != $request->schedule_time) {
                     $serviceRequest->status       = 'SEARCHING';
-                    $serviceRequest->schedule_at  = (Carbon::createFromFormat('Y-m-d H:i:s', (Carbon::parse($request->schedule_date . ' ' . $request->schedule_time)->format('Y-m-d H:i:s')), $timezone))->setTimezone('UTC');
+                    $serviceRequest->schedule_at  = (Carbon::createFromFormat('Y-m-d H:i:s', (Carbon::parse($request->schedule_date . ' ' . $request->schedule_time)->format('Y-m-d H:i:s')), $timezone))->setTimezone('Asia/Kolkata');
                     $serviceRequest->is_scheduled = 'YES';
                 }
                 if ('SCHEDULED' != $serviceRequest->status) {

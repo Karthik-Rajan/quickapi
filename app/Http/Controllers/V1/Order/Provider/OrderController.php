@@ -458,7 +458,7 @@ class OrderController extends Controller
             ->where('dispute_type', 'provider')
             ->first();
         if ($order_request_dispute) {
-            $order_request_dispute->created_time = (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $order_request_dispute->created_at, 'UTC'))->setTimezone(Auth::guard('provider')->user()->timezone)->format(Helper::dateFormat());
+            $order_request_dispute->created_time = (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $order_request_dispute->created_at, 'Asia/Kolkata'))->setTimezone(Auth::guard('provider')->user()->timezone)->format(Helper::dateFormat());
         }
 
         return Helper::getResponse(['data' => $order_request_dispute]);

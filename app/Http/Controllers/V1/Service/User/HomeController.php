@@ -161,7 +161,7 @@ class HomeController extends Controller
             ->where('dispute_type', 'user')
             ->first();
         if ($service_request_dispute) {
-            $service_request_dispute->created_time = (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $service_request_dispute->created_at, 'UTC'))->setTimezone($service_request_dispute->request->timezone)->format(Helper::dateFormat());
+            $service_request_dispute->created_time = (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $service_request_dispute->created_at, 'Asia/Kolkata'))->setTimezone($service_request_dispute->request->timezone)->format(Helper::dateFormat());
         }
         return Helper::getResponse(['data' => $service_request_dispute]);
     }

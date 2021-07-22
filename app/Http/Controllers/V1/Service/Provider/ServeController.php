@@ -813,9 +813,9 @@ class ServeController extends Controller
             ->where('service_request_id', $id)
             ->where('dispute_type', 'provider')
             ->first();
-        /*$service_request_dispute->created_time=(\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $service_request_dispute->created_at, 'UTC'))->setTimezone(Auth::guard('provider')->user()->timezone)->format(Helper::dateFormat()); */
+        /*$service_request_dispute->created_time=(\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $service_request_dispute->created_at, 'Asia/Kolkata'))->setTimezone(Auth::guard('provider')->user()->timezone)->format(Helper::dateFormat()); */
 
-        /*$service_request_dispute['created_time']= (isset($service_request_dispute->created_at)) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $service_request_dispute->created_at, 'UTC'))->setTimezone(Auth::guard('provider')->user()->timezone)->format(Helper::dateFormat(1)) : '' ;*/
+        /*$service_request_dispute['created_time']= (isset($service_request_dispute->created_at)) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $service_request_dispute->created_at, 'Asia/Kolkata'))->setTimezone(Auth::guard('provider')->user()->timezone)->format(Helper::dateFormat(1)) : '' ;*/
 
         return Helper::getResponse(['data' => $service_request_dispute]);
     }

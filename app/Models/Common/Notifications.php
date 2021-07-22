@@ -10,13 +10,15 @@ class Notifications extends BaseModel
 
     protected $appends = ['expiry_time'];
 
-    public function scopeSearch($query, $searchText='') {
+    public function scopeSearch($query, $searchText = '')
+    {
         return $query
             ->where('notify_type', 'like', "%" . $searchText . "%")
             ->orWhere('descriptions', 'like', "%" . $searchText . "%")
             ->orWhere('expiry_date', 'like', "%" . $searchText . "%")
             ->orWhere('status', 'like', "%" . $searchText . "%");
     }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -29,7 +31,7 @@ class Notifications extends BaseModel
         'image',
         'description',
         'expiry_date',
-        'status'        
+        'status',
     ];
 
     /**
@@ -39,12 +41,13 @@ class Notifications extends BaseModel
      */
     public function service()
     {
-       return $this->belongsTo('App\Models\Common\AdminService', 'service', 'admin_service');
+        return $this->belongsTo('App\Models\Common\AdminService', 'service', 'admin_service');
     }
 
-    public function getExpiryTimeAttribute() {
-        return (isset($this->attributes['expiry_date'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['expiry_date'], 'UTC'))->format('m-d-Y') : '' ;
-        
+    public function getExpiryTimeAttribute()
+    {
+        return (isset($this->attributes['expiry_date'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['expiry_date'], 'Asia/Kolkata'))->format('m-d-Y') : '';
+
     }
-  
+
 }

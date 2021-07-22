@@ -942,7 +942,7 @@ class HomeController extends Controller
     public function notification(Request $request)
     {
         try {
-            $timezone     = (Auth::guard('provider')->user()->state_id) ? State::find(Auth::guard('provider')->user()->state_id)->timezone : 'UTC';
+            $timezone     = (Auth::guard('provider')->user()->state_id) ? State::find(Auth::guard('provider')->user()->state_id)->timezone : 'Asia/Kolkata';
             $jsonResponse = [];
             if ($request->has('limit')) {
                 $query = Notifications::where('company_id', Auth::guard('provider')->user()->company_id)->whereIn('notify_type', ['provider', 'all']);
@@ -964,7 +964,7 @@ class HomeController extends Controller
             }
             if (count($notifications) > 0) {
                 foreach ($notifications as $k => $val) {
-                    $notifications[$k]['created_at'] = (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $val['created_at'], 'UTC'))->setTimezone($timezone)->format('Y-m-d H:i:s');
+                    $notifications[$k]['created_at'] = (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $val['created_at'], 'Asia/Kolkata'))->setTimezone($timezone)->format('Y-m-d H:i:s');
                 }
             }
             $jsonResponse['total_records'] = count($notifications);
