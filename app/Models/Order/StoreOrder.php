@@ -128,7 +128,7 @@ class StoreOrder extends BaseModel
     public function scopePendingRequest($query, $user_id, $store_id)
     {
         return $query->where('user_id', $user_id)
-            ->where('store_id', $store_id)
+        // ->where('store_id', $store_id)
             ->whereNotIn('status', ['CANCELLED', 'SCHEDULED'])
             ->where(function ($q) {
                 $q->where('paid', '<>', 1)
@@ -196,13 +196,13 @@ class StoreOrder extends BaseModel
     public function getAssignedTimeAttribute()
     {
 
-        return (isset($this->attributes['assigned_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['assigned_at'], 'UTC'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat(1)) : '';
+        return (isset($this->attributes['assigned_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['assigned_at']))->format(Helper::dateFormat(1)) : '';
     }
 
     public function getCreatedTimeAttribute()
     {
 
-        return (isset($this->attributes['created_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['created_at'], 'UTC'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat(1)) : '';
+        return (isset($this->attributes['created_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['created_at']))->format(Helper::dateFormat(1)) : '';
     }
 
     public function storeOrderDispute()
@@ -226,6 +226,6 @@ class StoreOrder extends BaseModel
 
     public function getDeliveryTimeAttribute()
     {
-        return (isset($this->attributes['delivery_date'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['delivery_date'], 'UTC'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat(1)) : '';
+        return (isset($this->attributes['delivery_date'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['delivery_date']))->format(Helper::dateFormat(1)) : '';
     }
 }

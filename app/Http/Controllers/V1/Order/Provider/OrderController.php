@@ -411,7 +411,7 @@ class OrderController extends Controller
             }, 'dispute' => function ($query) {
                 $query->where('dispute_type', 'provider');
             }, 'rating' => function ($query) {$query->select('request_id', 'user_rating', 'provider_rating', 'user_comment', 'provider_comment', 'store_comment', 'store_rating');}])
-                ->select('id', 'store_order_invoice_id', 'user_id', 'provider_id', 'admin_service', 'company_id', 'pickup_address', 'delivery_address', 'created_at', 'timezone', 'status', 'prescription_image');
+                ->select('id', 'store_order_invoice_id', 'user_id', 'provider_id', 'admin_service', 'company_id', 'pickup_address', 'delivery_address', 'created_at', 'timezone', 'status', 'prescription_image', 'comments');
             $request->request->add(['admin_service' => 'ORDER', 'id' => $id]);
             $data                  = (new ProviderServices())->providerTripsDetails($request, $providerrequest);
             $jsonResponse['order'] = $data;

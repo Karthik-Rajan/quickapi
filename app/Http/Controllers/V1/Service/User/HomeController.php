@@ -117,6 +117,7 @@ class HomeController extends Controller
 
             $data                    = (new UserServices())->userTripsDetails($request, $userrequest);
             $jsonResponse['service'] = $data;
+            $jsonResponse['status']  = \DB::connection('service')->table('service_status_tracking')->where('request_id', $id)->get()->toArray();
             return Helper::getResponse(['data' => $jsonResponse]);
         } catch (Exception $e) {
             return response()->json(['error' => trans('api.something_went_wrong')]);

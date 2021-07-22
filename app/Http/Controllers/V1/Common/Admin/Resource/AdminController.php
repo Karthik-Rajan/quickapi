@@ -867,6 +867,13 @@ class AdminController extends Controller
         return Helper::getResponse(['data' => $data]);
     }
 
+    public function updateAmbulanceDetails(Request $request)
+    {
+        $data = Service::where('service_category_id', 2)->where('service_subcategory_id', 8)->first();
+        print_r($request->all());
+        return Helper::getResponse(['data' => $data]);
+    }
+
     public function assignDriver(Request $request)
     {
         $data = AmbulanceDriver::where('ambulance_id', $request->input('ambulance_id'))->first();

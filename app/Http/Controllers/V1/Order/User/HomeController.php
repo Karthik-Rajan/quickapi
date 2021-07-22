@@ -386,8 +386,8 @@ class HomeController extends Controller
         $checkAddons = $request->addons ? @explode(',', $request->addons) : [];
         if (!empty($cart)) {
             if ($Item->store_id != $cart->store_id) {
-                StoreCart::where('user_id', $this->user->id)->delete();
-                $cart = 0;
+                // StoreCart::where('user_id', $this->user->id)->delete();
+                // $cart = 0;
             } else {
                 $response    = $this->findCart($request, $checkAddons);
                 $addonStatus = $response['addonStatus'];
@@ -472,11 +472,12 @@ class HomeController extends Controller
             'leave_at_door'   => 'required',
             'description'     => 'filled',
             'user_address_id' => 'required',
+            'comments'        => 'filled',
         ]);
 
         $path = 'user/prescriptions/';
 
-        $uploadedFile = Helper::upload_file($request->file('prescription'), $path, 'Prescription' . time());
+        $uploadedFile = Helper::upload_file($request->file('prescription'), $path);
 
         $bookingprefix = $this->settings->order->booking_prefix;
         $invoiceId     = $bookingprefix . time() . rand('0', '999');
@@ -489,6 +490,7 @@ class HomeController extends Controller
             'store_order_invoice_id' => $invoiceId,
             'city_id'                => $this->user->city_id,
             'country_id'             => $this->user->country_id,
+            'comments'               => $request->input('comments'),
         ];
 
         StoreOrder::insert($data);
@@ -961,7 +963,9 @@ class HomeController extends Controller
             'user_address_id.required' => trans('validation.custom.user_address_id_required'),
         ];
         $this->validate($request, [
-            'payment_mode' => 'required',
+            'payment_mode'          => 'required',
+            'prescription_images'   => 'array',
+            'prescription_images.*' => 'file|mimes:jpeg,jpg,bmp,png,pdf',
             //'user_address_id' => 'required|exists:user_addresses,id,deleted_at,NULL',
         ], $messages);
 
@@ -976,6 +980,18 @@ class HomeController extends Controller
         if ($UnavailableCount > 0) {
             return Helper::getResponse(['status' => 205]);
         }
+
+        $uploadedFiles = [];
+
+        if ($request->has('prescription_images')) {
+            $path = 'user/prescriptions';
+
+            foreach ($request->file('prescription_images') as $fileKey => $file) {
+                $uploadedFiles[] = Helper::upload_file($file, $path);
+            }
+        }
+
+        $prescriptions = json_encode($uploadedFiles);
 
         $cart = $this->viewcart($request);
 
@@ -1051,9 +1067,10 @@ class HomeController extends Controller
         if (!empty($payment_id) || $is_payable) {
             $order->paid = 1;
         }
-        $order->user_id     = $this->user->id;
-        $order->assigned_at = (Carbon::now())->toDateTimeString();
-        $order->order_type  = $request->order_type;
+        $order->user_id            = $this->user->id;
+        $order->assigned_at        = (Carbon::now())->toDateTimeString();
+        $order->order_type         = $request->order_type;
+        $order->prescription_image = $prescriptions;
         if (1 == $this->settings->order->manual_request) {
             $order->request_type = 'MANUAL';
         }
