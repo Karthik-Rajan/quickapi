@@ -632,7 +632,7 @@ class HomeController extends Controller
 
             if (count($notifications) > 0) {
                 foreach ($notifications as $k => $val) {
-                    $notifications[$k]['created_at'] = (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $val['created_at'], 'UTC'))->setTimezone($timezone)->format('Y-m-d H:i:s');
+                    $notifications[$k]['created_at'] = (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $val['created_at'], 'Asia/Kolkata'))->setTimezone($timezone)->format('Y-m-d H:i:s');
                 }
             }
 

@@ -120,27 +120,27 @@ class ServiceRequest extends BaseModel
     }
 
     /*public function getCreatedAtAttribute() {
-    return (isset($this->attributes['created_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['created_at'], 'UTC'))->setTimezone($this->attributes['timezone'])->format('Y-m-d H:i:s') : '' ;
+    return (isset($this->attributes['created_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['created_at'], 'Asia/Kolkata'))->setTimezone($this->attributes['timezone'])->format('Y-m-d H:i:s') : '' ;
 
     }*/
     public function getAssignedTimeAttribute()
     {
-        return (isset($this->attributes['assigned_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['assigned_at'], 'UTC'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat(1)) : '';
+        return (isset($this->attributes['assigned_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['assigned_at'], 'Asia/Kolkata'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat(1)) : '';
     }
 
     public function getScheduleTimeAttribute()
     {
-        return (isset($this->attributes['schedule_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['schedule_at'], 'UTC'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat(1)) : '';
+        return (isset($this->attributes['schedule_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['schedule_at'], 'Asia/Kolkata'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat(1)) : '';
     }
 
     public function getStartedTimeAttribute()
     {
-        return (isset($this->attributes['started_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['started_at'], 'UTC'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat(1)) : '';
+        return (isset($this->attributes['started_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['started_at'], 'Asia/Kolkata'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat(1)) : '';
     }
 
     public function getFinishedTimeAttribute()
     {
-        return (isset($this->attributes['finished_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['finished_at'], 'UTC'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat(1)) : '';
+        return (isset($this->attributes['finished_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['finished_at'], 'Asia/Kolkata'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat(1)) : '';
     }
 
     public function scopePendingRequest($query, $user_id)
@@ -213,6 +213,6 @@ class ServiceRequest extends BaseModel
 
     public function getCreatedTimeAttribute()
     {
-        return (isset($this->attributes['created_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['created_at'], 'UTC'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat()) : '';
+        return (isset($this->attributes['created_at'])) ? (\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['created_at'], 'Asia/Kolkata'))->setTimezone($this->attributes['timezone'])->format(Helper::dateFormat()) : '';
     }
 }
